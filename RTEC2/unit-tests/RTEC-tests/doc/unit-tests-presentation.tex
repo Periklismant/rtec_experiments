@@ -1,0 +1,4461 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[8pt]{beamer}
+
+\mode<presentation> {
+
+    % The Beamer class comes with a number of default slide themes
+    % which change the colors and layouts of slides. Below this is a list
+    % of all the themes, uncomment each in turn to see what they look like.
+
+    \usetheme{default}
+    %\usetheme{AnnArbor}
+    %\usetheme{Antibes}
+    %\usetheme{Bergen}
+    %\usetheme{Berkeley}
+    %\usetheme{Berlin}
+    %\usetheme{Boadilla}
+    %\usetheme{CambridgeUS}
+    %\usetheme{Copenhagen}
+    %\usetheme{Darmstadt}
+    %\usetheme{Dresden}
+    %\usetheme{Frankfurt}
+    %\usetheme{Goettingen}
+    %\usetheme{Hannover}
+    %\usetheme{Ilmenau}
+    %\usetheme{JuanLesPins}
+    %\usetheme{Luebeck}
+    %\usetheme{Madrid}
+    %\usetheme{Malmoe}
+    %\usetheme{Marburg}
+    %\usetheme{Montpellier}
+    %\usetheme{PaloAlto}
+    %\usetheme{Pittsburgh}
+    %\usetheme{Rochester}
+    %\usetheme{Singapore}
+    %\usetheme{Szeged}
+    %\usetheme{Warsaw}
+
+    % As well as themes, the Beamer class has a number of color themes
+    % for any slide theme. Uncomment each of these in turn to see how it
+    % changes the colors of your current slide theme.
+
+    %\usecolortheme{albatross}
+    %\usecolortheme{beaver}
+    %\usecolortheme{beetle}
+    %\usecolortheme{crane}
+    %\usecolortheme{dolphin}
+    %\usecolortheme{dove}
+    %\usecolortheme{fly}
+    %\usecolortheme{lily}
+    %\usecolortheme{orchid}
+    %\usecolortheme{rose}
+    %\usecolortheme{seagull}
+    %\usecolortheme{seahorse}
+\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+
+
+\DeclareMathOperator{\val}{=}  % for p=v atoms
+\DeclareMathOperator{\notval}{\neq}  % for p=v atoms
+
+\def \patsize {}
+
+\def\recogniseSimpleFluent{\textsf{\patsize recogniseSimpleFluent}}
+\def\recogniseSDFluent{\textsf{\patsize recogniseSDFluent}}
+\def\makeintervals{\textsf{\footnotesize makeIntervals}}
+\def\happensAt{\textsf{\patsize happensAt}}
+\def\happens{\textsf{\patsize happensAt}}
+\def\happensFor{\textsf{\footnotesize happensFor}}
+\def\initially{\textsf{\patsize initially}}
+\def\holdsAt{\textsf{\patsize holdsAt}}
+\def\holdsFor{\textsf{\patsize holdsFor}}
+\def\holdsForSDFluent{\textsf{\footnotesize holdsForSDFluent}}
+\def\holdsAtSDFluent{\textsf{\footnotesize holdsAtSDFluent}}
+\def\holdsForSimpleFluent{\textsf{\footnotesize holdsForSimpleFluent}}
+\def\holdsForRecognisedSimpleFluent{\textsf{\footnotesize holdsForRecognisedSimpleFluent}}
+\def\holdsForRecognisedSDFluent{\textsf{\footnotesize holdsForRecognisedSDFluent}}
+\def\holdsAtRecognisedSimpleFluent{\textsf{\footnotesize holdsAtRecognisedSimpleFluent}}
+\def\initiatedAt{\textsf{\patsize initiatedAt}}
+\def\terminatedAt{\textsf{\patsize terminatedAt}}
+\def\initiates{\textsf{\footnotesize initiates}}
+\def\terminates{\textsf{\footnotesize terminates}}
+\def\broken{\textsf{\footnotesize broken}}
+\def\startE{\textsf{\patsize start}}
+\def\startI{\textsf{\patsize startI}}
+
+\def\endE{\textsf{\patsize end}}
+
+\def\simpleFList{\textsf{\footnotesize simpleFList}}
+\def\sdFList{\textsf{\footnotesize sdFList}}
+
+\def\unionall{\textsf{\patsize union\_all}}
+\def\isetunion{\textsf{\footnotesize union}}
+\def\intersectall{\textsf{\patsize intersect\_all}}
+\def\isetintersection{\textsf{\footnotesize intersection}}
+\def\complementall{\textsf{\patsize relative\_complement\_all}}
+\def\abscomplementall{\textsf{\footnotesize complement\_all}}
+\def\isetdifference{\textsf{\footnotesize relative\_complement}}
+
+\def\nbf{\textsf{\patsize not}}
+\def\true{\textsf{\patsize true}}
+\def\false{\textsf{\patsize false}}
+\def\since{\textsf{\patsize since}}
+
+%array line separator
+\def \tblnsz {1.3pt}
+
+
+\newenvironment{mysplit}%
+  {\arraycolsep 0pt \begin{array}{l}}%
+  {\end{array}}
+
+\newcommand\arraybslash{\let\\\@arraycr}
+%\makeatother
+% Footnote rule
+\setlength{\skip\footins}{0.0469in}
+\renewcommand\footnoterule{\vspace*{-0.0071in}\setlength\leftskip{0pt}\setlength\rightskip{0pt plus 1fil}\noindent\textcolor{black}{\rule{0.0\columnwidth}{0.0071in}}\vspace*{0.0398in}}
+\setlength\tabcolsep{1mm}
+\renewcommand\arraystretch{1.3}
+\newcounter{Table}
+\renewcommand\theTable{\arabic{Table}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+
+%\setcounter{tocdepth}{2}
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[RTEC unit-tests]{RTEC unit-tests} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Manolis Pitsikalis} % Your name
+%\institute[UCLA] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+%{
+%University of California \\ % Your institution for the title page
+%\medskip
+%\textit{john@smith.com} % Your email address
+%}
+% \date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+    \titlepage % Print the title page as the first slide
+\end{frame}
+
+% \begin{frame}
+% \frametitle{Overview} % Table of contents slide, comment this block out to remove it
+% \begin{scriptsize}
+% \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+% \end{scriptsize}
+% \end{frame}
+
+%----------------------------------------------------------------------------------------
+%   PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
+\begin{frame}
+    \frametitle{Introduction}
+    In the following slides, we present:
+    \begin{itemize}
+        \item A set of fluents used for this set of unit-tests.
+        \item A way to run unit tests in YAP
+        \item A series of test cases along
+            with a short description of each case and the results produced.
+    \end{itemize}
+\end{frame}
+
+
+
+% \section{Background}
+% \subsection{Fluents} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+% \begin{frame}
+%   \frametitle{Fluents}
+% \begin{table}[t!]
+% \caption{Fluents used in unit-tests scenarios}\label{tbl:events}
+% \begin{center}
+% 
+% \begin{tabular}{ll}
+% \hline\noalign{\smallskip}
+% \multicolumn{1}{l}{\textbf{Fluent}} & \multicolumn{1}{c}{\textbf{Description}}  \\
+% \noalign{\smallskip}
+% \hline
+% \noalign{\smallskip}
+%     $\mathit{rich(X)}$ & $X$ is rich\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{sleeping(X)}$   & $X$ is sleeping\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{location(X)=Y}$ & $X$ is at location $Y$\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{working(X)}$ & $X$ is working\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{happy(X)}$ & $X$ is happy\\
+%     $\mathit{shappy(X)}$ & $X$ is happy (using sdFluent)\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{infinite\_beers(V)}$ & $X$ can drink infinite beers\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{shortHappiness(X)}$ & $X$ is at a pub but isn't rich \\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{drunk(X)}$ & $X$ is happy and has infinite beers\\
+%     $\mathit{sleeping\_at\_work(X)}$ & $X$ sleeps at work\\
+%     %\addlinespace[\tblnsz]
+%     $\mathit{workingEfficiently(X)}$ & $X$ works efficiently\\
+% \hline
+% \end{tabular}
+% \end{center}
+% \end{table}
+% \end{frame}
+
+%\subsection{Tests Categories}
+
+% \begin{frame}
+%   \frametitle{Tests Categories}
+%   
+%   Total number of tests 37
+%   \begin{itemize}
+%     \item \textbf{Initiation (3)} Simple cases where the initiation of fluents is tested.
+%     \item \textbf{Termination from another fluent (5)} Cases in this category test terminations caused from other fluents.
+%     \item \textbf{Interval manipulation (7)} These cases validate the correctness of the interval manipulation predicates (\textit{union\_all, intersect\_all, relative\_complement\_all}).
+%     \item \textbf{HoldsAt T (1)} Cases that test the $\holdsAt$ predicate.
+%     \item \textbf{Hierarchy (4)} These cases test the initiation/termination propagation between fluents.
+%     \item \textbf{Windows (13)} Cases in this category, test the recognition results when using windows.
+%   \end{itemize}
+% \end{frame}
+
+
+\section{Unit-tests in YAP}
+% \begin{frame}
+% 
+%   \frametitle{Unit-tests implementation}
+%   Current unit testing implementation supports definition of tests in a simplistic 
+%   way. In other words it requires an event stream, a testcase term,
+%   and a check rule for each testcase.
+% \end{frame}
+\subsection{testcase/4}
+\begin{frame}
+    \frametitle{testcase/4}
+
+    Each test case requires its declaration as a $\mathit{testcase/4}$ term. The arguments of the $\mathit{testcase(ScenarioId,Category,TestNumber,ExpectedResult,ErTimes)}$ term are defined as follows:
+    \begin{itemize}
+        \item $\mathit{ScenarioId}$ is the name of the scenario to use.
+        \item $\mathit{Category}$ is the name of the tests category.
+        \item $\mathit{TestNumber}$ is the number of the test for the category it belongs.
+        \item $\mathit{ExpectedResult}$ is the expected result of the test.
+        \item $\mathit{ErTimes}$ is an argument containing nesessairy information for event recognition.
+            i.e,[$(Step,Window,StartTime,EndTime)$,...].
+    \end{itemize}
+\end{frame}
+
+\subsection{check/3}
+\begin{frame}
+
+    \frametitle{check/3}
+    Similarly with the $\mathit{testcase/4}$ term each test case needs a $\mathit{check(Category,TestNumber,Found)}$ rule. This user-defined predicate queries the event recognition results and stores them in variable Found in a format matching the corresponding $\mathit{testscase}$ $\mathit{ExpectedResult}$.
+\end{frame}
+
+
+\section{RTEC-RTECV2 Tests}
+
+\subsection{Initiation}
+\begin{frame}
+    \frametitle{Initiation - test 1}
+    \small
+    Simple narrative.\\
+    \subsubsection{Test 1}
+    \begin{minipage}[t][]{0.5\linewidth}
+        \begin{table}[t]
+            \caption{Event description}
+            \begin{center}
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    lose\_wallet(chris)& 13 & T\\
+                    win\_lottery(chris)& 14 & I\\
+                    lose\_wallet(chris)& 16 & T\\
+                    win\_lottery(chris)& 18 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}%
+    \begin{minipage}[t]{0.5\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[(10,14),(15,17),(19,22)]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Initiation - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing simultaneous initiation/termination at $T=13$ while there is an initiation at $T=9$.
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \small
+            \begin{center}
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}&\multicolumn{1}{l}{\textbf{Status}}   \\
+                    win\_lottery(chris)& 9 &I\\
+                    lose\_wallet(chris)& 13&T\\
+                    win\_lottery(chris)& 13&I\\
+                    lose\_wallet(chris)& 16&T\\
+                    win\_lottery(chris)& 18&I\\
+                    lose\_wallet(chris)& 21&T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+
+    \end{minipage}
+    \begin{itemize}
+            \small
+        \item CurrentTime = 21, WindowSize = 21
+        \item Testing fluent = rich(chris)
+        \item Expected Result=[(10,14),(19,22)]
+        \item RTEC = passed
+        \item RTEC v2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Initiation - test 3}
+    \subsubsection{Test 3}
+    \small
+    Testing simultaneous initiation/termination at $T=13$ while \textbf{there isn't} an initiation at $T=9$.
+    \begin{minipage}{0.5\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}&\multicolumn{1}{l}{\textbf{Status}}   \\
+                    lose\_wallet(chris)& 13&T\\
+                    win\_lottery(chris)& 13&I\\
+                    lose\_wallet(chris)& 16&T\\
+                    win\_lottery(chris)& 18&I\\
+                    lose\_wallet(chris)& 21&T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}%
+    \begin{minipage}{0.5\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[(19,22)]
+        \item RTEC = passed
+        \item RTEC2 = passed
+            %  \item RTEC = failed  TP:[], FP:[(14,17),(19,22)] ,FN:[]
+            %  \item RTECv2 = failed TP:[], FP:[(14,17),(19,22)] ,FN:[]
+    \end{itemize}
+\end{frame}
+
+
+
+\subsection{Termination}
+%\begin{frame}
+%   \frametitle{Termination from another fluent - test 1}
+%   \small
+%     Testing termination caused by the initiation of a different fluent using ``$\startE(X=V)$.''
+% 
+%   \subsubsection{Test 1}
+% \begin{minipage}{0.48\linewidth}
+%   \begin{table}[t!]
+%     \caption{Event description}
+%     \begin{center}
+%       
+%       \begin{tabular}{lll}
+% 	\hline\noalign{\smallskip}
+% 	\multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Status}}   \\
+% 	go\_to(chris,work)&9&-\\
+% 	win\_lottery(chris)&13&I \\
+% 	go\_to(chris,home)&17&-\\
+% 	lose\_wallet(chris)&19&T\\
+% 	\noalign{\smallskip}
+% 	\hline
+%       \end{tabular}
+%     \end{center}
+%   \end{table}
+% \end{minipage}
+% \begin{minipage}{0.48\linewidth}
+% 
+% 
+% \begin{align*}
+% \begin{mysplit}
+% \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+% \quad    \nbf\ \holdsAt\mathit{(sleeping(X)\val\true,T)}.\\
+% \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+% \end{mysplit}
+% \end{align*}
+% \end{minipage}
+% \begin{itemize}
+% 
+%  \item ErTimes = [(21,21)]
+%  \item Result Format = [richIntervals]
+%  \item Expected Result=[[(14,20)]]
+%  \item Test Result=[[(14,20)]]
+% \end{itemize}
+% \end{frame}
+
+
+\begin{frame}
+    \frametitle{Termination - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing termination caused by the initiation of a different fluent using ``$\startI(X=V)$''. ``$\startI(X=V)$'' returns the start of interval while
+    ``$\startE(X=V)$'' returns the start of the interval minus one.
+
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)&9&I\\
+                    win\_lottery(chris)&13& -\\
+                    $\startI$(rich(chris)=true)&14& T\\
+                    go\_to(chris,home)&17&T\\
+                    lose\_wallet(chris)&19&-\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = working(chris)
+            \item Expected Result=[(10,15)]
+            \item RTEC = passed
+            \item RTEC2 = passed
+                %  \item RTEC = passed
+                %  \item RTECv2 = failed TP: [(10,14)], FP: [], FN: [(14,15)]
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val\ work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Termination - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing termination of fluent A caused by the initiation of a fluent B ($T=9$ , using ``$\startI$''), while the event triggering the initiation of B and thus the termination of A, occurs simultaneously with the initiation event of fluent A.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)&9&I\\
+                    win\_lottery(chris)&9&-\\
+                    $\startI$(rich(chris)=true)&10& T\\
+                    go\_to(chris,home)&17&T\\
+                    lose\_wallet(chris)&19&-\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = working(chris)
+            \item Expected Result=[(10,11)]
+            \item RTEC = passed
+            \item RTEC2 = passed
+                %  \item RTEC = passed
+                %  \item RTECv2 = failed TP: [(10,11)], FP: [(11,18)], FN: []
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+\begin{frame}
+    \frametitle{Termination - test 3}
+    \subsubsection{Test 3}
+    \small
+    Testing termination of a fluent caused by an event that happens simultaneously with its initiation.
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris,work)&9&I\\
+                    go\_to(chris,pub)&9&T\\
+                    go\_to(chris,home)&17&T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = working(chris)
+            \item Expected Result=[]
+            \item RTEC = passed
+            \item RTEC v2 = passed
+                %  \item RTEC = failed TP: [], FP: [(10,18)], FN: []
+                %  \item RTECv2 = failed TP: [], FP: [(10,18)], FN: []
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Termination - test 4}
+    \subsubsection{Test 4}
+    \small
+    Testing results when an event terminating a fluent occurs at the same timepoint with the query (Current Time).\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Time}}  \\
+                    go\_to(chris,work)&9&I\\
+                    go\_to(chris,home)&21&T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val\ work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[(10,22)]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{termination - test 5}
+    \subsubsection{Test 5}
+    \small
+    Testing fluent B results, when the initiation event of a fluent A, thus the termination of fluent B, occurs at T=Current Time\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Time}}  \\
+                    go\_to(chris,work)&9&$I_{working}$\\
+                    wins\_lottery(chris)&21&$I_{rich}$\\
+                    startI(rich(chris))&22&$T_{working}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = working(chris)
+            \item Expected Result=[(10,inf)]
+            \item RTEC = passed
+            \item RTEC v2 = passed
+                %  \item RTEC = passed
+                %  \item RTECv2 = failed TP: [(10,22)], FP: [], FN: [(22,inf)]
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val\ work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+
+\subsection{Intervals Manipulation}
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 1}
+    \subsubsection{Test 1}
+    \small Testing interval manipulation predicate ``$\unionall$''.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}   \\
+                    go\_to(chris, work)& 9 & -\\
+                    win\_lottery(chris)& 13 & $I_{rich}$\\
+                    go\_to(chris, pub)& 17 & $I_{location(chris)=pub}$\\
+                    lose\_wallet(chris)& 19 & $T_{rich}$ \\
+                    go\_to(chris, home)& 21 & $T_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = happy(chris)
+            \item Expected Result=[(14,22)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 2}
+    \small Testing interval manipulation predicate ``$\intersectall$''.\linebreak
+    \subsubsection{Test 2}
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}   \\
+                    go\_to(chris, work)& 9 & -\\
+                    win\_lottery(chris)& 13 & $I_{rich}$\\
+                    go\_to(chris, pub)& 17 & $I_{location(chris)=pub}$\\
+                    lose\_wallet(chris)& 19 & $T_{rich}$ \\
+                    go\_to(chris, home)& 21 & $T_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = infiniteBeers(chris)
+            \item Expected Result=[(18,20)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 3}
+    \subsubsection{Test 3}
+    \small Testing interval manipulation predicate ``$\complementall$''.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}   \\
+                    go\_to(chris, work)& 9 & -\\
+                    win\_lottery(chris)& 13 & $I_{rich}$\\
+                    go\_to(chris, pub)& 17 & $I_{location(chris)=pub}$\\
+                    lose\_wallet(chris)& 19 & $T_{rich}$ \\
+                    go\_to(chris, home)& 21 & $T_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = shortHappiness(chris)
+            \item Expected Result=[(20,22)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(shortHappiness(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,I1)},\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,I2)},\\
+                \quad    \complementall\mathit{(I1,[I2],I)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 4}
+    \small Testing ``$\intersectall$'' predicate with a different fluent.\linebreak
+    \subsubsection{Test 4}
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}   \\
+                    go\_to(chris, work)& 9 & -\\
+                    win\_lottery(chris)& 13 & $I_{rich}$\\
+                    go\_to(chris, pub)& 17 & $I_{location(chris)=pub}$\\
+                    lose\_wallet(chris)& 19 & $T_{rich}$ \\
+                    go\_to(chris, home)& 21 & $T_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = drunk(chris)
+            \item Expected Result=[(18,20)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize} 
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(drunk(X)\val\true,I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(happy(X)\val\true,I1),}\\
+                \quad    \holdsFor\mathit{(infiniteBeers(X)\val\true,I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 5}
+    \subsubsection{Test 5}
+    \small Testing ``$\unionall$'' predicate with input lists containing more than one interval.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 36, Window = 36
+            \item Testing Fluent = happy(chris)
+            \item Expected Result = [(21,29),(36,inf)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 6 }
+    \small Testing ``$\intersectall$'' predicate with input lists containing more than one interval.\linebreak
+    \subsubsection{Test 6}
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    % 	  go\_to(chris, work)& 9 & -\\
+                    % 	  go\_to(chris,work)& 9 & -\\
+                    % 	  sleep\_start(chris)& 13 &-\\
+                    % 	  sleep\_end(chris)& 14 &-\\
+                    % 	  go\_to(chris,home)& 18 &-\\
+                    % 	  go\_to(chris, home)& 18 &-\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 36, Window = 36
+            \item Testing Fluent = infiniteBeers(chris)
+            \item Expected Result = [(22,24),(25,28)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Intervals Manipulation - test 7}
+    \small Testing ``$\complementall$`` predicate with input lists containing more than one interval.\linebreak
+    \subsubsection{Test 7}
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    % 	  go\_to(chris, work)& 9 & -\\
+                    % 	  go\_to(chris,work)& 9 & -\\
+                    % 	  sleep\_start(chris)& 13 &-\\
+                    % 	  sleep\_end(chris)& 14 &-\\
+                    % 	  go\_to(chris,home)& 18 &-\\
+                    % 	  go\_to(chris, home)& 18 &-\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+        \begin{itemize}
+            \item Current time = 36, Window = 36
+            \item Testing Fluent = shortHappiness(chris)
+            \item Expected Result = [(21,22),(24,25),(28,29)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(shortHappiness(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,I1)},\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,I2)},\\
+                \quad    \complementall\mathit{(I1,[I2],I)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+\end{frame}
+
+
+% \begin{frame}
+%   \frametitle{Intervals Manipulation - test 8}
+%   \subsubsection{Test 8}
+%   \small Testing $\intersectall$ predicate with input lists containing more than one interval, and a different fluent.
+% \begin{minipage}{0.48\linewidth}
+%   \begin{table}[t!]
+%     \caption{Event description}
+%     \begin{center}
+%       
+%       \begin{tabular}{llll}
+% 	\hline\noalign{\smallskip}
+% 	\multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+% % 	  go\_to(chris, work)& 9 & -\\
+% % 	  go\_to(chris,work)& 9 & -\\
+% % 	  sleep\_start(chris)& 13 &-\\
+% % 	  sleep\_end(chris)& 14 &-\\
+% % 	  go\_to(chris,home)& 18 &-\\
+% % 	  go\_to(chris, home)& 18 &-\\
+% 	  go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+% 	  win\_lottery(chris)&21 &$I_{rich}$\\
+% 	  lose\_wallet(chris)& 23 &$T_{rich}$\\
+% 	  win\_lottery(chris)& 24 &$I_{rich}$\\
+% 	  lose\_wallet(chris)& 27 &$T_{rich}$\\
+% 	  go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+% 	  sleep\_start(chris)& 28 & -\\
+% 	  sleep\_end(chris)& 32& -\\
+% 	  go\_to(chris, work)& 33& -\\
+% 	  go\_to(chris,work)& 33& -\\
+% 	  win\_lottery(chris)& 35&$I_{rich}$\\\\
+% 	\noalign{\smallskip}
+% 	\hline
+%       \end{tabular}
+%     \end{center}
+%   \end{table}
+% \end{minipage}
+% \begin{minipage}{0.48\linewidth}
+% 
+% \begin{align*}
+% \begin{mysplit}
+% \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+% \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+% \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+% \quad    \unionall\mathit{([I1,I2],\ I)}.
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+% \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+% \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+% \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \holdsFor\mathit{(drunk(X)\val\true,I) \leftarrow}\\
+% \quad    \holdsFor\mathit{(happy(X)\val\true,I1),}\\
+% \quad    \holdsFor\mathit{(infiniteBeers(X)\val\true,I2),}\\
+% \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+% \end{mysplit}
+% \end{align*}
+% \end{minipage}
+% 
+% \begin{itemize}
+%  \item ErTimes = [(36,36)]
+%  \item Result Format = drunkIntervals
+%  \item Expected Result=[[(22,24),(25,28)]]
+%  \item Test Result =[[(22,24),(25,28)]]
+% \end{itemize}
+% \end{frame}
+
+
+% \begin{frame}
+%   \frametitle{Intervals Manipulation - test 9}
+%   \subsubsection{Test 9}
+% \begin{minipage}{0.48\linewidth}
+%   \begin{table}[t!]
+%     \caption{Event description}
+%     \begin{center}
+%       
+%       \begin{tabular}{llll}
+% 	\hline\noalign{\smallskip}
+% 	\multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+% 	  go\_to(chris,work)& 9 & $I_{working}$\\
+% 	  sleep\_start(chris)& 13 &$I_{sleeping}$\\
+% 	  sleep\_end(chris)& 14 &$T_{sleeping}$\\
+% 	  go\_to(chris,home)& 18 &$T_{working}$\\
+% 	  go\_to(chris, home)& 18 &$I_{working}$\\
+% 	  sleep\_start(chris)& 28 &$I_{sleeping}$\\
+% 	  sleep\_end(chris)& 32& $T_{sleeping}$\\
+% 	  go\_to(chris, work)& 33& -\\
+% 	  go\_to(chris,work)& 33&$I_{working}$\\
+% 	\noalign{\smallskip}
+% 	\hline
+%       \end{tabular}
+%     \end{center}
+%   \end{table}
+%   
+% \begin{itemize}
+%  \item ErTimes = [(36,36)]
+%  \item Result Format = sleeping\_at\_workIntervals
+%  \item Expected Result = [(14,15)]
+%  \item Test Result = [(14,15)]
+% \end{itemize}
+% \end{minipage}
+% \begin{minipage}{0.48\linewidth}
+% 
+% \begin{align*}
+% \begin{mysplit}
+% \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(start(rich(X)\val\true),T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+% \quad	 \mathit{Y\ \backslash\val\ work}.\\
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \initiatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+% \quad    \happensAt\mathit{(sleep\_start(X),T).}\\
+% \terminatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+% \quad    \happensAt\mathit{(sleep\_end(X),T).}
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \holdsFor\mathit{(sleeping\_at\_work(X)\val\true,I) \leftarrow}\\
+% \quad    \holdsFor\mathit{(working(X)\val\true,I1),}\\
+% \quad    \holdsFor\mathit{(sleeping(X)\val\true,I2),}\\
+% \quad    \intersectall\mathit{([I1,I2],I).}
+% \end{mysplit}
+% \end{align*}
+% \end{minipage}
+% \end{frame}
+% 
+% 
+% 
+% \begin{frame}
+%   \frametitle{Intervals Manipulation - test 10}
+%   \subsubsection{Test 10}
+% \begin{minipage}{0.48\linewidth}
+%   \begin{table}[t!]
+%     \caption{Event description}
+%     \begin{center}
+%       
+%       \begin{tabular}{llll}
+% 	\hline\noalign{\smallskip}
+% 	\multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+% 	  go\_to(chris, work)& 9 & -\\
+% 	  go\_to(chris,work)& 9 & $I_{working}$\\
+% 	  sleep\_start(chris)& 13 &$I_{sleeping}$\\
+% 	  sleep\_end(chris)& 14 &$T_{sleeping}$\\
+% 	  go\_to(chris,home)& 18 &$T_{working}$\\
+% 	  go\_to(chris, home)& 18 &$T_{working}$\\
+% 	  go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+% 	  go\_to(chris,work)& 33&$I_{working}$\\
+% 	  win\_lottery(chris)& 35&$T_{working}$\\
+% 	\noalign{\smallskip}
+% 	\hline
+%       \end{tabular}
+%     \end{center}
+%   \end{table}
+%   
+% \begin{itemize}
+%  \item ErTimes = [(36,36)]
+%  \item Result Format = [workingEfficientlyIntervals]
+%  \item Expected Result=[[(10,14),(15,19),(34,37)]]
+%  \item Test Result =[[(10,14),(15,19),(34,37)]]
+% \end{itemize}
+% \end{minipage}
+% \begin{minipage}{0.48\linewidth}
+% 
+% \begin{align*}
+% \begin{mysplit}
+% \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+% \quad    \happensAt\mathit{(start(rich(X)\val\true),T)}.\\
+% \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+% \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+% \quad	 \mathit{Y\ \backslash\val\ work}.\\
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \initiatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+% \quad    \happensAt\mathit{(sleep\_start(X),T).}\\
+% \terminatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+% \quad    \happensAt\mathit{(sleep\_end(X),T).}
+% \end{mysplit}
+% \end{align*}
+% \begin{align*}
+% \begin{mysplit}
+% \holdsFor\mathit{(workingEfficiently(X)\val\true,I)\leftarrow}\\
+% \quad    \holdsFor\mathit{(working(X)\val\true,I1),}\\
+% \quad    \holdsFor\mathit{(sleeping\_at\_work(X)\val\true,I2),}\\
+% \quad    \complementall\mathit{(I1,[I2],I).}\\
+% \end{mysplit}
+% \end{align*}
+% \end{minipage}
+% \end{frame}
+
+
+
+\subsection{HoldsAt T}
+% \begin{frame}
+%   \frametitle{HoldsAt T - test 1}
+%   \subsubsection{HoldsAt - test 1}
+%   \small Simple case testing use of $\holdsAt$ inside the body of an initiation rule.\linebreak
+% \begin{minipage}{0.48\linewidth}
+%   \begin{table}[t!]
+%     \caption{Event description}
+%     \begin{center}
+%       
+%       \begin{tabular}{lll}
+% 	\hline\noalign{\smallskip}
+% 	\multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Status}}   \\
+% 	  sleep\_start(chris) &9& $I_{sleeping}$\\
+% 	  win\_lottery(chris) &12& -\\
+% 	  sleep\_end(chris)  &21&$T_{sleeping}$\\\\
+% 	\noalign{\smallskip}
+% 	\hline
+%       \end{tabular}
+%     \end{center}
+%   \end{table}
+%   \begin{itemize}
+%   
+%  \item Current time = 21, Window = 21
+%  \item Testing Fluent = rich(chris)
+%  \item Expected Result = []
+%  \item RTEC = passed
+%  \item RTECv2 = passed
+% \end{itemize}
+% \end{minipage}
+% \begin{minipage}{0.48\linewidth}
+
+    \begin{frame}
+        \frametitle{HoldsAt T - test 2}
+        \subsubsection{HoldsAt - test 2}
+        \small Simple case testing use of $\holdsAt$ inside the body of an initiation rule.\linebreak
+        \begin{minipage}{0.48\linewidth}
+            \begin{table}[t!]
+                \caption{Event description}
+                \begin{center}
+
+                    \begin{tabular}{lll}
+                        \hline\noalign{\smallskip}
+                        \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Status}}   \\
+                        win\_lottery(chris) &8& $I_{rich}$\\
+                        start(happy(chris)) &9& -\\
+                        sleep\_start(chris) &9& $I_{sleeping}$\\
+                        start(sleeping(chris)) &9& $I_{sleepinghappy}$\\
+
+                        sleep\_end(chris)  &15&$T_{sleeping}$\\
+                        end(sleeping(chris)) &15& $T_{sleepinghappy}$\\
+
+                        \noalign{\smallskip}
+                        \hline
+                    \end{tabular}
+                \end{center}
+            \end{table}
+            \begin{itemize}
+
+                \item Current time = 21, Window = 21
+                \item Testing Fluent = sleepingHappy(chris)
+                \item Expected Result = [(10,16)]
+                \item RTEC = passed
+                \item RTECv2 = passed
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}{0.48\linewidth}
+
+
+            \begin{align*}
+                \begin{mysplit}
+                    \initiatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(sleep\_start(X),T).}\\
+                    \terminatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(sleep\_end(X),T).}\\\\
+                    \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+                    \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                    \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                    \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                    \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                    \quad    \unionall\mathit{([I1,I2],\ I)}.\\\\
+                    \initiatedAt\mathit{(sleepingHappy(X)\val\true,T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(start(sleeping(X)=true),T),}\\
+                    \quad    \holdsAt\mathit{(happy(X)=true,T).}\\
+                    \terminatedAt\mathit{(sleepingHappy(X)\val\true,T) \leftarrow}\\
+                    \quad    \happensAt\mathit{(end(sleeping(X)=true),T).}\\\\
+                \end{mysplit}
+            \end{align*}
+        \end{minipage}
+    \end{frame}
+
+\begin{frame}
+    \frametitle{HoldsAt T - test 3}
+    \subsubsection{HoldsAt - test 3}
+    \small Simple case testing use of $\holdsAt$ inside the body of an initiation rule with unsorted narrative.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}}  & \multicolumn{1}{c}{\textbf{Status}}   \\
+                    start(happy(chris)) &6& -\\
+                    sleep\_start(chris) &9& $I_{sleeping}$\\
+                    win\_lottery(chris) &5& $I_{rich}$\\
+                    start(sleeping(chris)) &9& $I_{sleepinghappy}$\\
+                    sleep\_end(chris)  &15&$T_{sleeping}$\\
+                    end(sleeping(chris)) &15& $T_{sleepinghappy}$\\
+
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \begin{itemize}
+
+            \item Current time = 21, Window = 21
+            \item Testing Fluent = sleepingHappy(chris)
+            \item Expected Result = [(10,16)]
+            \item RTEC = passed
+            \item RTECv2 = passed
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_start(X),T).}\\
+                \terminatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T).}\\\\
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.\\\\
+                \initiatedAt\mathit{(sleepingHappy(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(start(sleeping(X)=true),T),}\\
+                \quad    \holdsAt\mathit{(happy(X)=true,T).}\\
+                \terminatedAt\mathit{(sleepingHappy(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(end(sleeping(X)=true),T).}\\\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+\end{frame}
+
+
+
+\subsection{Hierarchy}
+\begin{frame}
+    \frametitle{Hierarchy SimpleFluent $\rightarrow$ SDFluent - test 1}
+    \small Testing hierarchy between a simple fluent and an SDFluent.\linebreak
+    \subsubsection{Test 1}
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+                \quad    \nbf\ \holdsAt\mathit{(sleeping(X)\val\true,T)}.\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+
+    \begin{itemize}
+        \item Current time = 36, Window = 36
+        \item Testing Fluent = happy(chris)
+        \item Expected Result = [(21,29),(36,inf)]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Hierarchy Events $\rightarrow$ SimpleFluent - test 2}
+    \subsubsection{Test 2}
+    \small Testing hierarchy between events and a simple fluent.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & -\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Current time = 36, Window = 36
+        \item Testing Fluent = rich(chris)
+        \item Expected Result = [(22,24),(25,28),(36,inf)]
+        \item RTEC = passed
+        \item RTECv2 = passed
+
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Hierarchy SDFluent $\rightarrow$ SimpleFluent - test 3}
+    \subsubsection{Test 3}
+
+    \small Testing hierarchy between an SDFluent and a simple fluent.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    startI(happy(chris)& 21 & $I_{shappy}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    end(happy(chris)) & 28 &$T_{shappy}$\\
+
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    startI(happy(chris)& 36 & $I_{shappy}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(shappy(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(happy(X)=true),\ T).}\\
+                \terminatedAt\mathit{(shappy(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\endE(happy(X)=true),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Current time = 36, Window = 36
+        \item Testing Fluent = shappy(chris)
+        \item Expected Result = [(22,29),(37,inf)]
+        \item RTEC = passed
+        \item RTEC v2 = passed
+            %  \item RTEC = passed
+            %  \item RTECv2 = failed TP: [(22,29),(37,inf)], FP: [(21,22),(36,37)], FN: [(29,30)]
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Hierarchy SDFluent $\rightarrow$  SDFluent - test 4}
+    \subsubsection{Test 4}
+    \small Testing hierarchy between an SDFluent and an SDFluent.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    % 	  go\_to(chris, work)& 9 & -\\
+                    % 	  go\_to(chris,work)& 9 & -\\
+                    % 	  sleep\_start(chris)& 13 &-\\
+                    % 	  sleep\_end(chris)& 14 &-\\
+                    % 	  go\_to(chris,home)& 18 &-\\
+                    % 	  go\_to(chris, home)& 18 &-\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(drunk(X)\val\true,I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(happy(X)\val\true,I1),}\\
+                \quad    \holdsFor\mathit{(infiniteBeers(X)\val\true,I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Current time = 36, Window = 36
+        \item Testing Fluent = drunk(chris)
+        \item Expected Result = [(22,24),(25,28)]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+\subsection{Windows-ERs}
+\begin{frame}
+    \frametitle{Windows-ERs - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing simple fluent results when performing queries in a large window.
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 9, Window = 36, Time start = 9, Time end = 36
+        \item Testing Fluent = rich(chris)
+        \item Expected Result (per step) = [[],[(22,24),(25,28)],[(22,24),(25,28),(36,inf)]]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 2,10}
+    \subsubsection{Test 2,10}
+    \small
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris,work)& 9 & -\\
+                    sleep\_start(chris)& 13 &$I_{sleeping}$\\
+                    sleep\_end(chris)& 14 &$T_{sleeping}$\\
+                    go\_to(chris,home)& 18 &-\\
+                    sleep\_start(chris)& 28 &$I_{sleeping}$\\
+                    sleep\_end(chris)& 32& $T_{sleeping}$\\
+                    go\_to(chris, work)& 33& -\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_start(X),T).}\\
+                \terminatedAt\mathit{(sleeping(X)\val\true,T) \leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T).}
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    Testing Fluent = sleeping(chris)
+
+    \begin{itemize}
+        \item Test 2 : Testing simple fluent results when performing queries in a large overlapping window  equal to $End\ time - Start\ time$.
+            \begin{itemize}
+                \item Step = 9, Window = 36,Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(14,15)],[(14,15)],[(14,15),(29,33)]]
+                \item RTEC = passed
+                \item RTECv2 = passed
+            \end{itemize}
+        \item Test 10 : Testing simple fluent results when performing queries using overlapping windows where window size is less than $End\ time - Start\ time$.
+            \begin{itemize}
+                \item Step = 9, Window = 18, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(14,15)],[(14,15)],[(29,33)]]
+                \item RTEC = passed
+                \item RTECv2 = passed
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 3,11}
+    \subsubsection{Test 3,11}
+    \small
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, work)& 9 & $I_{working}$\\
+                    go\_to(chris, home)& 18 &$T_{working}$\\
+                    go\_to(chris, work)& 33&$I_{working}$\\
+                    win\_lottery(chris)& 35 & -\\
+                    startI(rich(chris))& 36 &$T_{working}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(\startI(rich(X)\val\true),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T)},\\
+                \quad	 \mathit{Y\ \backslash\val\ work}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    Testing Fluent = working(chris)\\
+    \begin{itemize}
+        \item Test 3 : Testing simple fluent with ''$\startI$`` in its rule body, recognition results when performing queries in a large overlapping window equal to $End\ time - Start\ time$
+            \begin{itemize}
+                \item Step = 9, Window = 36, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(10,19)],[(10,19)],[(10,19),(34,37)]]
+                \item RTEC = passed
+                \item RTEC v2 = passed
+            \end{itemize}
+        \item Test 11 : Testing results, when performing queries using overlapping windows where window size is less than $End\ time - Start\ time$.
+            \begin{itemize}
+                \item Step = 9, Window = 18, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(10,19)],[(10,19)],[(34,37)]]
+                \item RTEC = passed
+                \item RTEC v2 = passed
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 4}
+    \subsubsection{Test 4}
+    \small
+    Hierarchy (Simple Fluent $\rightarrow$ SDFluent)/Union test when performing multiple queries in a large window.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Step = 9, Window = 36, Time start = 9, Time end = 36
+        \item Testing Fluent = happy(chris) 
+        \item Expected Result (per step) = [[],[(21,inf)],[(21,29),(36,inf)]] 
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 5}
+    \subsubsection{Test 5}
+    \small
+    Hierarchy (SDFluent $\rightarrow$ SDFluent)/Intersection test when performing multiple queries in a large window.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    % 	  go\_to(chris, work)& 9 & -\\
+                    % 	  go\_to(chris,work)& 9 & -\\
+                    % 	  sleep\_start(chris)& 13 &-\\
+                    % 	  sleep\_end(chris)& 14 &-\\
+                    % 	  go\_to(chris,home)& 18 &-\\
+                    % 	  go\_to(chris, home)& 18 &-\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Step = 9, Window = 36, Time start = 9, Time end = 36
+        \item Testing Fluent = infiniteBeers(chris) 
+        \item Expected Result (per step) = [[],[(22,24),(25,28)],[(22,24),(25,28)]]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 6}
+    \subsubsection{Test 6}
+    \small
+    Checking inf update in next query results. \linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    % 	  go\_to(chris, work)& 9 & -\\
+                    % 	  go\_to(chris,work)& 9 & -\\
+                    % 	  sleep\_start(chris)& 13 &-\\
+                    % 	  sleep\_end(chris)& 14 &-\\
+                    % 	  go\_to(chris,home)& 18 &-\\
+                    % 	  go\_to(chris, home)& 18 &-\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(shortHappiness(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,I1)},\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,I2)},\\
+                \quad    \complementall\mathit{(I1,[I2],I)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Step = 9, Window = 36,Time start = 9, Time end = 36
+        \item Testing Fluent = shortHappiness(chris) 
+        \item Expected Result (per step) = [[],[(21,22),(24,25),(28,inf)],[(21,22),(24,25),(28,29)]]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 7}
+    \subsubsection{Test 7}
+    \small
+    Testing results when performing queries with different windows (not overlapping).
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(infiniteBeers(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I1),}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(drunk(X)\val\true,I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(happy(X)\val\true,I1),}\\
+                \quad    \holdsFor\mathit{(infiniteBeers(X)\val\true,I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],\ I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Step = 9, Window = 9, Time start = 9,Time end = 36
+        \item Testing Fluent = drunk(chris) 
+        \item Expected Result (per step) = [[],[(22,24),(25,28)],[(25,28)]]
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 8,12}
+    \subsubsection{Test 8,12}
+    \small
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{llll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris,work)& 9 & $I_{working}$\\
+                    sleep\_start(chris)& 13 &$I_{sleeping}$\\
+                    sleep\_end(chris)& 14 &$T_{sleeping}$\\
+                    go\_to(chris,home)& 18 &$T_{working}$\\
+                    go\_to(chris, home)& 18 &$I_{working}$\\
+                    sleep\_start(chris)& 28 &$I_{sleeping}$\\
+                    sleep\_end(chris)& 32& $T_{sleeping}$\\
+                    go\_to(chris, work)& 33& -\\
+                    go\_to(chris,work)& 33&$I_{working}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+
+
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(sleeping\_at\_work(X)\val\true,I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(working(X)\val\true,I1),}\\
+                \quad    \holdsFor\mathit{(sleeping(X)\val\true,I2),}\\
+                \quad    \intersectall\mathit{([I1,I2],I).}
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    Testing Fluent = sleeping\_at\_work(chris)]\\
+    \begin{itemize}
+        \item Test 8 : Testing results when an initiation takes place at the start of window (working T=9) ( $(9,18]$ )
+            \begin{itemize}
+                \item Step = 9, Window = 9, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(14,15)],[(14,15)],[(14,15)]]
+                \item RTEC = passed
+                \item RTECv2 = passed
+            \end{itemize}
+        \item Test 12 : Testing forget mechanism with overlapping windows
+            \begin{itemize}
+                \item Step = 9, Window = 18, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(14,15)],[(14,15)],[]]
+                \item RTEC = passed
+                \item RTECv2 = passed
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Windows-ERs - test 9,13}
+    \subsubsection{Test 9,13}
+    \small
+    Testing update of recognised intervals with a fluent that is affected by $\startI$ predicate without/with overlapping windows.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \begin{center}
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    go\_to(chris,work)& 9 & $I_{working}$\\
+                    sleep\_start(chris)& 13 &$I_{sleeping}$\\
+                    sleep\_end(chris)& 14 &$T_{sleeping}$\\
+                    go\_to(chris,home)& 18 &$T_{working}$\\
+                    go\_to(chris, home)& 18 &$T_{working}$\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    go\_to(chris,work)& 33&$I_{working}$\\
+                    win\_lottery(chris)& 35&$T_{working}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(workingEfficiently(X)\val\true,I)\leftarrow}\\
+                \quad    \holdsFor\mathit{(working(X)\val\true,I1),}\\
+                \quad    \holdsFor\mathit{(sleeping\_at\_work(X)\val\true,I2),}\\
+                \quad    \complementall\mathit{(I1,[I2],I).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    Testing Fluent = workingEfficiently(chris)
+
+    \begin{itemize}
+        \item Test 9
+            \begin{itemize}
+                \item Step = 9, Window = 36, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [[(10,14),(15,19)],[(10,14),(15,19)],[(10,14),(15,19),(34,37)]]
+                \item RTEC = passed
+                \item RTEC v2 = passed
+                    %      \item RTEC = passed
+                    %      \item RTECv2 = failed ER number: 2, TP:[(10,14),(15,19),(34,36)], FP:[], FN:[(36,37)]
+            \end{itemize}
+        \item Test 13
+            \begin{itemize}
+                \item Step = 9, Window = 18, Time start = 9, Time end = 36
+                \item Expected Result (per step) = [(10,14),(15,19)],[(10,14),(15,19)],[(15,19),(34,37)]
+                \item RTEC = passed
+                \item RTEC v2 = passed
+                    %      \item RTEC = passed
+                    %      \item RTECv2 = failed ER number:2, TP: [(34,36)], FP:[], FN:[(36,37)]
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Unsorted narratives}
+\begin{frame}
+    \frametitle{Unsorted narratives - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing results when narrative is unsorted.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+            \end{mysplit}
+        \end{align*}
+        \begin{align*}
+            \begin{mysplit}
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Current time = 36, Window = 36
+        \item Testing Fluent = happy(chris) 
+        \item Expected Result = [[(21,29),(36,inf)]] 
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Unsorted narratives - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing results when narrative is unsorted, with windows.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}}  \\
+                    \hline
+                    - & $T<18$ & -\\
+                    \hline
+                    win\_lottery(chris)&21 &$I_{rich}$\\
+                    lose\_wallet(chris)& 23 &$T_{rich}$\\
+                    lose\_wallet(chris)& 27 &$T_{rich}$\\
+                    \hline
+                    win\_lottery(chris)& 24 &$I_{rich}$\\
+                    go\_to(chris, home)& 28 &$T_{location(chris)=pub}$\\
+                    win\_lottery(chris)& 35&$I_{rich}$\\
+                    go\_to(chris, pub)& 20 & $I_{location(chris)=pub}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(location(X)\val Y,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T).}\\\\
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+                \quad    \nbf\ \holdsAt\mathit{(sleeping(X)\val\true,T)}.\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\\\
+                \holdsFor\mathit{(happy(X)\val\true,\ I) \leftarrow}\\
+                \quad    \holdsFor\mathit{(rich(X)\val\true,\ I1)}\\
+                \quad    \holdsFor\mathit{(location(X)\val pub,\ I2)}\\
+                \quad    \unionall\mathit{([I1,I2],\ I)}.
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+
+    \begin{itemize}
+        \item Step = 9, Window = 36, Time start = 9, Time end = 36
+        \item Testing Fluent = happy(chris) 
+        \item Expected Result (per step) = [[],[(22,24],[(21,29),(36,inf)]] 
+        \item RTEC = passed
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+\section{RTECv2 Specific Tests}
+\subsection{Deadlines maxDurationUE}
+\begin{frame}
+    \frametitle{DeadlinesUE - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing termination caused by maxDurationUE.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(10,14)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing normal termination.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    lose\_wallet(chris)& 11 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(10,12)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 3}
+    \subsubsection{Test 3}
+    \small
+    Testing deadline extent with initiation.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    win\_lottery(chris)& 11 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(10,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 4}
+    \subsubsection{Test 4}
+    \small
+    Succesful attempt with simultaneous initiation.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    win\_lottery(chris)& 13 & I,T\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(10,18)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 5}
+    \subsubsection{Test 5}
+    \small
+    Simple window test.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 9 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 10, Window = 15, Time start = 0, Time end = 20
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(10,inf)],[(10,14)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 6}
+    \subsubsection{Test 6}
+    \small
+    Testing result when first initiation is outside window.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    win\_lottery(chris)& 7 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T),}\\
+                \quad    \nbf\ \holdsAt\mathit{(sleeping(X)\val\true,T)}.\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 5, Window = 8, Time start = 0, Time end = 15
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(2,inf)],[(2,inf)],[(2,12)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 7}
+    \subsubsection{Test 7}
+    \small
+    Testing result when first and second initiation are in different windows.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    win\_lottery(chris)& 7 & I\\
+                    lose\_wallet(chris)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T).}\\
+                \terminatedAt\mathit{(rich(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich(X)=\true,4)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 3, Window = 3, Time start = 0, Time end = 12
+        \item Testing Fluent = rich(chris)
+        \item Expected Result=[[(2,inf)],[(2,inf)],[(2,inf)],[(2,12)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 8}
+    \subsubsection{Test 8}
+    \small
+    Testing deadline extension.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    win\_lottery(chris)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T)}.\\
+                \terminatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich2(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 3, Window = 15, Time start = 3, Time end = 15
+        \item Testing Fluent = rich2(chris)
+        \item Expected Result=[[(2,inf)],[(2,inf)],[(2,inf)],[(2,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 9}
+    \subsubsection{Test 9}
+    \small
+    Normal termination.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    win\_lottery(chris)& 7 & I\\
+                    lose\_wallet(chris)& 8 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T)}.\\
+                \terminatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich2(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 6, Window = 12, Time start = 0, Time end = 12
+        \item Testing Fluent = rich2(chris)
+        \item Expected Result=[[(2,inf)],[(2,9)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 10}
+    \subsubsection{Test 10}
+    \small
+    Normal termination inside deadline, then initiation.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    lose\_wallet(chris)& 6 & T\\
+                    win\_lottery(chris)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T)}.\\
+                \terminatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich2(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 3, Window = 17, Time start = 2, Time end = 17
+        \item Testing Fluent = rich2(chris)
+        \item Expected Result=[[(2,inf)],[(2,7),(8,inf)],[(2,7),(8,inf)],[(2,7),(8,inf)],[(2,7),(8,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DeadlinesUE - test 11}
+    \subsubsection{Test 11}
+    \small
+    Testing deadline extension.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    win\_lottery(chris)& 1 & I\\
+                    win\_lottery(chris)& 4 & I\\
+                    win\_lottery(chris)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(win\_lottery(X),\ T)}.\\
+                \terminatedAt\mathit{(rich2(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(lose\_wallet(X),\ T)}.\\
+                \mathit{maxDurationUE(rich2(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Step = 5, Window = 15, Time start = 0, Time end = 15
+        \item Testing Fluent = rich2(chris)
+        \item Expected Result=[[(2,inf)],[(2,inf)],[(2,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Deadlines maxDuration}
+
+\begin{frame}
+    \frametitle{Deadlines - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing deadline succesful attempt.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & I\\
+                    go\_to(chris,home)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),\ T)},Y\neq work.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(10,18)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing normal termination in deadlines.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & I\\
+                    go\_to(chris,home)& 14 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(10,15)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 3}
+    \subsubsection{Test 3}
+    \small
+    Second initiation before the deadline.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & I\\
+                    go\_to(chris,work)& 12 & I\\
+                    go\_to(chris,home)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(10,18)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 4}
+    \subsubsection{Test 4}
+    \small
+    Meet deadline with initiation simultaneously.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & I\\
+                    go\_to(chris,work)& 17 & I\\
+                    go\_to(chris,home)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(10,18)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 5}
+    \subsubsection{Test 5}
+    \small
+    Sliding window test.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & I\\
+                    go\_to(chris,home)& 21 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 10, Window = 15, Time start = 0, Time end = 20
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(10,inf)],[(10,18)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 6}
+    \subsubsection{Test 6}
+    \small
+    Sliding window test, first/second initiation in different windows.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 2 & I\\
+                    go\_to(chris,work)& 7 & I\\
+                    go\_to(chris,home)& 15 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 4, Window = 4, Time start = 0, Time end = 16
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(3,inf)],[(3,inf)],[(3,11)],[]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 8}
+    \subsubsection{Test 8}
+    \small
+    Testing deadline termination without extension.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 1 & I\\
+                    go\_to(chris,work)& 4 & I\\
+                    go\_to(chris,work)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 3, Window = 15, Time start = 3, Time end = 15
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(2,inf)],[(2,10)],[(2,10)],[(2,10)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 9}
+    \subsubsection{Test 9}
+    \small
+    Testing normal termination.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 1 & I\\
+                    go\_to(chris,work)& 4 & I\\
+                    go\_to(chris,work)& 6 & I\\
+                    go\_to(chris,home)& 8 & T\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 6, Window = 12, Time start = 0, Time end = 12
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(2,inf)],[(2,9)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 10}
+    \subsubsection{Test 10}
+    \small
+    Testing normal termination before deadline, then initiation.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 1 & I\\
+                    go\_to(chris,work)& 4 & I\\
+                    go\_to(chris,home)& 6 & T\\
+                    go\_to(chris,work)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 3, Window = 17, Time start = 2, Time end = 17
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(2,inf)],[(2,7),(8,inf)],[(2,7),(8,inf)],[(2,7),(8,inf)],[(2,7),(8,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Deadlines - test 11}
+    \subsubsection{Test 11}
+    \small
+    Testing termination caused by deadline.\linebreak
+    \begin{minipage}{0.48\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 1 & I\\
+                    go\_to(chris,work)& 4 & I\\
+                    go\_to(chris,work)& 7 & I\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.48\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(working(X)\val\true,\ T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T)}.\\
+                \terminatedAt\mathit{(working(X)\val\true,\ T) \leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),Y\neq work,\ T)}.\\
+                \mathit{maxDuration(working(X)=\true,8)}.\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 15, Time start = 0, Time end = 15
+        \item Testing Fluent = working(chris)
+        \item Expected Result=[[(2,inf)],[(2,10)],[(2,10)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Cycles - strength}
+\begin{frame}
+    \frametitle{Cycles - test 1}
+    \subsubsection{Test 1}
+    \small
+    Cycles test where CurrentTime-Window = 0 (simple narrative).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 21
+        \item Testing Fluent: strength(chris)=full
+        \item Expected Result=[[]]
+        \item RTECv2 = failed ER number: 0 TP: [], FP: [(19,inf)], FN: []
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 2}
+    \subsubsection{Test 2}
+    \small
+    Cycles test where CurrentTime-Window = -1.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 22
+        \item Testing Fluent: strength(chris)=full
+        \item Expected Result=[[(0,10),(19,inf)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 4}
+    \subsubsection{Test 4}
+    \small
+    Cycles test where CurrentTime-Window = -1 (simple narrative).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 22
+        \item Testing Fluent: strength(chris)=lowering
+        \item Expected Result=[[(10,15)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 6}
+    \subsubsection{Test 6}
+    \small
+    Cycles test where CurrentTime-Window = -1.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 22
+        \item Testing Fluent: strength(chris)=tired
+        \item Expected Result=[[(15,19)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 7}
+    \subsubsection{Test 7}
+    \small
+    Window test where fluent initiation is outside the window.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 6, Time start = 0, Time end = 20
+        \item Testing Fluent :  strength(chris)=full
+        \item Expected Result=[[(0,inf)],[(0,10)],[],[(19,inf)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 10}
+    \subsubsection{Test 10}
+    \small
+    Testing holdsAt of terminating condition when fluent A initiates at T and an initiating event of fluent B that depends on A happens at T (not concurrent initiation-termination).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 9 & -\\
+                    sleep\_end(chris)& 18 & -\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 22
+        \item Testing Fluent :  strength(chris)=lowering
+        \item Expected Result=[[(10,inf)]],
+        \item RTECv2 = passed
+
+    \end{itemize}
+\end{frame}
+
+\subsection{Cycles - hungry/eating/noFoodNeeds}
+\begin{frame}
+    \frametitle{Cycles - test 11}
+    \subsubsection{Test 11}
+    \small
+    Testing cycles results with different fluents.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 7 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $I_{nFN},T_{h,e}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    needs\_food(chris)& 15 & $T_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 22
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result=[[(2,11)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 12}
+    \subsubsection{Test 12}
+    \small
+    Testing cycles results with different fluents.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 7 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $I_{nFN},T_{h,e}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    needs\_food(chris)& 15 & $T_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 22
+        \item Testing Fluent :  eating(chris)=true
+        \item Expected Result=[[(8,11)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 13}
+    \subsubsection{Test 13}
+    \small
+    Testing cycles results with different fluents.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 7 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $I_{nFN},T_{h,e}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    needs\_food(chris)& 15 & $T_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 22
+        \item Testing Fluent :  noFoodNeeds(chris)=true
+        \item Expected Result=[[(11,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 14}
+    \subsubsection{Test 14}
+    \small
+    Testing cycles results with different fluents - initiation/termination in different windows.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 7 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $I_{nFN},T_{h,e}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    needs\_food(chris)& 15 & $T_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 6, Time start = 0, Time end = 15
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result=[[(2,inf)],[(2,11)],[(2,11)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles - test 15}
+    \subsubsection{Test 15}
+    \small
+    Testing cycles results with different fluents.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 7 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $I_{nFN},T_{h,e}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    needs\_food(chris)& 15 & $T_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 6, Time start = 0, Time end = 15
+        \item Testing Fluent :  eating(chris)=true
+        \item Expected Result=[[],[(8,11)],[(8,11)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Cycles - test 16}
+    \subsubsection{Test 16}
+    \small
+    Testing cycles results with concurrent initiation termination.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    ate\_bacon(chris)& 1  & $T_{h}$\\
+                    smell\_bacon(chris)& 12 & $I_{h}$\\
+                    needs\_food(chris)& 15 & \\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 21
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result=[[(13,inf)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+\subsection{Cycles - unsorted}
+\begin{frame}
+    \frametitle{Cycles unsorted narrative - Test 1}
+    \subsubsection{Test 1}
+    \small
+    Cycles test where narrative is unsorted.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time = 21, Window = 22
+        \item Testing Fluent: strength(chris)=full
+        \item Expected Result=[[(0,10),(19,inf)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles unsorted narrative - Test 2}
+    \subsubsection{Test 2}
+    \small
+    Cycles test where narrative is unsorted.\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    sleep\_end(chris)& 18 & $I_{full}$\\
+                    \hline 
+                    go\_to(chris,home)& 14 & $I_{tired}$\\
+                    go\_to(chris,work)& 9 & $I_{lowering}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initially\mathit{(strength(X)\val full)}.\\
+                \initiatedAt\mathit{(strength(X)\val tired,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,Y),T),Y\neq work,}\\
+                \quad    \holdsAt\mathit{(strength(X)\val lowering),T).}\\
+                \initiatedAt\mathit{(strength(X)\val lowering,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(go\_to(X,work),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val full,T).}\\
+                \initiatedAt\mathit{(strength(X)=full,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(sleep\_end(X),T),}\\
+                \quad    \holdsAt\mathit{(strength(X)\val tired),T).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 10, Window = 21, Time start = 0, Time end = 20
+        \item Testing Fluent: strength(chris)=full
+        \item Expected Result=[[(0,inf)],[(0,10),(19,inf)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+\subsection{Cycles - Deadlines combination}
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 1}
+    \subsubsection{Test 1}
+    \small
+    Testing cycles-deadlines results (simple test).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $T_{h,e}$\\
+                    ate\_food(chris)& 10  & $I_{nFN}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 21
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result=[[(2,7)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 2}
+    \subsubsection{Test 2}
+    \small
+    Testing cycles-deadlines results (simple test).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $T_{h,e}$\\
+                    ate\_food(chris)& 10  & $I_{nFN}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 21
+        \item Testing Fluent :  eating(chris)=true
+        \item Expected Result=[[(4,11)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 3}
+    \subsubsection{Test 3}
+    \small
+    Testing cycles-deadlines results with different fluents (terminated by deadline).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_bacon(chris)& 10  & $T_{h,e}$\\
+                    ate\_food(chris)& 10  & $I_{nFN}$\\
+                    smell\_bacon(chris)& 12 & -\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item Current time=21, Window = 21
+        \item Testing Fluent :  noFoodNeeds(chris)=true
+        \item Expected Result=[[(11,16)]],
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 4}
+    \subsubsection{Test 4}
+    \small
+    Initiation and termination in different windows (terminated by deadline maxDurationUE) .\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_bacon(chris)& 8  & $T_{h,e}$\\
+                    ate\_food(chris)& 8  & $I_{nFN}$\\
+                    smell\_bacon(chris)& 16 & $I_{h}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 6, Time start = 0, Time  end = 20
+        \item Testing Fluent :  noFoodNeeds(chris)=true
+        \item Expected Result = [[],[(9,inf)],[(9,14)],[]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 5}
+    \subsubsection{Test 5}
+    \small
+    initiation/termination in different windows (maxDuration).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_bacon(chris)& 8  & $T_{h,e}$\\
+                    ate\_food(chris)& 8  & $I_{nFN}$\\
+                    smell\_bacon(chris)& 16 & $I_{h}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 5, Window = 6, Time start = 0, Time end = 20
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result=[[(2,inf)],[(2,7)],[],[(17,inf)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 6}
+    \subsubsection{Test 6}
+    \small
+    First and second initiation inside the same window .\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_food(chris)& 7  & $I_{nFN}$\\
+                    ate\_food(chris)& 8  & $I_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 3, Window = 4, Time start = 0, Time end = 15
+        \item Testing Fluent :  noFoodNeeds(chris)=true
+        \item Expected Result = [[],[],[(8,inf)],[(8,inf)],[(8,14)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 7}
+    \subsubsection{Test 7}
+    \small
+    First and second initiation in different windows (maxDurationUE).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    found\_bacon(chris)& 3 & $I_{e}$\\
+                    ate\_food(chris)& 7  & $I_{nFN}$\\
+                    ate\_food(chris)& 10  & $I_{nFN}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 3, Window = 4, Time start = 0, Time end = 15
+        \item Testing Fluent :  noFoodNeeds(chris)=true
+        \item Expected Result = [[],[],[(8,inf)],[(8,inf)],[(8,16)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Cycles Deadlines - test 8}
+    \subsubsection{Test 8}
+    \small
+    First and second initiation in different windows (maxDuration).\linebreak
+    \begin{minipage}{0.4\linewidth}
+        \begin{table}[t!]
+            \caption{Event description}
+            \begin{center}
+
+                \begin{tabular}{lll}
+                    \hline\noalign{\smallskip}
+                    \multicolumn{1}{l}{\textbf{Event}} & \multicolumn{1}{c}{\textbf{Time}} & \multicolumn{1}{c}{\textbf{Status}} \\
+                    smell\_bacon(chris)& 1 & $I_{h}$\\
+                    smell\_bacon(chris)& 5 & $I_{h}$\\
+                    \noalign{\smallskip}
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+    \end{minipage}
+    \begin{minipage}{0.55\linewidth}
+        \begin{align*}
+            \begin{mysplit}
+                \initiatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(smell\_bacon(X),T),}\\
+                \quad    not\ \holdsAt\mathit{(noFoodNeeds(X)\val true),T).}\\
+                \terminatedAt\mathit{(hungry(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(found\_bacon(X),T),}\\
+                \quad    \holdsAt\mathit{(hungry(X)\val true),T).}\\
+                \terminatedAt\mathit{(eating(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_bacon(X),T)}\\
+                \initiatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(ate\_food(X),T),}\\
+                \quad    \holdsAt\mathit{(eating(X)\val true),T).}\\
+                \terminatedAt\mathit{(noFoodNeeds(X)\val true,T)\leftarrow}\\
+                \quad    \happensAt\mathit{(needsFood(X),T)}\\
+                \mathit{maxDurationUE(noFoodNeeds(X),5).}\\
+                \mathit{maxDuration(hungry(X),5).}\\
+            \end{mysplit}
+        \end{align*}
+    \end{minipage}
+    \begin{itemize}
+        \item  Step = 3, Window = 4, Time start = 0, Time end = 6
+        \item Testing Fluent :  hungry(chris)=true
+        \item Expected Result = [[(2,inf)],[(2,7)]]
+        \item RTECv2 = passed
+    \end{itemize}
+\end{frame}
+
+
+\section{}
+\begin{frame}
+    \Huge{\centerline{The End}}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

@@ -1,0 +1,30 @@
+
+ACTION POINTS:
+
+---Present the declarations language precisely, taking into consideration RTEC's changelog.
++The same fluent must have the same index.
++All values of a simple fluent must be declared.
+
+---Present the execution scripts.
+
+---What is the meaning of the different colours in the listings?
+
+---Add information about the built-in start(F=V) and end(F=V) events: in Section 2 for expressivity, but then Section 2.1 should appear after the fluents; and in the description of the figure illustrating maIntervalsFromPoints where an initiating point is computed at the beginning of an input entity interval.
+
+---Present a formal account of expressivity. See RTEC2 paper.
+
+---Present RTEC2.
+
+---Present a gentle, brief intro to the event calculus
+
+---Present algorithm for simple fluent processing.
+
+---Present algorithm for event processing.
+
+---Present the simple language (commonsense17 paper); this section has been commented out.
+
+
+NOTES:
+- Section 2 is mainly about expressivity.
+- Section 3 gives an example of reasoning.
+- Section 4 presents the operation of RTEC.

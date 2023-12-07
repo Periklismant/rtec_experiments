@@ -1,0 +1,31 @@
+#!/bin/bash
+
+EndTimes='100 200 400 800'
+
+for EndTime in $EndTimes; do
+	yap -l FL_EC.prolog -q -g "runQueryAllInits(phage_g, ${EndTime}), halt."
+
+	CIVals='0 1 2'
+	CroVals='0 1 2 3'
+	CIIVals='0 1'
+	NVals='0 1'
+
+	for CIVal in $CIVals; do
+		for CroVal in $CroVals; do
+			for CIIVal in $CIIVals; do
+				for NVal in $NVals; do
+					python3 transform_flec_logs.py phage_g ${EndTime} ${CIVal} ${CroVal} ${CIIVal} ${NVal}
+				done
+			done
+		done
+	done
+done
+
+
+
+FILES="FLECresults/*"
+for f in $FILES; do
+	X="$(basename "$f")"
+	echo $X
+	diff <(sort "results/$X") <(sort "FLECresults/$X")
+done

@@ -1,0 +1,3 @@
+initiates(complete(presentQuote,_ID,Merchant,[Consumer,Goods]), status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),active), _).
+terminates(complete(acceptQuote,_ID,Consumer,[Merchant,Goods]), status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),active), _).
+

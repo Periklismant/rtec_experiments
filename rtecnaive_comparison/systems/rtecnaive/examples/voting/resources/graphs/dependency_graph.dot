@@ -1,0 +1,77 @@
+digraph
+{
+	node [shape=record, style=filled, fillcolor=white, fontsize=16.0];
+	rankdir=LR;
+	ranksep="1.2 equally"
+
+	1 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="status(_)=voting" border="1" color="red">status(_)=voting</td></tr>
+		<tr><td port="status(_)=voted" border="1" color="red">status(_)=voted</td></tr>
+		<tr><td port="status(_)=proposed" border="1" color="red">status(_)=proposed</td></tr>
+		<tr><td port="status(_)=null" border="1" color="red">status(_)=null</td></tr>
+	</table>>
+	]
+
+	2 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="voted(_, _)=aye" border="1" color="black">voted(_, _)=aye</td></tr>
+		<tr><td port="voted(_, _)=nay" border="1" color="black">voted(_, _)=nay</td></tr>
+		<tr><td port="voted(_, _)=null" border="1" color="black">voted(_, _)=null</td></tr>
+		<tr><td port="outcome(_)=carried" border="1" color="black">outcome(_)=carried</td></tr>
+		<tr><td port="outcome(_)=not_carried" border="1" color="black">outcome(_)=not_carried</td></tr>
+		<tr><td port="auxPerCloseBallot(_)=true" border="1" color="blue">auxPerCloseBallot(_)=true</td></tr>
+		<tr><td port="auxPerCloseBallot(_)=false" border="1" color="blue">auxPerCloseBallot(_)=false</td></tr>
+		<tr><td port="per(close_ballot(_, _))=false" border="1" color="black">per(close_ballot(_, _))=false</td></tr>
+		<tr><td port="obl(declare(_, _, _))=false" border="1" color="black">obl(declare(_, _, _))=false</td></tr>
+		<tr><td port="pow(propose(_, _))=true" border="1" color="black">pow(propose(_, _))=true</td></tr>
+		<tr><td port="pow(second(_, _))=true" border="1" color="black">pow(second(_, _))=true</td></tr>
+		<tr><td port="pow(vote(_, _))=true" border="1" color="black">pow(vote(_, _))=true</td></tr>
+		<tr><td port="pow(close_ballot(_, _))=true" border="1" color="black">pow(close_ballot(_, _))=true</td></tr>
+		<tr><td port="pow(declare(_, _))=true" border="1" color="black">pow(declare(_, _))=true</td></tr>
+	</table>>
+	]
+
+	3 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="per(close_ballot(_, _))=true" border="1" color="black">per(close_ballot(_, _))=true</td></tr>
+		<tr><td port="auxMotionOutcomeEvent(_, _)" border="1" color="black">auxMotionOutcomeEvent(_, _)</td></tr>
+	</table>>
+	]
+
+	4 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="obl(declare(_, _, _))=true" border="1" color="black">obl(declare(_, _, _))=true</td></tr>
+	</table>>
+	]
+
+	5 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="sanctioned(_)=true" border="1" color="green4">sanctioned(_)=true</td></tr>
+		<tr><td port="sanctioned(_)=false" border="1" color="green4">sanctioned(_)=false</td></tr>
+	</table>>
+	]
+
+
+	1:"status(_)=voting" -> 2:"voted(_, _)=aye"
+	1:"status(_)=voting" -> 2:"voted(_, _)=nay"
+	1:"status(_)=voting" -> 2:"voted(_, _)=null"
+	1:"status(_)=null" -> 2:"voted(_, _)=null"
+	1:"status(_)=voted" -> 2:"outcome(_)=carried"
+	1:"status(_)=proposed" -> 2:"outcome(_)=carried"
+	1:"status(_)=voted" -> 2:"outcome(_)=not_carried"
+	1:"status(_)=proposed" -> 2:"outcome(_)=not_carried"
+	1:"status(_)=voting" -> 2:"auxPerCloseBallot(_)=true"
+	1:"status(_)=proposed" -> 2:"auxPerCloseBallot(_)=false"
+	2:"auxPerCloseBallot(_)=true" -> 3:"per(close_ballot(_, _))=true"
+	1:"status(_)=voting" -> 3:"per(close_ballot(_, _))=true"
+	1:"status(_)=voted" -> 2:"per(close_ballot(_, _))=false"
+	3:"auxMotionOutcomeEvent(_, _)" -> 4:"obl(declare(_, _, _))=true"
+	1:"status(_)=null" -> 2:"obl(declare(_, _, _))=false"
+	3:"per(close_ballot(_, _))=true" -> 5:"sanctioned(_)=true"
+	1:"status(_)=voted" -> 5:"sanctioned(_)=true"
+	4:"obl(declare(_, _, _))=true" -> 5:"sanctioned(_)=true"
+	1:"status(_)=null" -> 2:"pow(propose(_, _))=true"
+	1:"status(_)=proposed" -> 2:"pow(second(_, _))=true"
+	1:"status(_)=voting" -> 2:"pow(vote(_, _))=true"
+	1:"status(_)=voting" -> 2:"pow(close_ballot(_, _))=true"
+	1:"status(_)=voted" -> 2:"pow(declare(_, _))=true"
+	1:"status(_)=voted" -> 3:"auxMotionOutcomeEvent(_, _)"
+	2:"voted(_, _)=aye" -> 3:"auxMotionOutcomeEvent(_, _)"
+	2:"voted(_, _)=nay" -> 3:"auxMotionOutcomeEvent(_, _)"
+}

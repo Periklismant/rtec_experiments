@@ -1,0 +1,10 @@
+Event,TP,FP,FN,Precision,Recall,F-1
+activeOrInactivePerson,0,521560,0,0.0,(nan),(nan)
+close,0,50061920,0,0.0,(nan),(nan)
+closeSymmetric,0,212440,0,0.0,(nan),(nan)
+fighting,0,11720,24960,0.0,0.0,(nan)
+greeting1,0,72960,0,0.0,(nan),(nan)
+leaving_object,0,55640,7680,0.0,0.0,(nan)
+meeting,53400,49360,40720,0.519657454262359,0.567360815979601,0.542462413652987
+moving,5720,108760,119000,0.0499650593990217,0.0458627325208467,0.0478260869565217
+person,0,2135000,0,0.0,(nan),(nan)

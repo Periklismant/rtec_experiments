@@ -1,0 +1,63 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                   %
+%   Part of the formalization common to all activities   %
+%                                                                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% Generation of internal events
+
+happens(start(A,ID,O,Input),T):-
+	happens(exec(ts,A,ID,O,Input),T),
+	\+ initiates(exec(ts,A,ID,O,Input),status(i(ID,activity(A)),error),T).
+
+happens(complete(A,ID,O,InOut),T):-
+	happens(start(A,ID,O,Input),Ts),
+	happens(exec(tc,A,ID,O,Output),T),
+	T > Ts,
+	holds_at(status(i(ID,activity(A)),active),T),
+	append(Input,Output,InOut).
+
+happens(cancel(A,ID,O,Input),T):-
+	happens(exec(ts,A,ID,O,Input),Ts),
+	happens(exec(tx,A,ID,O,[]),T),
+	T > Ts,
+	holds_at(status(i(ID,activity(A)),active),T).
+	
+
+%%% Activity lifecycle 
+
+% Activity instance succesful creation
+initiates(start(A,ID,O,Input),status(i(ID,activity(A)),active),T).
+
+% Active -> completed successful transition
+terminates(complete(A,ID,O,InOut),status(i(ID,activity(A)),active),T).
+initiates(complete(A,ID,O,Inout),status(i(ID,activity(A)),completed),T).
+
+% Active -> canceled successful transition
+terminates(cancel(A,ID,O,_),status(i(ID,activity(A)),active),T).
+initiates(cancel(A,ID,O,_),status(i(ID,activity(A)),canceled),T).
+
+
+% Errors management
+
+% 1) Any error causes the current state to be terminated
+terminates(Ev,status(i(ID,activity(A)),S),T):-
+	initiates(Ev,status(i(ID,activity(A)),error),T).
+
+% 2) Repeated ID is an error
+initiates(exec(E,A,ID,_,_),status(i(ID,activity(A)),error),T):-
+	happens(exec(E,A,ID,_,_),Tp),Tp < T.
+
+% 3) Mismatch between tc-complete and tx-cancel external and internal events is an error
+initiates(exec(tc,A,ID,O,_),status(i(ID,activity(A)),error),T):-
+	\+ happens(complete(A,ID,O,_),T).	
+
+initiates(exec(tx,A,ID,O,_),status(i(ID,activity(A)),error),T):-
+	\+ happens(cancel(A,ID,O,_),T).
+
+% 4) At the trace termination, all active activity instances become error instances
+terminates(exec(complete),status(i(ID,activity(A)),active),T).
+initiates(exec(complete),status(i(ID,activity(A)),error),T):-
+	holds_at(status(i(ID,activity(A)),active),T).
+

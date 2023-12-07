@@ -1,0 +1,48 @@
+recCar(C) at T :- car(C), rec(C) at T in [1 #].
+car(1). car(2). car(3). car(4).
+
+quote at T :- quote at T1 [100 sec], T1<T, not acceptQuote at T2 [100 sec], T2>T1, T>T2.
+
+initQuote(TimeStamp) :- presentQuote(TimeStamp)
+brokenQuote() :- 
+mostRecentInit()
+
+presentQuote(1)
+presentQuote(2)
+acceptQuote(3)
+acceptQuote(4)
+presentQuote(5)
+acceptQuote(6)
+presentQuote(7)
+presentQuote(8)
+
+subsequentTermBeforeNextInit(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), subsequentInitQuote(TimeStamp2), termBetween(TimeStamp,TimeStamp2).
+
+
+subsequentTermQuote(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), acceptQuote(TimeStamp2) [10000 sec], lt(TimeStamp,TimeStamp2).
+mostRecentTermQuote(TimeStamp) :- acceptQuote(TimeStamp) [10000 sec], timepoint(TimeStamp), not subsequentTermQuote(TimeStamp).
+
+termBetween(TimeStamp,TimeStamp2) :- timepoint(TimeStamp), timepoint(TimeStamp2), timepoint(TimeStamp3), acceptQuote(TimeStamp3) [10000 sec], lt(TimeStamp,TimeStamp3), lt(TimeStamp3,TimeStamp2).
+initBeforeNextTermQuote(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), presentQuote(TimeStamp2) [10000 sec], not termBetween(TimeStamp,TimeStamp2).
+
+termPointQuote(TimeStamp) :- timepoint(TimeStamp), acceptQuote(TimeStamp) [10000 sec], initBeforeNextTermQuote(TimeStamp).
+termPointQuote(TimeStamp) :- timepoint(TimeStamp), mostRecentTermQuote(TimeStamp).
+
+
+
+subsequentInitQuote(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), presentQuote(TimeStamp2) [10000 sec], lt(TimeStamp,TimeStamp2).
+mostRecentInitQuote(TimeStamp) :- presentQuote(TimeStamp) [10000 sec], timepoint(TimeStamp), not subsequentInitQuote(TimeStamp).
+
+initBetween(TimeStamp,TimeStamp2) :- timepoint(TimeStamp), timepoint(TimeStamp2), timepoint(TimeStamp3), presentQuote(TimeStamp3) [10000 sec], lt(TimeStamp,TimeStamp3), lt(TimeStamp3,TimeStamp2).
+brokenBeforeNextInitQuote(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), lt(TimeStamp,TimeStamp2), acceptQuote(TimeStamp2) [10000 sec], not initBetween(TimeStamp,TimeStamp2).
+
+initPointQuote(TimeStamp) :- timepoint(TimeStamp), presentQuote(TimeStamp) [10000 sec], brokenBeforeNextInitQuote(TimeStamp).
+initPointQuote(TimeStamp) :- timepoint(TimeStamp), mostRecentInitQuote(TimeStamp).
+
+termBetween(TimeStamp,TimeStamp2) :- timepoint(TimeStamp), timepoint(TimeStamp2), timepoint(TimeStamp3), termQuote(TimeStamp3), lt(TimeStamp,TimeStamp3), lt(TimeStamp3,TimeStamp2).
+
+subsequentTermQuote(TimeStamp) :- timepoint(TimeStamp), timepoint(TimeStamp2), termQuote(TimeStamp2), lt(TimeStamp,TimeStamp2).
+
+isTerminationPoint(TimeStamp) :- timepoint(TimeStamp), termQuote(TimeStamp), not subsequentTermQuote(TimeStamp).
+
+isTerminationPoint(TimeStamp) :- timepoint(TimeStamp), termQuote(TimeStamp), timepoint(TimeStamp2), initQuote(TimeStamp2), lt(TimeStamp,TimeStamp2), not termBetween(TimeStamp,TimeStamp2).

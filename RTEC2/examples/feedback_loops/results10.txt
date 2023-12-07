@@ -1,0 +1,45 @@
+Application: immune_g
+Running FeedBack Loop for all time-points in (0, 10].
+holdsAt(val(h,0),1).
+holdsAt(val(s,0),1).
+happens(occurs(f(h),1),1).
+happens(occurs(f(s),0),1).
+holdsAt(val(h,0),2).
+holdsAt(val(s,0),2).
+happens(occurs(f(h),1),2).
+happens(occurs(f(s),0),2).
+holdsAt(val(h,1),3).
+holdsAt(val(s,0),3).
+happens(occurs(f(h),1),3).
+happens(occurs(f(s),1),3).
+holdsAt(val(h,1),4).
+holdsAt(val(s,0),4).
+happens(occurs(f(h),1),4).
+happens(occurs(f(s),1),4).
+holdsAt(val(h,1),5).
+holdsAt(val(s,1),5).
+happens(occurs(f(h),1),5).
+happens(occurs(f(s),2),5).
+holdsAt(val(h,1),6).
+holdsAt(val(s,1),6).
+happens(occurs(f(h),1),6).
+happens(occurs(f(s),2),6).
+holdsAt(val(h,1),7).
+holdsAt(val(s,2),7).
+happens(occurs(f(h),0),7).
+happens(occurs(f(s),2),7).
+holdsAt(val(h,1),8).
+holdsAt(val(s,2),8).
+happens(occurs(f(h),0),8).
+happens(occurs(f(s),2),8).
+holdsAt(val(h,0),9).
+holdsAt(val(s,2),9).
+happens(occurs(f(h),0),9).
+happens(occurs(f(s),2),9).
+holdsAt(val(h,0),10).
+holdsAt(val(s,2),10).
+happens(occurs(f(h),0),10).
+happens(occurs(f(h),0),10).
+happens(occurs(f(s),2),10).
+
+Execution Time for 10 time-points is: 30

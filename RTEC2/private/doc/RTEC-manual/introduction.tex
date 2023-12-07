@@ -1,0 +1,172 @@
+\section{Introduction}
+
+The Event Calculus for Run-Time reasoning (RTEC) is an open-source, logic programming implementation of the Event Calculus \cite{DBLP:journals/ngc/KowalskiS86}, optimised for computing continuous queries on data streams \cite{DBLP:journals/tkde/ArtikisSP15}. RTEC has been successfully used for \emph{composite event recognition}  (`event pattern matching') in various real-world application domains. Composite event (CE) recognition systems accept as input a stream of time-stamped simple, derived events (SDE)s. A SDE is the result of applying a computational derivation process to some other event, such as an event coming from a sensor \cite{EPTSglossary}. Using SDEs as input, event recognition systems identify CEs of interest---collections of events that satisfy some pattern. The `definition' of a CE  imposes temporal and, possibly, atemporal constraints on its subevents, i.e.~SDEs or other CEs. 
+Below are a few CE recognition applications in which RTEC has been used:
+%
+\begin{itemize}
+	\item Activity recognition (see \cite{DBLP:journals/tkde/ArtikisSP15} and \url{http://cer.iit.demokritos.gr/cerar}).
+	\item City transport \& traffic management  \cite{DBLP:journals/tkde/ArtikisSP15, DBLP:conf/bigdataconf/ArtikisWGKG13, DBLP:conf/edbt/ArtikisWSBLPBMKMGMGK14}.
+	\item Maritime monitoring (see \cite{DBLP:conf/debs/PitsikalisADRCJ19, DBLP:conf/edbt/PatroumpasAKVTP15} and \url{http://cer.iit.demokritos.gr/cermm}).
+	\item Fleet management (see \cite{DBLP:journals/tplp/TsilionisKNDA19} \url{http://cer.iit.demokritos.gr/cerfm}).
+\end{itemize}
+
+
+The novelty of RTEC lies in the following implementation techniques:
+
+\begin{enumerate}
+	\item\textit{Caching}, that helps in avoiding unnecessary re-computations.
+	\item\textit{Interval manipulation}, that helps in expressing succinctly complex temporal phenomena.
+	\item\textit{Indexing}, that makes RTEC robust to data streams that are irrelevant to the queries we want to compute.
+	\item\textit{Windowing}, that supports real-time query computation.
+\end{enumerate}
+
+
+\subsection{Software requirements \& installation}
+
+RTEC is cross-platform. The only software requirement is a Prolog implementation. RTEC has been tested under YAP\footnote{\url{https://en.wikipedia.org/wiki/YAP_(Prolog)}} and SWI\footnote{\url{https://www.swi-prolog.org/}} Prolog, operating in Ubuntu Linux. 
+
+In this manual, we will illustrate the use of RTEC in YAP.
+
+To use RTEC, simply download it from \url{https://github.com/aartikis/RTEC}.
+
+
+
+
+
+\subsection{A simple example}\label{sec:aSimpleExample}  
+
+We begin with a simple example briefly illustrating  the functionality of RTEC. In the following sections we will have a closer look at the expressivity and reasoning algorithms of RTEC.
+
+Suppose that Chris is having an all but ordinary day. He goes to work in the morning and in the afternoon he finds out that he has won the lottery. In the evening he goes to the pub, but loses his wallet. Ultimately, he goes home at night. We want to know whether Chris is happy or not, as these actions take place. Our story has three events, ``go\_to'', ``lose\_wallet'' and ``win\_lottery'', and three properties, ``happy'', ``location'' and ``rich''. The basic concept of RTEC lies in events taking place and modifying the values of the properties. In the RTEC terminology, these properties are called ``fluents''.
+
+We would like to specify the conditions that make Chris happy in our tiny world. Being rich is such a condition. Another condition could be being at the pub. Therefore, the `union' of these two conditions can meet the needs of a happy man in our example. Winning the lottery makes someone rich. For the sake of the example, let's assume that losing your wallet causes you to stop being rich. 
+
+Now that we have designed the rules that describe our example, we are ready to express them into the logic programming language of RTEC. Use a text editor and create a new file, say  ``\textttsmall{toy\_rules.prolog}'', and paste the following:
+
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style      = Prolog-cvlas,
+  caption    = {Event description in RTEC.},
+  label	     = {lst:rules}
+]{listings/toy_rules.prolog}
+\end{minipage}
+
+Following Prolog's convention, variables start with an upper-case letter, while predicates and constants start with a lower-case letter. To test the formalization above, create a new file, ``\textttsmall{toy\_declarations.prolog}'', containing the following:
+
+\lstinputlisting[
+	style	= Prolog-cvlas,
+	caption	= {Event and fluent declarations.},
+	label	= {lst:declarations}
+]{listings/toy_declarations.prolog}
+
+The above \emph{declarations} file is a companion to the rules file. It contains information about all the events and fluents of our scenario. In the following section, we will describe the declarations language in detail.
+
+At this point, we need to compile the rules and declarations. To do this, open a terminal, go to the \textttsmall{RTEC/} directory, invoke Prolog and execute the following query:
+
+{\small
+\begin{verbatim}
+   ?- compileEventDescription('toy_declarations.prolog',
+                     'toy_rules.prolog', 'toy_rules_compiled.prolog').
+\end{verbatim}
+}
+
+If Prolog responds with a message ending in ``yes'' or ``true'' (depending on your Prolog implementation), compilation was successful. During compilation, a new file ``\textttsmall{toy\_rules\_compiled.prolog}'' has been created. This file combines the information provided in the rules and declarations files and is in a form ready for use by RTEC. 
+
+At the next step, we must provide the domain of each variable. Create another file, say ``\textttsmall{toy\_var\_domain.prolog}'', and put the following code in it:
+
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style      = Prolog-cvlas,
+  caption    = {Variable domain.}
+]{listings/toy_var_domain.prolog}
+\end{minipage}
+
+The contents of this file are used for \emph{output entity} (e.g.~fluent) grounding (see Listing \ref{lst:declarations}, lines 49-53). 
+Finally, to test our event description, we need an event narrative, such as the following:
+
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+	style	= Prolog-cvlas,
+	caption	= {Event narrative.},
+	label	= {lst:stream}
+]{listings/toy_event_stream.prolog}
+\end{minipage}
+
+%``\texttt{toy\_Event\_stream.prolog}''
+
+We make a series of assertions about what happens at each time in our scenario. \textttsmall{happensAtIE} is a compiled version of the \textttsmall{happensAt} predicate that expresses event occurrences. At 9:00 Chris goes to work. Then, at 13:00 he finds out that he has won the lottery. Subsequently, at 17:00 he goes to the pub. Afterwards, at 19:00 he loses his wallet, and finally at 21:00 he returns home. We group these assertions under the auxiliary \textttsmall{updateSDE} predicate, so that whenever we want to load this narrative we simply call this predicate.
+
+Now we have all the necessary components for narrative assimilation---in this example, the computation of the maximal intervals of the fluents. We simply need to combine the aforementioned files and start the RTEC engine. This may be done by creating a Prolog script, ``\textttsmall{toy\_queries.prolog}'' that contains the following:
+
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+	style	= Prolog-cvlas,
+	caption	= {Narrative assimilation script.},
+	label	= {lst:queries}
+]{listings/toy_queries.prolog}
+\end{minipage}
+
+The code of Listing \ref{lst:queries} accumulates the information contained in the files described above, and combines it with the main file of RTEC, namely ``RTEC.prolog''. Then, we define a predicate ``\textttsmall{performER}''  to automate narrative assimilation. At first we initialize RTEC, by setting four parameters. First, we state that the input facts are temporally sorted. 
+%Second, we state that there is no need for `dynamic grounding' --- details about this feature will be presented later.
+Second, we state that our input data does not require some form of preprocessing. Finally, the last parameter is the distance between two consecutive timepoints in our dataset, which is 1 time unit. Subsequently, we load the event narrative using the ``\textttsmall{updateSDE}'' predicate we created in Listing \ref{lst:stream}, and finally we call the built-in \textttsmall{eventRecognition} predicate of RTEC for narrative assimilation. We provide two parameters, the current time of the query and how deep in the past will RTEC look for events and fluents in order to calculate the composite events of interest. Here, since we have a small dataset that ends at timepoint 21, we perform one query at time 21 and we take into account account all the input events that took place within the last 21 timepoints, i.e. from the beginning.
+
+Back to Prolog now. Halt any open session with Prolog and start a new one. Then load the Prolog script:
+
+{\small
+\begin{verbatim}
+   ?- ['toy_queries.prolog'].
+\end{verbatim}
+}
+
+Again, if Prolog responds with a message ending in ``yes'' or ``true'', then the file loading was successful. We are now ready for narrative assimilation, by typing the command
+
+{\small
+\begin{verbatim}
+   ?- performER.
+\end{verbatim}
+}
+
+If Prolog answers ``yes'' or ``true'', that means RTEC has finished the computation of the maximal intervals of fluents. Now we can ask RTEC anything about the processed fluents. For instance, if we want to see when Chris is happy, typing ``\textttsmall{holdsFor(happy(chris)=true,I).}'' will give us the answer:
+
+{\small
+\begin{verbatim}
+I = [(14,22)]
+\end{verbatim}
+}
+
+This means that Chris is happy from time 14, right after he won the lottery, until time 22 (not included), when he leaves the pub. A term of the form \textttsmall{(Ts, Te)} in RTEC represents the closed-open interval $\mathit{[T_s, T_e)}$. According to our example, one is happy if he is rich or at the pub. Thus, this answer seems reasonable.
+
+To see the maximal intervals of all fluent-value pairs that have been computed by RTEC, simply type ``\textttsmall{holdsFor(F,I).}'' and press ENTER. You will receive an output that looks like this:
+
+{\small
+\begin{verbatim}
+F = (location(chris)=home),
+I = [(22,inf)] ? ;
+F = (location(chris)=pub),
+I = [(18,22)] ? ;
+F = (location(chris)=work),
+I = [(10,18)] ? ;
+F = (rich(chris)=true),
+I = [(14,20)] ? ;
+F = (rich(chris)=false),
+I = [] ? ;
+F = (happy(chris)=true),
+I = [(14,22)] ? ;
+F = (happy(chris)=false),
+I = []
+\end{verbatim}
+}
+
+In addition, we can ask what was true at a specific time-point. For instance if we ask ``\textttsmall{holdsAt(F,16).}'' we will find out what was the situation like at time-point 16. RTEC will respond:
+
+{\small
+\begin{verbatim}
+F = (location(chris)=work) ? ;
+F = (rich(chris)=true) ? ;
+F = (happy(chris)=true)
+\end{verbatim}
+}
+
+So, RTEC says that at time-point 16 Chris is at work, rich, and happy.
+
+Now that we have given a brief illustration of the basic functionality of RTEC, we can take a closer look at its language and reasoning techniques.

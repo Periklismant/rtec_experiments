@@ -1,0 +1,170 @@
+
+*************** COMMENTS: ***************
+ALWAYS test in SWI Prolog. For performance, use YAP.
+
+-With the exception of one unit test, all tests pass. The one that fails possibly has to do with an initiating point before the start of a window and cycles.
+
+-timeoutTreatment should be loaded only for applications that need it. See eg handleApplication.
+
+-atemporal definitions must be declared dynamic (this is an old comment; I am not sure it is true any more).
+
+*************** To Do: ***************
+
+********** MANOS (start): **********
+
+---MarineTraffic dataset: set up the folder and run the maritime patterns.
+
+---Re-run maritime experiments to check the accuracy and efficiency of RTEC2.
+
+---Automate the process of running experiments (logging times and F1-score where possible, and constucting diagrams using ScalaTikz). 
+
+---dynamic grounding
++additional unit tests for dynamic grounding?
++Can we use re-use parts of input processing for dynamic grounding?
++How could dynamic grounding work without scanning the data?
+
+---RTEC unit tester: 
++synchronise the unit test slides with the actual test files;
++add simple test with concurent initiations and terminations; 
++add generic/toy example tests for multi-valued fluents with deadlines and no cycles; 
++use the same narrative file with different window parameters; eg in test_voting_motion_cycles_(no)deadlines(notextended).prolog, narrative4 is essentially the same as narrative3; we should not create a separate narrative file.
++any other unit tests that should be added?
+
+********** MANOS (end) **********
+
+********** EXPERIMENTS (start): **********
+
+Measure the efficiency of RTEC v2 (all examples should be tested on manually compiled rules).
+Important: 
++Look at the rules for optimisations (especially in the maritime use case; in these cases, look at all files) and test for correctness (check the recognitions at arbitrary query times).
++document times with and without the forget mechanism.
+
+Applications:
++Brest (with deadlines, cycles)
++IMIS (with deadlines, cycles)
++CAVIAR (without deadlines, cycles); report f1-score in addition to execution times; BUT: I found two bugs in the input files, so the f1-score should be investigated in case there are more bugs. (RTEC2 has the same results as RTEC1 since we updated the event desciption to match the new functionality of RTEC2.)
++CTM (without deadlines, cycles). (We updated the event desciption to match the new functionality of RTEC2; but RTEC2 cannot have the same results as RTEC1 due to the new semantics of the end() event.)
++MAS protocols (with deadlines, cycles)
+
+---Common hardware for running the experiments: goliath?
+
+-run experiments with ordered vs unordered input.
+-voting: YAP handles 10K agents, 100K events in 12 sec in the home desktop. Increase the thresholds in handleMsg to increase the number of input events (from some point, the increase in output entities should be sublinear).
+-netbill is much harder.
+-Make the data generators more dynamic by giving the list limits as parameters that change every 10 timepoints (simulation cycle); allowing different event sequences.
+-Control the domain of the variables used for grounding, ie the number of CEs; the number of agents, the number of events; the ratio between input entities and output entities; the length of the cycles; the type and length of deadlines. For grounding: increase motions/music items without increasing queryMotion/queryGoodsDescription. This way, the number of input entitites will increase without increasing the number of output entities. Also: increase the messages of agents with no roles in the data generators, and decrease the messages of agents with roles.
+-The MAS protocol data generators should produce csv files; then use the data loader on these files.
+
+********** EXPERIMENTS (end) **********
+
+---Discuss the dynamic grounding in netbill (Manos recently added that); proceed with voting
+
+---Investigate why we have such a low f1-score in caviar (ground truth was provided by AlexTrup).
+
+---Execution script:
++I updated continuousQueries.prolog, and it produces the same results in the Brest and IMIS datasets as Manos' mass-queries.prolog. The downside is that we need to set the StartReasoningTime to -1 in order to handle initially statements. This is inappropriate and needs to be fixed. Stop supporting initially statements or update the execution script in order to extend the first window to -1. In general, initially is inconsistent with the spirit of streaming applications, as at every query time we need to check the initial state (timepoint -1). Deleting initially, however, will make the first initiation rule (of status in voting, for instance) complex and thus expensive. (Note that initially/1 may be problematic wrt dynamic grounding). 
+There is also the issue of initially for cyclic fluents. What does RTEC.prolog do with initiallyCyclic? Can initially and initiallyCyclic be separated?
++++The only examples that use initially are voting and CTM. Start by thinking of way to delete the initially statements from these examples, ie we are agnostic about the value of the fluent until some event arrives that sets the value of the fluent.
++++Do unit tests pass?
++++What about the unit test that always failed (see comment at the top of this file).
++++Is it really more expensive to delete the initially statements?
++Test (trace in SWI) all protocols. Compare against the script of the RTEC github repo.
++test on the complete 6 months Brest.
++Future work: Further optimise, clean, add comments on the script.
+
+---use dynamic grounding
++see readme file.
++see the unit tests, located in RTEC-unit tests: RTEC_version_1_dg.prolog. It is likely that they are not sufficient.
++combine with the data loader (see the findGroundings/2 predicate of the data loader); we should take advantage of the data file parsing of the data loader in producing the constants for dynamic grounding.
++Can we use re-use parts of input processing for dynamic grounding?
++How could dynamic grounding work without scanning the data?
++If dynamic grounding is domain-independent we should claim it as a contribution in the paper.
+
+---Write a bash script for the compilation of event descriptions, to avoid halting and re-launching prolog. The input to this script should be a directory, and the script should find the .patterns and .decl files (patterns and declarations).
+
+---Note: do not update anymore the RTEC master branch; create a branch for RTEC2 when dynamic grounding, data loader and the maritime application are ready, and update just that. Eventually, this will become the master branch.
+
+---Cycle treatment: 
++Unit tests: check the cycle unit tests slides. I also have cycle tests in voting (small cycle) and netbill (large cycle). Are all cases covered?
++Think about updating the definition of start(F=V) and end(F=V) events in RTEC.prolog to support cyclic F=V: for cyclic fluents that have been processed (that is, processedCyclic/2) we can return the starting/ending points of their intervals. This way, the inference over large cycles would improve. Would this extra check reduce significantly the evaluation of start(F=V) and end(F=V) for non-cyclic fluents? Check the extra benefit in NetBill.
++Do we gain anything by storing initiating points in the cycle/deadline treatment? If we do gain something, then we should also cache ending points.
+
+---Brest example: 
++The generic execution script works; ie the files under /utils in the Brest folder and run.prolog are obsolete. However, I chose to keep them in order to compare further development with those scripts that provably work. Also, mass-queries.prolog has some useful statistics computation predicates.
+
+---RTEC unit tester: 
++any other tests that should be added?
++Use the data loader for (some of) the RTEC unit tests; important, distinguish between arrival time and occurrence time; see the python script /private/auxiliary scripts/Prolog2CSV-converter.py that converts the Prolog assertion files into csv files; the unit tester needs to be updated to use the data loader. Note that in the data loader the range that we load events is (StartPoint,EndPoint]. In contrast, I use updateSDE in an ad hoc manner in the unit tests.
++Update manual: extra arguments have been added in testcase[E/SE].
+
+---data loader unit tests:
++Use YAP for these tests?
++Replace fullel.prolog by continuousQueries.prolog 
++Expand Elias' unit tests (does he declare fluents in a different way?).
++Make the directory structure compatible with the structure of the other unit tests.
++Does the most recent version of YAP support these tests?
+
+---Support only csv files: thus simplify continuousQueries.prolog and RTEC.prolog (anywhere else?) by deleting updateSDE predicates and the SDEBatch variable. Note that updateSDE should also be deleted from the RTEC unit tests. 
+
+---Maritime examples: delete identical files that appear both in the Brest and the IMIS folders.
+
+---Declarations:
++Add in the comments of each declarations file the need to declare cyclic/1.
++Why do we need to ground input fluents?
+
+---Upgrade to the stable version of YAP 6.3
++Are the results the same as YAP 6.2.2?
++does this resolve the memory issues of continuous queries?
+
+---Simplify the process of writing declarations (eg by avoiding superfluous statements). See the comments at the declarations of the example applications.
+
+---Update RTEC manual: 
+-Document the declarations language (see the declarations files).
+-see action-points.txt in the directory of the latex source of RTEC's manual.
+
+---Good License for RTEC: AGLP 3.0 (like the LGPL, but for the cloud era).
+
+*************** Future Work: ***************
+
+---Try to maximise the f1-score in CAVIAR (RTEC vs ground truth) as a way to debug RTEC.
+---Add all MAS protocols (+corresponding unit tests).
+---CER on the MarineTraffic data.
+---Internal database as opposed to assert/retract: http://www.dcc.fc.up.pt/~vsc/Yap/yap.html#Internal-Database 
+---Index input entities based on time-stamp. This way, we will be able to efficiently evaluate happensAt within initiatedAt. (Now, in the initiatedAt clauses, we go through ALL events in the window, and THEN we discard those that do not satisfy the two temporal constraints.) 
+
+---What is the correct left temporal boundary for evaluating of initiatedAt/terminatedAt in processSimpleFluents and holdsAtCyclic? InitTime or InitTimePlus1? See treatment of initially (for cyclic fluents) and fluent intervals that break in Qi-WM. 
+
+---Idea for code implementation: restrict the search for ending points given the computed starting points. This can be done using the new initiatedAt/4 and terminatedAt/4 predicates. This is not restricted to cyclic fluents. If I decide to change the code then measure efficiency improvement.
+
+---timeoutTreatment: see the commented action points in timeoutTreatment.prolog
+
+-timeoutTreatment; comparison between the old and the new code: 
+---accuracy: both the old and the new version pass the same unit tests, with the exception of concurrent initiations and deadlines in maxDurationUE where the old code fails.
+---efficiency: there is almost no difference in the two big MAS protocols. This is in contrast to the Brest maritime dataset where the new code is much faster, most likely due to avoiding to look for deadlines between an initiation and a deadline in maxDurationUE. This means that the bottleneck must by the cycles (big in netbill, small in voting, no cycles in the maritime data), and that the artifical MAS data have no re-initiations (and thus we do not have to check deadlines between an initiation and a deadline). This might also mean that storing starting points is not of much use.
+
+---timeoutTreatment: assume maxDuration(F=V, F=NewV, D); we should check that F=V is not broken at the time it is initiated (noise) in order to avoid creating an unnecessary deadline (minor issue since RTEC is not build to handle noise; but this is easy to fix). 
+
+---Compiler: 
++compiler unit tests: compare cachingOrder2, buildFromPoints, collectIntervals.
++compiler unit tests: Is the comparison code correct?
++compiler unit tests: update documentation/slides with the current unit tests.
++test and if necessary fix the treatment of holdsAt to holdsForSDFluent.
++Why not use the lexical analyser Flex and the parser generator Bison for the RTEC compiler?
++It'd be better to avoid obscure free variables in the compiled rules; one way to achieve this is to process the rules as strings.
++Add the simple language of the commonsense17 paper. 
+++Unit tests (test all the features presented in the paper (can the compiler really detect that disappear is an event in CAVIAR?)); Note that the RTEC compiler has been changed since the commonsense paper was written; 
+++Check/update/produce compiler manual.  
+
+---Domain-independent happensAt/4 for adding temporal checks in initiatedAt and terminatedAt. Add to changes in RTEC.prolog. Update compiler. Check for backward compatibility.
+
+---Indexing techniques (such as red-black trees) for supporting range queries in RTEC (happensAt(E,T), T1<T<T2).
+
+---data loader: 
++It is possible that there's room for optimisation. Thus, do not measure the data loading time in the experiments. 
++The error messages arising from errors in the CSV files are only displayed at the terminal,
+ and are not logged in some file. Do we want to also log them? 
++I have not read the manualCSVReader. Is it already supported by YAP now? 
+
+
+
+

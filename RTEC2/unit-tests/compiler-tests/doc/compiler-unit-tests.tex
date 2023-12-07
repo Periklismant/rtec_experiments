@@ -1,0 +1,731 @@
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[8pt]{beamer}
+\usepackage{listings}
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+
+
+\DeclareMathOperator{\val}{=}  % for p=v atoms
+\DeclareMathOperator{\notval}{\neq}  % for p=v atoms
+
+\def \patsize {}
+
+\def\recogniseSimpleFluent{\textsf{\patsize recogniseSimpleFluent}}
+\def\recogniseSDFluent{\textsf{\patsize recogniseSDFluent}}
+\def\makeintervals{\textsf{\footnotesize makeIntervals}}
+\def\happensAt{\textsf{\patsize happensAt}}
+\def\happens{\textsf{\patsize happensAt}}
+\def\happensFor{\textsf{\footnotesize happensFor}}
+\def\initially{\textsf{\footnotesize initially}}
+\def\holdsAt{\textsf{\patsize holdsAt}}
+\def\holdsFor{\textsf{\patsize holdsFor}}
+\def\holdsForSDFluent{\textsf{\footnotesize holdsForSDFluent}}
+\def\holdsAtSDFluent{\textsf{\footnotesize holdsAtSDFluent}}
+\def\holdsForSimpleFluent{\textsf{\footnotesize holdsForSimpleFluent}}
+\def\holdsForRecognisedSimpleFluent{\textsf{\footnotesize holdsForRecognisedSimpleFluent}}
+\def\holdsForRecognisedSDFluent{\textsf{\footnotesize holdsForRecognisedSDFluent}}
+\def\holdsAtRecognisedSimpleFluent{\textsf{\footnotesize holdsAtRecognisedSimpleFluent}}
+\def\initiatedAt{\textsf{\patsize initiatedAt}}
+\def\terminatedAt{\textsf{\patsize terminatedAt}}
+\def\initiates{\textsf{\footnotesize initiates}}
+\def\terminates{\textsf{\footnotesize terminates}}
+\def\broken{\textsf{\footnotesize broken}}
+\def\startE{\textsf{\patsize start}}
+\def\endE{\textsf{\patsize end}}
+
+\def\simpleFList{\textsf{\footnotesize simpleFList}}
+\def\sdFList{\textsf{\footnotesize sdFList}}
+
+\def\unionall{\textsf{\patsize union\_all}}
+\def\isetunion{\textsf{\footnotesize union}}
+\def\intersectall{\textsf{\patsize intersect\_all}}
+\def\isetintersection{\textsf{\footnotesize intersection}}
+\def\complementall{\textsf{\patsize relative\_complement\_all}}
+\def\abscomplementall{\textsf{\footnotesize complement\_all}}
+\def\isetdifference{\textsf{\footnotesize relative\_complement}}
+
+\def\nbf{\textsf{\patsize not}}
+\def\true{\textsf{\patsize true}}
+\def\false{\textsf{\patsize false}}
+\def\since{\textsf{\patsize since}}
+
+%array line separator
+\def \tblnsz {1.3pt}
+
+
+\newenvironment{mysplit}%
+  {\arraycolsep 0pt \begin{array}{l}}%
+  {\end{array}}
+  
+\newcommand\arraybslash{\let\\\@arraycr}
+%\makeatother
+% Footnote rule
+\setlength{\skip\footins}{0.0469in}
+\renewcommand\footnoterule{\vspace*{-0.0071in}\setlength\leftskip{0pt}\setlength\rightskip{0pt plus 1fil}\noindent\textcolor{black}{\rule{0.0\columnwidth}{0.0071in}}\vspace*{0.0398in}}
+\setlength\tabcolsep{1mm}
+\renewcommand\arraystretch{1.3}
+\newcounter{Table}
+\renewcommand\theTable{\arabic{Table}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+
+%\setcounter{tocdepth}{2}
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[RTEC2 compiler unit-tests]{RTEC2 compiler unit-tests} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Manolis Pitsikalis (updated by Alex Artikis)} % Your name
+%\institute[UCLA] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+%{
+%University of California \\ % Your institution for the title page
+%\medskip
+%\textit{john@smith.com} % Your email address
+%}
+% \date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+% \begin{frame}
+% \frametitle{Overview} % Table of contents slide, comment this block out to remove it
+% \begin{scriptsize}
+% \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+% \end{scriptsize}
+% \end{frame}
+
+%----------------------------------------------------------------------------------------
+%   PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
+\begin{frame}
+  \frametitle{Presentation Structure}
+
+\begin{itemize}
+\item Execution instructions.
+\item Unit test structure.
+\item Presentation of the tests used for the evaluation of RTEC2 compiler.
+\end{itemize}
+
+\end{frame}
+
+% ==========================
+
+\begin{frame}
+  \frametitle{Execution instructions}
+
+To run the unit tests of RTEC's compiler, run the \texttt{runallcompilertests.sh} script; eg:
+
+\bigskip
+
+\texttt{> ./runallcompilertests.sh}
+
+\end{frame}
+
+% ==========================
+
+\begin{frame}
+  \frametitle{Unit test structure}
+
+Each unit test includes:
+
+\begin{itemize}
+\item \texttt{rules.prolog}: manually constructed, non-compiled rules.
+\item \texttt{declarations.prolog}: manually constructed declarations.
+\item \texttt{rules\_compiled\_c.prolog}: rules compiled by means of RTEC's compiler.
+\item \texttt{rules\_compiled\_t.prolog}: manually compiled rules.
+\end{itemize}
+
+\bigskip 
+
+Unit testing then amounts to:
+\begin{itemize}
+\item invoking the compiler to compile \texttt{rules.prolog} into \texttt{rules\_compiled\_c.prolog} using the \texttt{declarations};
+\item comparing \texttt{rules\_compiled\_c.prolog} and \texttt{rules\_compiled\_t.prolog}.
+\end{itemize}
+
+\end{frame}
+
+\section{RTEC2 compiler Tests}
+
+\subsection{Simple Fluents}
+\begin{frame}[fragile]
+\frametitle{Simple Fluents - test 1}
+\subsubsection{Test 1}
+\small
+Happens at input events.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(sleeping(X)=true,T) :-
+    happensAt(sleep_start(X),T). %input event
+terminatedAt(sleeping(X)=true,T) :-
+    happensAt(sleep_end(X),T).   %input event
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(sleeping(X)=true, T1, T, T2) :-
+    happensAtIE(sleep_start(X),T),
+    T1=<T,
+    T<T2.
+terminatedAt(sleeping(X)=true, T1, T, T2) :-
+    happensAtIE(sleep_end(X),T),
+    T1=<T,
+    T<T2.
+\end{lstlisting}
+\end{tiny}
+Compiled rules
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(sleeping(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(sleep_start(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+terminatedAt(sleeping(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(sleep_end(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Fluents - test 2}
+\subsubsection{Test 2}
+\small
+HoldsAt of a simple fluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(X)=true, T) :-
+    happensAt(win_lottery(X), T),  %input event
+    \+holdsAt(sleeping(X)=true,T). %simple fluent
+terminatedAt(rich(X)=true, T) :-
+    happensAt(lose_wallet(X), T).  %input event
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(X)=true, T1, T, T2) :-
+    happensAtIE(win_lottery(X),T),T1=<T,T<T2,
+    \+holdsAtProcessedSimpleFluent(X,sleeping(X)=true,T).
+terminatedAt(rich(X)=true, T1, T, T2) :-
+    happensAtIE(lose_wallet(X),T),
+    T1=<T,
+    T<T2.
+\end{lstlisting}
+\end{tiny}
+Compiled rules
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(_131139)=true, _131158, _131124, _131160) :-
+     happensAtIE(win_lottery(_131139),_131124),_131158=<_131124,_131124<_131160,
+     \+holdsAtProcessedSimpleFluent(_131139,sleeping(_131139)=true,_131124).
+terminatedAt(rich(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(lose_wallet(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Fluents - test 3}
+\subsubsection{Test 3}
+\small
+Happens at start/end of a SDFluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(shappy(X)=true,T):-
+    happensAt(start(happy(X)=true),T). % simple fluent
+terminatedAt(shappy(X)=true,T):-
+    happensAt(end(happy(X)=true),T).   % simple fluent
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(shappy(X)=true, T1, T, T2) :-
+    happensAtProcessedSDFluent(X,start(happy(X)=true),T),
+    T1=<T,
+    T<T2.
+terminatedAt(shappy(X)=true, T1, T, T2) :-
+    happensAtProcessedSDFluent(X,end(happy(X)=true),T),
+    T1=<T,
+    T<T2.
+\end{lstlisting}
+\end{tiny}
+Compiled rules
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(shappy(_131139)=true, _131150, _131124, _131152) :-
+     happensAtProcessedSDFluent(_131139,start(happy(_131139)=true),_131124),
+     _131150=<_131124,
+     _131124<_131152.
+terminatedAt(shappy(_131139)=true, _131150, _131124, _131152) :-
+     happensAtProcessedSDFluent(_131139,end(happy(_131139)=true),_131124),
+     _131150=<_131124,
+     _131124<_131152.
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Fluents - test 4}
+\subsubsection{Test 4}
+\small
+HoldsAt SDFluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(X)=true, T) :-
+    happensAt(win_lottery(X), T),  %input event
+    \+holdsAt(sleeping_at_work(X)=true,T). %SDfluent
+terminatedAt(rich(X)=true, T) :-
+    happensAt(lose_wallet(X), T).  %input event
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(X)=true, T1, T, T2) :-
+     happensAtIE(win_lottery(X),T),T1=<T,T<T2,
+     \+holdsAtProcessedSDFluent(X,sleeping_at_work(X)=true,T).
+terminatedAt(rich(X)=true, T1, T, T2) :-
+     happensAtIE(lose_wallet(X),T),
+     T1=<T,T<T2.
+\end{lstlisting}
+\end{tiny}
+Compiled rules
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(_131139)=true, _131158, _131124, _131160) :-
+     happensAtIE(win_lottery(_131139),_131124),_131158=<_131124,_131124<_131160,
+     \+holdsAtProcessedSDFluent(_131139,sleeping_at_work(_131139)=true,_131124).
+terminatedAt(rich(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(lose_wallet(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Fluents - test 5}
+\subsubsection{Test 5}
+\small
+Happens at start/end simple fluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(srich(X)=true, T) :-
+     happensAt(start(rich(X)=true),T).
+terminatedAt(srich(X)=true, T) :-
+     happensAt(end(rich(X)=true),T).
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(srich(X)=true, T1, T, T2) :-
+     happensAtProcessedSimpleFluent(X,start(rich(X)=true),T),
+     T1=<T,T<T2.
+terminatedAt(srich(X)=true, T1, T, T2) :-
+     happensAtProcessedSimpleFluent(X,end(rich(X)=true),T),
+     T1=<T,T<T2.
+\end{lstlisting}
+\end{tiny}
+Compiled rules
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(srich(_131139)=true, _131150, _131124, _131152) :-
+     happensAtProcessedSimpleFluent(_131139,start(rich(_131139)=true),_131124),
+     _131150=<_131124,
+     _131124<_131152.
+terminatedAt(srich(_131139)=true, _131150, _131124, _131152) :-
+     happensAtProcessedSimpleFluent(_131139,end(rich(_131139)=true),_131124),
+     _131150=<_131124,
+     _131124<_131152.
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+
+\subsection{SDFluents}
+\begin{frame}[fragile]
+\frametitle{SDFluents - test 1}
+\subsubsection{Test 1}
+\small
+Holds for simple fluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsFor(infiniteBeers(X)=true, I) :- 
+    holdsFor(location(X)=pub, I1), %simple fluent
+    holdsFor(rich(X)=true, I2),    %simple fluent
+    intersect_all([I1,I2], I).
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(infiniteBeers(X)=true,I) :-
+    holdsForProcessedSimpleFluent(X,location(X)=pub,I1),
+    holdsForProcessedSimpleFluent(X,rich(X)=true,I2),
+    intersect_all([I1,I2],I).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(infiniteBeers(_131139)=true,_131124) :-
+     holdsForProcessedSimpleFluent(_131139,location(_131139)=pub,_131145),
+     holdsForProcessedSimpleFluent(_131139,rich(_131139)=true,_131156),
+     intersect_all([_131145,_131156],_131124).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SDFluents - test 2}
+\subsubsection{Test 2}
+\small
+Holds for SDFluent.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsFor(drunk(X)=true,I) :-
+    holdsFor(happy(X)=true,I1), %SDFluent
+    holdsFor(infiniteBeers(X)=true,I2), %SDFluent
+    intersect_all([I1,I2], I).
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(drunk(X)=true,I) :-
+    holdsForProcessedSDFluent(X,happy(X)=true,I1),
+    holdsForProcessedSDFluent(X,infiniteBeers(X)=true,I2),
+    intersect_all([I1,I2],I).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(drunk(_131139)=true,_131124) :-
+     holdsForProcessedSDFluent(_131139,happy(_131139)=true,_131145),
+     holdsForProcessedSDFluent(_131139,infiniteBeers(_131139)=true,_131156),
+     intersect_all([_131145,_131156],_131124).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\subsection{Cycles}
+\begin{frame}[fragile]
+\frametitle{Cycles - test 1}
+\subsubsection{Test 1}
+\small
+Holds at cyclic.\linebreak
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(strength(X)=full, T1, -1, T2) :-
+    T1=< -1,-1<T2.
+initiatedAt(strength(X)=tired, T1, T, T2) :-
+    happensAtIE(ends_working(X),T),
+    T1=<T,T<T2,
+    holdsAtCyclic(X,strength(X)=lowering,T).
+initiatedAt(strength(X)=lowering, T1, T, T2) :-
+    happensAtIE(starts_working(X),T),
+    T1=<T,T<T2,
+    holdsAtCyclic(X,strength(X)=full,T).
+initiatedAt(strength(X)=full, T1, T, T2) :-
+    happensAtIE(sleep_end(X),T),
+    T1=<T,T<T2,
+    holdsAtCyclic(X,strength(X)=tired,T).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(strength(_131143)=full, _131124, -1, _131126) :-
+     _131124=< -1,
+     -1<_131126.
+initiatedAt(strength(_131139)=tired, _131159, _131124, _131161) :-
+     happensAtIE(ends_working(_131139),_131124),_131159=<_131124,_131124<_131161,
+     holdsAtCyclic(_131139,strength(_131139)=lowering,_131124).
+initiatedAt(strength(_131139)=lowering, _131159, _131124, _131161) :-
+     happensAtIE(starts_working(_131139),_131124),_131159=<_131124,_131124<_131161,
+     holdsAtCyclic(_131139,strength(_131139)=full,_131124).
+initiatedAt(strength(_131139)=full, _131159, _131124, _131161) :-
+     happensAtIE(sleep_end(_131139),_131124),_131159=<_131124,_131124<_131161,
+     holdsAtCyclic(_131139,strength(_131139)=tired,_131124).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\subsection{MaxDuration/UE}
+\begin{frame}[fragile]
+\frametitle{MaxDuration/UE - test 1}
+\subsubsection{Test 1}
+\small
+MaxDuration.\linebreak
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(working(X)=true, T1, T, T2) :-
+    happensAtIE(starts_working(X),T),
+    T1=<T,
+    T<T2.
+terminatedAt(working(X)=true, T1, T, T2) :-
+    happensAtIE(ends_working(X),T),
+    T1=<T,
+    T<T2.
+maxDuration(working(X)=true,working(X)=false,8) :- grounding(working(X)=true).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(working(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(starts_working(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+terminatedAt(working(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(ends_working(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+maxDuration(working(_131166)=true,working(_131166)=false,8) :- 
+     grounding(working(_131166)=true).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{MaxDuration/UE - test 2}
+\subsubsection{Test 2}
+\small
+MaxDurationUE.\linebreak
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(X)=true, T1, T, T2) :-
+    happensAtIE(win_lottery(X),T),
+    T1=<T,
+    T<T2.
+terminatedAt(rich(X)=true, T1, T, T2) :-
+    happensAtIE(lose_wallet(X),T),
+    T1=<T,
+    T<T2.
+maxDurationUE(rich(X)=true,rich(X)=false,4) :- grounding(rich(X)=true).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+initiatedAt(rich(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(win_lottery(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+terminatedAt(rich(_131139)=true, _131145, _131124, _131147) :-
+     happensAtIE(lose_wallet(_131139),_131124),
+     _131145=<_131124,
+     _131124<_131147.
+maxDurationUE(rich(_131166)=true,rich(_131166)=false,4) :- 
+     grounding(rich(_131166)=true).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\subsection{Findall}
+\begin{frame}[fragile]
+\frametitle{Findall - test 1}
+\subsubsection{Test 1}
+\small
+Findall on intervals.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsFor(workingEfficiently(X)=true,I):-
+    holdsFor(working(X)=true,I1),
+    holdsFor(sleeping_at_work(X)=true,I2),
+    relative_complement_all(I1,[I2],Ii),
+    findall((S,E),(member(Ii,(S,E)),Diff is E - S,compare(>,Diff,2)),I).
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(workingEfficiently(X)=true,I) :-
+     holdsForProcessedSimpleFluent(X,working(X)=true,Iw),
+     holdsForProcessedSDFluent(X,sleeping_at_work(X)=true,Isw),
+     relative_complement_all(Iw,[Isw],Ii),
+     findall((S,E),(member(Ii,(S,E)),Diff is E-S,compare(>,Diff,2)),I).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(workingEfficiently(_131139)=true,_131124) :-
+     holdsForProcessedSimpleFluent(_131139,working(_131139)=true,_131145),
+     holdsForProcessedSDFluent(_131139,sleeping_at_work(_131139)=true,_131156),
+     relative_complement_all(_131145,[_131156],_131168),
+     findall((_131176,_131177),(member(_131168,(_131176,_131177)),
+				_131194 is _131177-_131176,
+				compare(>,_131194,2)),
+		_131124).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{Findall - test 2}
+\subsubsection{Test 2}
+\small
+Findall on holdsAt.\linebreak
+User rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsFor(workingEfficientlyAtWork(X)=true,I):-
+    holdsFor(working(X)=true,I1),
+    holdsFor(sleeping_at_work(X)=true,I2),
+    relative_complement_all(I1,[I2],Ii),
+    findall((S,E),(
+                    member(Ii,(S,E)),
+                    holdsAt(location(X)=work,S)
+                  ),
+          I).
+\end{lstlisting}
+\end{tiny}
+Typed rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(workingEfficientlyAtWork(X)=true,I) :-
+     holdsForProcessedSimpleFluent(X,working(X)=true,Iw),
+     holdsForProcessedSDFluent(X,sleeping_at_work(X)=true,Isw),
+     relative_complement_all(Iw,[Isw],Ii),
+     findall((S,E),(
+		    member(Ii,(S,E)),
+		    holdsAtProcessedSimpleFluent(X,location(X)=work,S)
+		   )
+	     ,I).
+\end{lstlisting}
+\end{tiny}
+Compiled rules:
+\begin{tiny}
+\begin{lstlisting}[language=Prolog]
+holdsForSDFluent(workingEfficientlyAtWork(_131139)=true,_131124) :-
+     holdsForProcessedSimpleFluent(_131139,working(_131139)=true,_131145),
+     holdsForProcessedSDFluent(_131139,sleeping_at_work(_131139)=true,_131156),
+     relative_complement_all(_131145,[_131156],_131168),
+     findall((_131176,_131177),(
+				member(_131168,(_131176,_131177)),
+				holdsAtProcessedSimpleFluent(_131139,location(_131139)=work,_131176)
+				)
+	      ,_131124).
+\end{lstlisting}
+\end{tiny}
+Status: Passed
+\end{frame}
+\section{}
+\begin{frame}
+\Huge{\centerline{The End}}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

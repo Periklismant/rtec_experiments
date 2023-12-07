@@ -1,0 +1,32 @@
+Initially	::=	"initially", Fluent
+
+HappensAt	::=	"happens", Event, "if", HappensAtBody
+
+InitiatedAt	::=	"initiate", Fluent, "if", HappensAtBody
+
+TerminatedAt	::=	"terminate", Fluent, "if", HappensAtBody
+
+HoldsFor	::= 	"holds", Fluent, "iff", HoldsForBody
+
+Event		::=	functor, "(", argumentsList, ")"
+
+Fluent		::= 	functor, "(", argumentsList, ")", (value)?
+
+HappensAtBody	::=	"start", Fluent, (",", Condition)*
+		|	"end", Fluent, (",", Condition)*
+		|	"happens", Event, (",", Condition)*
+		|	"not happens", Event, (",", Condition)*
+
+Condition	::=	"start", Fluent
+		|	"end", Fluent
+		|	"happens", Event
+		|	"not happens", Event
+		|	"holds" Fluent
+		|	"not holds", Fluent
+
+HoldsForBody	::=	Expression
+
+Expression	::=	Fluent, ([","|"or"], Fluent)*
+		|	"(", Expression, ")"
+		|	"not", Expression
+		|	Expression, ([","|"or"], Expression)*

@@ -1,0 +1,620 @@
+% ----- FILE 'rtfds'
+
+
+:- sorts
+   agent >> protagonist;
+   agent >> determiner_sort;
+   proposition;
+   sp_act;
+   roleName;
+   number.
+   
+
+:- objects
+   claim, concede, retract, deny	:: sp_act;
+   proponent, opponent, determiner	:: roleName;
+   0..maxAllowedObjActions+1		:: number.
+
+   
+:- variables
+   Det					  :: determiner_sort;
+   Protag, Protag2, Protag3, Protag4	  :: protagonist;
+   Ag					  :: agent;
+   Winner				  :: protagonist+none;
+   Q, P					  :: proposition;
+   Sp_act, Sp_act2			  :: sp_act;
+   N					  :: number;
+   ActCount				  :: 0..maxActionsPerTurn;
+   TurnCount				  :: 1..protocolTurns;
+   Act					  :: action.
+   
+
+:- constants
+   topic				:: simpleFluent(proposition);
+   role_of(agent)			:: simpleFluent(roleName);
+
+   initialState,
+
+   % --- powObject(a, act, b, q) reads as
+   % --- agent a has the power to object to the act(b, q) action
+   powObject(protagonist, sp_act, protagonist, proposition),
+   
+   % --- powObjectDeclare(a, b) reads as
+   % --- agent a has the power to object to the declaration of b the winner
+   powObjectDeclare(protagonist, protagonist),
+   premise(protagonist, proposition),
+   sanctioned(agent)			:: inertialFluent;
+
+   objActions(agent)			:: inertialFluent(number);
+   actionsPerTurn			:: inertialFluent(0..maxActionsPerTurn);
+   turnsPerProtocol			:: inertialFluent(1..protocolTurns);
+
+   turn					:: inertialFluent(roleName+none); 
+   
+   winner, previous_winner		:: inertialFluent(protagonist+none);
+
+   accepts(protagonist, proposition),
+   proper(sp_act, protagonist, proposition),
+   properDeclare(protagonist),
+   in_order(sp_act, protagonist, proposition),
+   in_orderDeclare(protagonist),
+   objectionable(sp_act, protagonist, proposition),
+   objectionableDeclare(protagonist),
+   per(sp_act, protagonist, proposition),
+   obl(sp_act, protagonist, proposition),
+   perDeclare(protagonist),
+   oblDeclare(protagonist)			     :: sdFluent;
+
+   winning				:: sdFluent(protagonist+none);
+
+   claim(protagonist, proposition),         
+   concede(protagonist, proposition),       
+   retract(protagonist, proposition),       
+   deny(protagonist, proposition),          
+   declare(determiner_sort, protagonist),
+   object(protagonist, sp_act, protagonist, proposition),
+   objectDeclare(protagonist, protagonist),
+   oTimeout, pTimeout, dTimeout, endTimeout	     :: exogenousAction.
+   
+
+
+% ----- PROPER ACTIONS
+
+caused proper(claim, Protag, Q).
+
+caused proper(concede, Protag, Q) if
+       premise(Protag2, Q),
+       Protag <> Protag2.
+
+caused proper(retract, Protag, Q) if
+       premise(Protag, Q).
+
+caused proper(deny, Protag, Q) if
+       premise(Protag2, Q),
+       Protag <> Protag2.
+
+default -proper(Sp_act, Protag, Q).
+
+caused properDeclare(Protag) if
+       winning = Protag.
+
+caused properDeclare(Protag) if
+       winning = none.
+
+default -properDeclare(Protag).       
+
+% ----- IN ORDER ACTIONS
+
+caused in_order(claim, Protag, Q) if
+       initialState,
+       topic = Q,
+       turn = role_of(Protag).
+
+caused in_order(claim, Protag, Q) if
+       -initialState,
+       turn = role_of(Protag).
+
+caused in_order(concede, Protag, Q) if
+       -initialState,
+       turn = role_of(Protag).
+
+caused in_order(retract, Protag, Q) if
+       -initialState,
+       turn = role_of(Protag).
+
+caused in_order(deny, Protag, Q) if
+       -initialState,
+       turn = role_of(Protag).
+
+default -in_order(Sp_act, Protag, Q).       
+
+caused in_orderDeclare(Protag) if
+       turn = determiner,
+       winner <> Protag.
+
+default -in_orderDeclare(Protag).
+
+% ----- OBJECTIONABLE ACTIONS
+
+caused objectionable(claim, Protag, Q) if
+       -in_order(claim, Protag, Q),
+       -premise(Protag, Q).
+
+caused objectionable(concede, Protag, Q) if
+       -in_order(concede, Protag, Q),
+       -premise(Protag, Q).
+
+caused objectionable(concede, Protag, Q) if
+       -proper(concede, Protag, Q),
+       -premise(Protag, Q).
+
+caused objectionable(retract, Protag, Q) if
+       proper(retract, Protag, Q),
+       -in_order(retract, Protag, Q).
+
+caused objectionable(deny, Protag, Q) if
+       -proper(deny, Protag, Q),
+       premise(Protag, Q).
+
+caused objectionable(deny, Protag, Q) if
+       -in_order(deny, Protag, Q),
+       premise(Protag, Q).
+
+default -objectionable(Sp_act, Protag, Q).
+
+caused objectionableDeclare(Protag) if
+       -properDeclare(Protag),
+       winner <> Protag.
+
+caused objectionableDeclare(Protag) if
+       -in_orderDeclare(Protag),
+       winner <> Protag.
+
+% --- the following expresses the penalties associated with
+% --- the protagonists' sanctions
+
+% --- according to the following law, even a proper, in order
+% --- declaration may be objectionable when considering sanctions
+
+caused objectionableDeclare(Protag) if
+       winning = none,
+       winner <> Protag,
+       Protag <> Protag2,
+       -sanctioned(Protag2),
+       sanctioned(Protag).
+
+default -objectionableDeclare(Protag).
+
+% ----- COUNTING THE NUMBER OF OBJECTIONABLE ACTIONS
+
+% --- we stop counting after reaching maxAllowedObjActions 
+
+claim(Protag, Q) causes objActions(Protag) = N+1 if
+	      objectionable(claim, Protag, Q),
+	      objActions(Protag) = N,	
+	      N < maxAllowedObjActions.
+
+concede(Protag, Q) causes objActions(Protag) = N+1 if
+	      objectionable(concede, Protag, Q),
+	      objActions(Protag) = N,
+	      N < maxAllowedObjActions.
+
+retract(Protag, Q) causes objActions(Protag) = N+1 if
+	      objectionable(retract, Protag, Q),
+	      objActions(Protag) = N,
+	      N < maxAllowedObjActions.
+
+deny(Protag, Q) causes objActions(Protag) = N+1 if
+	      objectionable(deny, Protag, Q),
+	      objActions(Protag) = N,
+	      N < maxAllowedObjActions.
+
+declare(Det, Protag) causes objActions(Det) = N+1 if
+	      objectionableDeclare(Protag),
+	      objActions(Det) = N,
+	      N < maxAllowedObjActions.
+
+% ----- POWER TO OBJECT: PROPER, IN ORDER OBJECTIONS
+
+% --- an objectionable action initiates the power to object to it
+
+claim(Protag, Q) causes powObject(Protag2, claim, Protag, Q) if
+	      objectionable(claim, Protag, Q),
+	      Protag <> Protag2.
+
+concede(Protag, Q) causes powObject(Protag2, concede, Protag, Q) if
+	      objectionable(concede, Protag, Q),
+	      Protag <> Protag2.
+
+retract(Protag, Q) causes powObject(Protag2, retract, Protag, Q) if
+	      objectionable(retract, Protag, Q),
+	      Protag <> Protag2.
+
+deny(Protag, Q) causes powObject(Protag2, deny, Protag, Q) if
+	      objectionable(deny, Protag, Q),
+	      Protag <> Protag2.
+
+% --- an objectionable action terminates the power to object to actions
+% --- that took place before the last protocol action
+
+claim(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      objectionable(claim, Protag, Q),
+	      powObject(Protag2, Sp_act, Protag3, P).
+
+concede(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      objectionable(concede, Protag, Q),
+	      powObject(Protag2, Sp_act, Protag3, P).
+
+retract(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      objectionable(retract, Protag, Q),
+	      powObject(Protag2, Sp_act, Protag3, P).
+
+deny(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      objectionable(deny, Protag, Q),
+	      powObject(Protag2, Sp_act, Protag3, P).
+
+% --- an non-objectionable action terminates the power to object to any action
+
+claim(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      -objectionable(claim, Protag, Q).
+
+concede(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      -objectionable(concede, Protag, Q).
+
+retract(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      -objectionable(retract, Protag, Q).
+
+deny(Protag, Q) causes -powObject(Protag2, Sp_act, Protag3, P) if
+	      -objectionable(deny, Protag, Q).
+
+% --- a declaration, objectionable or not, terminates the power to object 
+% --- to a claim, concede, retract or deny action
+
+declare(Det, Protag) causes -powObject(Protag2, Sp_act, Protag3, Q).
+
+% --- an objection terminates the power to object to any action
+% --- recall that an objection is never objectionable
+
+object(Protag, Sp_act, Protag2, Q) causes -powObject(Protag3, Sp_act2,
+Protag4, P).
+
+objectDeclare(Protag, Protag2) causes -powObject(Protag3, Sp_act, Protag4, Q).
+
+% --- powObjectDeclare, ie power to object to declarations
+
+declare(Det, Protag) causes powObjectDeclare(Protag2, Protag) if
+	     objectionableDeclare(Protag).
+
+declare(Det, Protag) causes -powObjectDeclare(Protag2, Protag3) if
+	     objectionableDeclare(Protag),
+	     powObjectDeclare(Protag2, Protag3).
+
+declare(Det, Protag) causes -powObjectDeclare(Protag2, Protag3) if
+	     -objectionableDeclare(Protag).
+
+claim(Protag, Q) causes -powObjectDeclare(Protag2, Protag3).
+
+concede(Protag, Q) causes -powObjectDeclare(Protag2, Protag3).
+
+retract(Protag, Q) causes -powObjectDeclare(Protag2, Protag3).
+
+deny(Protag, Q) causes -powObjectDeclare(Protag2, Protag3).
+
+object(Protag, Sp_act, Protag2, Q) causes -powObjectDeclare(Protag3, Protag4).
+
+objectDeclare(Protag, Protag2) causes -powObjectDeclare(Protag3, Protag4).
+
+% ----- CLAIM
+
+claim(Protag, Q) causes premise(Protag, Q).
+
+claim(Protag, topic) causes -initialState if
+       role_of(Protag) = proponent.
+
+% ----- CONCEDE
+
+concede(Protag, Q) causes premise(Protag, Q).
+
+% ----- RETRACT
+
+retract(Protag, Q) causes -premise(Protag, Q).
+
+% ----- DENY
+
+deny(Protag, Q) causes -premise(Protag, Q). 
+
+% ----- DECLARE
+
+declare(Det, Protag) causes winner = Protag.
+
+declare(Det, Protag) causes previous_winner = Winner if
+	     winner = Winner.
+
+% ----- OBJECT
+
+object(Protag, claim, Protag2, Q) causes -premise(Protag2, Q) if
+	 powObject(Protag, claim, Protag2, Q).
+
+object(Protag, concede, Protag2, Q) causes -premise(Protag2, Q) if
+	 powObject(Protag, concede, Protag2, Q).
+
+object(Protag, retract, Protag2, Q) causes premise(Protag2, Q) if
+	 powObject(Protag, retract, Protag2, Q).
+
+object(Protag, deny, Protag2, Q) causes premise(Protag2, Q) if
+	 powObject(Protag, deny, Protag2, Q).
+
+% --- objecting to a declaration
+
+objectDeclare(Protag, Protag2) causes winner = Winner if
+		      powObjectDeclare(Protag, Protag2),
+		      previous_winner = Winner.
+
+objectDeclare(Protag, Protag2) causes previous_winner = Winner if
+		      powObjectDeclare(Protag, Protag2),
+		      winner = Winner.
+
+% ----- TIMEOUTS
+
+% --- timeouts determine turn-taking
+
+pTimeout causes turn = proponent.
+
+oTimeout causes turn = opponent.
+
+dTimeout causes turn = determiner.
+
+% --- an endTimeout signals the end of the protocol
+
+endTimeout causes turn = none.
+
+% --- fix the sequence of timeouts
+
+nonexecutable oTimeout if turn <> proponent.
+
+nonexecutable pTimeout if turn <> opponent.
+
+nonexecutable endTimeout if turn <> determiner.
+
+% --- the opponent always has the last word
+% --- (this restriction can be lifted in different specifications)
+
+nonexecutable dTimeout if turn <> opponent.
+
+% --- the following laws enable the specification of concrete
+% --- protocol runs
+% --- they constrain (i) the number of actions taking place between 
+% --- 2 timeouts and (ii) the number of the protagonists' turns
+
+% --- protocolTurns and maxActionsPerTurn are example-specific macros
+% --- at the initial state protocolTurns=1 and maxActionsPerTurn=0 
+
+% --- count the number of actions that take place between 2 timeouts
+
+Act causes actionsPerTurn = ActCount+1 if
+	actionsPerTurn = ActCount,
+	ActCount < maxActionsPerTurn,
+	Act <> pTimeout,
+	Act <> oTimeout,
+	Act <> dTimeout,
+	Act <> endTimeout.
+
+% --- a timeout resets the value of the actionsPerTurn fluent
+
+pTimeout causes actionsPerTurn = 0.
+oTimeout causes actionsPerTurn = 0.
+dTimeout causes actionsPerTurn = 0.
+endTimeout causes actionsPerTurn = 0.
+
+% --- only a timeout may take place after maxActionsPerTurn actions
+
+nonexecutable Act if
+	actionsPerTurn = maxActionsPerTurn,
+	Act <> pTimeout,
+	Act <> oTimeout,
+	Act <> dTimeout,
+	Act <> endTimeout.
+
+% --- count the number of turns that protagonists may take
+
+pTimeout causes turnsPerProtocol = TurnCount+1 if
+	turnsPerProtocol = TurnCount,
+	TurnCount < protocolTurns.
+
+% --- a dTimeout (initiating the determiner's turn) cannot
+% --- take place before the number of turns (taken up to this point)
+% --- reaches protocolTurns
+
+nonexecutable dTimeout if turnsPerProtocol < protocolTurns.
+
+% --- when turnsPerProtocol=protocolCount the protagonists
+% --- stop taking turns and the determines speaks
+
+nonexecutable pTimeout if turnsPerProtocol = protocolTurns.
+
+% ----- PERMISSION
+
+% --- a protagonist is permitted to perform an action iff
+% --- the action is not objectionable or the agent
+% --- has not reached the limit of objectionable actions
+
+caused per(Sp_act, Protag, Q) if	
+       -objectionable(Sp_act, Protag, Q).
+
+caused per(Sp_act, Protag, Q) if
+       objActions(Protag) < maxAllowedObjActions.
+
+default -per(Sp_act, Protag, Q).
+
+% --- permission to declare
+
+caused perDeclare(Protag) if	
+       oblDeclare(Protag).
+
+% --- the following definition requires that the number
+% --- of protagonists is exactly 2. For more than 2 protagonists
+% --- the first 2 lines should be replaced by
+% --- [/\Protag2 | -oblDelcare(Protag2)]
+
+caused perDeclare(Protag) if
+       Protag <> Protag2,
+       -oblDeclare(Protag2),
+       -objectionableDeclare(Protag).
+
+% --- the same applies for the following law
+
+caused perDeclare(Protag) if
+       Protag <> Protag2,
+       -oblDeclare(Protag2),
+       objActions(Det) < maxAllowedObjActions.
+
+default -perDeclare(Protag).
+
+% --- an agent is always permitted to object to an action
+% --- we have not included a constant expressing permission
+% --- to object, however
+
+% ----- OBLIGATION
+
+default -obl(Sp_act, Protag, Q).
+
+% --- obligation to declare
+
+caused oblDeclare(Protag) if
+       turn = determiner,
+       winner <> Protag,
+       winning = Protag.
+
+default -oblDeclare(Protag).
+
+% --- an agent is never obliged to object to an action
+% --- there is no constant expressing obligation to object
+
+% ----- SANCTIONS
+
+% --- a protagonist's performance of a forbidden action sanctions it
+
+claim(Protag, Q) causes sanctioned(Protag) if
+	      -per(claim, Protag, Q).
+
+concede(Protag, Q) causes sanctioned(Protag) if
+	      -per(concede, Protag, Q).
+
+retract(Protag, Q) causes sanctioned(Protag) if
+	      -per(retract, Protag, Q).
+
+deny(Protag, Q) causes sanctioned(Protag) if
+	      -per(deny, Protag, Q).
+
+% --- we do not consider the determiner's forbidden actions
+
+% --- the determiner is sanctioned if it does not discharge
+% --- its obligation to declare the winner by the end of the protocol
+
+endTimeout causes sanctioned(Det) if
+	   oblDeclare(Protag).
+
+% --- the penalties associated with the protagists' sanctions 
+% --- are expressed by means of objectionable declarations
+
+% --- we do not express penalties for the determiner's sanctions
+
+% ----- WINNING
+
+caused winning = Protag if
+       role_of(Protag) = proponent,
+       role_of(Protag2) = opponent,
+       accepts(Protag, topic),
+       accepts(Protag2, topic).
+
+caused winning = Protag2 if
+       role_of(Protag) = proponent,
+       role_of(Protag2) = opponent,
+       -accepts(Protag, topic).
+
+default winning = none.
+
+% ----- INITIAL STATE
+
+% --- we are only interested in runs of the transition system in which 
+% --- the only executable action at the initial state of the protocol
+% --- is the proponent's claim of the topic of the dispute
+
+nonexecutable Act if
+	initialState &
+	Act <> claim(pro, topic).
+
+% --- set the value of every simple fluent constant at the initial state
+
+caused false if
+       initialState,
+       winner <> none.
+
+caused false if
+       initialState,
+       previous_winner <> none.
+
+caused false if
+       initialState,
+       turn <> proponent.
+
+caused false if 
+       initialState,
+       premise(Protag, Q).
+
+caused false if
+       initialState,
+       powObject(Protag, Sp_act, Protag2, Q).
+
+caused false if
+       initialState,
+       powObjectDeclare(Protag, Protag2).
+
+caused false if
+       initialState,
+       objActions(Ag) > 0.
+
+caused false if
+       initialState,
+       actionsPerTurn > 0.
+
+caused false if
+       initialState,
+       turnsPerProtocol > 1.
+
+caused false if
+       initialState,
+       sanctioned(Ag).
+
+% ----- FINAL STATE
+
+% --- turn = none only after an endTimeout, ie the last timeout
+
+nonexecutable Act if turn = none.
+
+% ----- LOGIC OF DISPUTATION
+
+% --- the logic of disputation can be as complicated as one wants
+% --- (provided that it can be expressed by means of C+ laws)
+% --- the following laws express a very simple logic of disputation
+% --- (which is adequate to conduct simple experiments)
+
+caused accepts(Protag, Q) if
+       premise(Protag, Q).
+
+default -accepts(Protag, Q).
+
+% ----- AT LEAST ONE ACTION SHOULD BE EXECUTED AT EACH STEP
+
+caused false after [/\Act | -Act].
+
+% ----- AT MOST ONE ACTION SHOULD BE EXECUTED AT EACH STEP 
+
+noconcurrency. 
+
+% --- the result of the last two laws is that exactly one 
+% --- action may take place at each transition
+% --- lifting such a restriction requires updating the 
+% --- definition of the power to object
+
+

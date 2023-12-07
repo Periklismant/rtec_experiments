@@ -1,0 +1,280 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{courier}
+\usepackage{filecontents}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[top=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{verbatim}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{amsmath}  % newly added package
+\usepackage{algorithm} % newly added package
+\usepackage{algorithmic} % newly added package
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{longtable}
+%\usepackage{dsfont}   % newly added package
+\usepackage{booktabs}
+
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{upquote}
+\usepackage{subfloat}
+\usepackage{subfigure}
+
+
+\newenvironment{mysplit}%
+  {\arraycolsep 0pt \begin{array}{l}}%
+  {\end{array}}
+
+\DeclareMathOperator{\val}{=}  % for p=v atoms
+\DeclareMathOperator{\notval}{\neq}  % for p=v atoms
+
+\def\processSimpleFluent{\texttt{\small processSimpleFluent}}
+\def\processSDFluent{\texttt{\small processSDFluent}}
+
+\def\happensAt{\texttt{\small happensAt}}
+\def\happensAtEv{\texttt{\small happensAtEv}}
+\def\happensAtIE{\texttt{\small happensAtIE}}
+\def\happensAtProcessed{\texttt{\small happensAtProcessed}}
+\def\initially{\texttt{\small initially}}
+\def\holdsAt{\texttt{\small holdsAt}}
+\def\holdsAtSDFluent{\texttt{\small holdsAtSDFluent}}
+\def\holdsAtProcessedIE{\texttt{\small holdsAtProcessedIE}}
+\def\holdsAtProcessedSDFluent{\texttt{\small holdsAtProcessedSDFluent}}
+\def\holdsAtProcessedSimpleFluent{\texttt{\small holdsAtProcessedSimpleFluent}}
+\def\holdsFor{\texttt{\small holdsFor}}
+\def\holdsForSDFluent{\texttt{\small holdsForSDFluent}}
+\def\holdsForSimpleFluent{\texttt{\small holdsForSimpleFluent}}
+\def\holdsForProcessedIE{\texttt{\small holdsForProcessedIE}}
+\def\holdsForProcessedSDFluent{\texttt{\small holdsForProcessedSDFluent}}
+\def\holdsForProcessedSimpleFluent{\texttt{\small holdsForProcessedSimpleFluent}}
+\def\initiatedAt{\texttt{\small initiatedAt}}
+\def\terminatedAt{\texttt{\small terminatedAt}}
+\def\broken{\texttt{\small broken}}
+\def\startE{\texttt{\small start}}
+\def\endE{\texttt{\small end}}
+
+\def\simpleFPList{\texttt{\small simpleFPList}}
+\def\sdFPList{\texttt{\small sdFPList}}
+
+\def\unionall{\texttt{\small union\_all}}
+\def\isetunion{\texttt{\small union}}
+\def\intersectall{\texttt{\small intersect\_all}}
+\def\isetintersection{\texttt{\small intersection}}
+\def\complementall{\texttt{\small relative\_complement\_all}}
+\def\abscomplementall{\texttt{\small complement\_all}}
+\def\isetdifference{\texttt{\small relative\_complement}}
+
+\def\nbf{\texttt{\small not}}
+\def\true{\texttt{\small true}}
+\def\false{\texttt{\small false}}
+\def\since{\texttt{\small since}}
+
+%------- for complexity formulas
+
+\def\m#1#2{m(#1,#2)}
+% \def\m#1#2{m_{#1,#2}}   % ALEX
+
+
+
+% --- ugly internals for language definition ---
+%
+\makeatletter
+
+% initialisation of user macros
+\newcommand\PrologPredicateStyle{}
+\newcommand\PrologVarStyle{}
+\newcommand\PrologAnonymVarStyle{}
+\newcommand\PrologAtomStyle{}
+\newcommand\PrologOtherStyle{}
+\newcommand\PrologCommentStyle{}
+
+% useful switches (to keep track of context)
+\newif\ifpredicate@prolog@
+\newif\ifwithinparens@prolog@
+
+% save definition of underscore for test
+\lst@SaveOutputDef{`_}\underscore@prolog
+
+% local variables
+\newcount\currentchar@prolog
+
+\newcommand\@testChar@prolog%
+{%
+  % if we're in processing mode...
+  \ifnum\lst@mode=\lst@Pmode%
+    \detectTypeAndHighlight@prolog%
+  \else
+    % ... or within parentheses
+    \ifwithinparens@prolog@%
+      \detectTypeAndHighlight@prolog%
+    \fi
+  \fi
+  % Some housekeeping...
+  \global\predicate@prolog@false%
+}
+
+% helper macros
+\newcommand\detectTypeAndHighlight@prolog
+{%
+  % First, assume that we have an atom.
+  \def\lst@thestyle{\PrologAtomStyle}%
+  % Test whether we have a predicate and modify the style accordingly.
+  \ifpredicate@prolog@%
+    \def\lst@thestyle{\PrologPredicateStyle}%
+  \else
+    % Test whether we have a predicate and modify the style accordingly.
+    \expandafter\splitfirstchar@prolog\expandafter{\the\lst@token}%
+    % Check whether the identifier starts by an underscore.
+    \expandafter\ifx\@testChar@prolog\underscore@prolog%
+      % Check whether the identifier is '_' (anonymous variable)
+      \ifnum\lst@length=1%
+        \let\lst@thestyle\PrologAnonymVarStyle%
+      \else
+        \let\lst@thestyle\PrologVarStyle%
+      \fi
+    \else
+      % Check whether the identifier starts by a capital letter.
+      \currentchar@prolog=65
+      \loop
+        \expandafter\ifnum\expandafter`\@testChar@prolog=\currentchar@prolog%
+          \let\lst@thestyle\PrologVarStyle%
+          \let\iterate\relax
+        \fi
+        \advance \currentchar@prolog by 1
+        \unless\ifnum\currentchar@prolog>90
+      \repeat
+    \fi
+  \fi
+}
+\newcommand\splitfirstchar@prolog{}
+\def\splitfirstchar@prolog#1{\@splitfirstchar@prolog#1\relax}
+\newcommand\@splitfirstchar@prolog{}
+\def\@splitfirstchar@prolog#1#2\relax{\def\@testChar@prolog{#1}}
+
+% helper macro for () delimiters
+\def\beginlstdelim#1#2%
+{%
+  \def\endlstdelim{\PrologOtherStyle #2\egroup}%
+  {\PrologOtherStyle #1}%
+  \global\predicate@prolog@false%
+  \withinparens@prolog@true%
+  \bgroup\aftergroup\endlstdelim%
+}
+
+% language name
+\newcommand\lang@prolog{Prolog-pretty}
+% ``normalised'' language name
+\expandafter\lst@NormedDef\expandafter\normlang@prolog%
+  \expandafter{\lang@prolog}
+
+% language definition
+\expandafter\expandafter\expandafter\lstdefinelanguage\expandafter%
+{\lang@prolog}
+{%
+  language            = Prolog,
+  keywords            = {},      % reset all preset keywords
+  showstringspaces    = false,
+  alsoletter          = (,
+  moredelim           = **[is][\beginlstdelim{(}{)}]{(}{)},
+  MoreSelectCharTable =
+    \lst@DefSaveDef{`(}\opparen@prolog{\global\predicate@prolog@true\opparen@prolog},
+}
+
+\newcommand{\textttsmall}[1]{\texttt{\small #1}}
+
+% Hooking into listings to test each ``identifier''
+\newcommand\@ddedToOutput@prolog\relax
+\lst@AddToHook{Output}{\@ddedToOutput@prolog}
+
+\lst@AddToHook{PreInit}
+{%
+  \ifx\lst@language\normlang@prolog%
+    \let\@ddedToOutput@prolog\@testChar@prolog%
+  \fi
+}
+
+\lst@AddToHook{DeInit}{\renewcommand\@ddedToOutput@prolog{}}
+
+\makeatother
+%
+% --- end of ugly internals ---
+
+
+% --- definition of a custom style similar to that of Pygments ---
+% custom colors
+\definecolor{PrologPredicate}	{RGB}{000, 031, 255}
+\definecolor{PrologVar}      	{RGB}{127, 000, 127}
+\definecolor{PrologAtom}     	{RGB}{255, 000, 000}
+\definecolor{PrologComment}	{RGB}{000, 154, 000}
+\definecolor{BackgroundColor}	{RGB}{240, 240, 240}
+
+% redefinition of user macros for Prolog style
+\renewcommand\PrologPredicateStyle{\color{PrologPredicate}}
+\renewcommand\PrologVarStyle{\color{PrologVar}}
+\renewcommand\PrologAnonymVarStyle{\color{PrologVar}}
+\renewcommand\PrologAtomStyle{\color{PrologAtom}}
+\renewcommand\PrologCommentStyle{\itshape\color{PrologComment}}
+
+% custom style definition 
+\lstdefinestyle{Prolog-cvlas}
+{
+	language		= Prolog-pretty,
+	upquote		= true,
+	stringstyle	= \PrologAtomStyle
+}
+
+% global settings
+\lstset
+{
+	captionpos		= below,
+	commentstyle		= \color{PrologComment},	% comment style
+	numbers			= left,        				% where to put the line-numbers; possible values are (none, left, right)
+%	stepnumber		= 2,						% the step between two line-numbers. If it's 1, each line will be numbered
+	numberstyle		= \ttfamily\small,			% the style that is used for the line-numbers
+	backgroundcolor	= \color{BackgroundColor},
+	frame      		= none,
+	columns    		= fullflexible,
+	basicstyle 		= \ttfamily\small,
+}
+
+\title{Event Calculus for Run-Time reasoning (RTEC):\\ A Manual}
+
+\author{Alexander Artikis and Christos Vlassopoulos \bigskip \\ 
+Institute of Informatics \& Telecommunications,\\ NCSR ``Demokritos'',\\ Complex Event Recognition group\\ \url{cer.iit.demokritos.gr}}
+
+\begin{document}
+
+\maketitle
+\sloppy
+
+\input{introduction}
+
+\input{language}
+
+\input{reasoning}
+
+\input{operation}
+
+\input{further}
+
+
+%\input{ctm}
+
+%\input{simplEC}
+
+\bibliographystyle{plain}               % basic style, author-year citations
+\bibliography{RTEC_manual}
+
+\nocite{*}
+
+\end{document}

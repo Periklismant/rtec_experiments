@@ -1,0 +1,145 @@
+  // Formulation straight from the papers.
+  // except For right end of time interval in clipped and declipped, which is inclusive now (<= instead of <).
+  // This was necessary to get a stratified program.
+  // Requires adaption on calls: "Clipped(t1, f, t2)" becomes "Step(t2, s), Clipped(t1, f, s) ", where Step(t2, s)
+  // is a Fusemate built-in that provides in s the latest of all timepoints in all facts that strictly precedes t2.
+  // Similarly for "Declipped"
+
+  case class Clipped(t1: Time, f: Fluent, time: Time) extends Atom
+  case class Declipped(t1: Time, f: Fluent, time: Time) extends Atom
+
+  @rules
+  val ECAxiomsBasic = List(
+
+    // EC 1
+    Clipped(t1, f, t2) :- (
+      Now(t2),
+      TimePoint(t1),
+      Happens(e, t),
+      t1<=t,
+      t<=t2, // was t<t2
+      Terminates(e, f, t)
+    ),
+
+    // EC 2
+    Declipped(t1, f, t2) :- (
+      Now(t2),
+      TimePoint(t1),
+      Happens(e, t),
+      t1<=t,
+      t<=t2, // was t<t2
+      Initiates(e, f, t)
+    ),
+
+    // EC 3
+    HoldsAt(f, t2) :- (
+      Now(t2),
+      Happens(e, t1),
+      t1<t2,
+      Initiates(e, f, t1),
+      NOT (
+        Step(t2, s),
+        Clipped(t1, f, s) )
+    ),
+
+    // EC 4
+    NEG(HoldsAt(f, t2)) :- (
+      Now(t2),
+      Happens(e,t1),
+      t1<t2,
+      Terminates(e, f, t1),
+      NOT (
+        Step(t2, s),
+        Declipped(t1, f, s)
+      )
+    ),
+
+    // EC 5 Frame Axiom
+    HoldsAt(f, t2) :- (
+      Now(t2),
+      HoldsAt(f, t1),
+      t1<t2,
+      NOT (
+        Step(t2, s),
+        Clipped(t1, f, s)
+      )
+    ),
+
+    // EC 6 Frame Axiom
+    NEG(HoldsAt(f, t2)) :- (
+      Now(t2),
+      NEG(HoldsAt(f, t1)),
+      t1<t2,
+      NOT (
+        Step(t2, s),
+        Declipped(t1, f, s)
+      )
+    ),
+  )
+
+// Inlined "clipped"/"declipped", for efficiency
+/*
+  @rules
+  val ECAxiomsFM = List(
+
+    // EC 3
+    HoldsAt(f, t2) :- (
+      Now(t2),
+      Happens(e, t1),
+      t1 < t2,
+      Initiates(e, f, t1),
+      NOT (
+        // Clipped(t1, f, s) STH s < t2
+        Happens(e1, s >= t1) STH (
+          s < t2,
+          Terminates(e1, f, s)
+        )
+      )
+    ),
+
+    // EC 4
+    NEG(HoldsAt(f, t2)) :- (
+      Now(t2),
+      Happens(e,t1),
+      t1 < t2,
+      Terminates(e, f, t1),
+      NOT (
+        // Declipped(t1, f, s) STH s < t2
+        Happens(e1, s >= t1) STH (
+          s < t2,
+          Initiates(e1, f, s)
+        )
+      )
+    ),
+
+    // EC 5 Frame Axiom
+
+    HoldsAt(f, t2) :- (
+      Now(t2),
+      HoldsAt(f, t1),
+      t1 < t2,
+      NOT (
+        // Clipped(t1, f, s) STH s < t2
+        Happens(e1, s >= t1) STH (
+          s < t2,
+          Terminates(e1, f, s)
+        )
+      )
+    ),
+
+    // EC 6 Frame Axiom
+    NEG(HoldsAt(f, t2)) :- (
+      Now(t2),
+      NEG(HoldsAt(f, t1)),
+      t1 < t2,
+      NOT (
+        // Declipped(t1, f, s) STH s < t2
+        Happens(e1, s >= t1) STH (
+          s < t2,
+          Initiates(e1, f, s)
+        )
+      )
+    ),
+  )
+ */
+

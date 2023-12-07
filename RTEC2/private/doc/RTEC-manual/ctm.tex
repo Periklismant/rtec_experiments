@@ -1,0 +1,238 @@
+\section{An Integrated Example}
+
+We now present a larger, more realistic use case of RTEC; Performing Event Recognition in order to support city transport management (CTM). The system has been tested in the city of Helsinki, Finland. Buses and trams are equipped with sensors that send GPS coordinates, in-vehicle temperature, noise level and acceleration information to a central server, providing information about the current status of the transport system (for example, the location of buses and trams on the city map). Given the SDE extracted from these sensors, from other data sources such as digital maps, and from the communication between the drivers and the public transport control centre, CE are recognised related to the punctuality of a vehicle, passenger and driver comfort, passenger and driver safety, and passenger satisfaction, among others. The recognised CE are made available to the public transport control centre in order to facilitate decision-making. The choice of CE in this example, and their definitions, were specified by the domain experts (end users).
+
+Short-term activities can be viewed as SDE while long-term activities can be viewed as CE. Consequently, the input to RTEC in this case study includes the set of annotated short-term activities, hereafter SDE, and the output is a set of recognised long-term activities, hereafter CE.
+
+We chose the CTM use case because its CE definitions are fairly complex, allowing us to show many interesting aspects of RTEC. In what follows we present the input to RTEC, a subset of the CE definitions, as well as the data required, and the preparation needed for the Event Recognition.
+
+\subsection{Simple Derived Events \& Composite Events}\label{sec:ctm-input} 
+
+The input to RTEC for the CTM application includes the instantaneous SDE $\mathit{enter\_stop}$, $\mathit{leave\_stop}$, $\mathit{internal\_temperature\_change}$, $\mathit{noise\_level\_change}$ and $\mathit{passenger\_density\_change}$. We represent the instantaneous SDE using the \happensAt\ predicate. For example, the fact \linebreak$\happensAt\mathit{(noise\_level\_change(17, bus, high),\ 415)}$ expresses that the noise level became high in bus $\mathit{17}$ at time-point $\mathit{415}$.
+
+The input to RTEC for CTM also includes durative SDE: $\mathit{abrupt\_acceleration}$, $\mathit{abrupt\_deceleration}$ and $\mathit{sharp\_turn}$. Durative SDE are represented by means of the \holdsFor\ predicate. $\holdsFor\mathit{(abrupt\_acceleration(27, tram)\val very\_abrupt,}$ $\mathit{[(345, 500), (600, 750)])}$, for example, expresses that tram $\mathit{27}$ accelerated `very abruptly' during the intervals $\mathit{[345,500)}$ and $\mathit{[600,750)}$. (Suitable thresholds have been defined by the PRONTO SDE detection system by which it is possible to differentiate between abrupt acceleration and `very' abrupt acceleration, and abrupt deceleration and `very' abrupt deceleration.)
+
+Given the aforementioned SDE, RTEC recognises, among others, the instantaneous $\mathit{punctuality\_change}$ CE, and the durative $\mathit{driving\_style}$, $\mathit{driving\_quality}$, $\mathit{passenger\_comfort}$, $\mathit{driver\_comfort}$ and $\mathit{passenger\_satisfaction}$ CE. Like SDE, the instantaneous CE are represented by means of \happensAt, while the durative ones are represented by \holdsFor.
+
+In the following subsection we present examples of CE definitions.
+
+\subsection{Composite Event Definitions}\label{sec:ctm-definitions} 
+
+% ============== PUNCTUALITY
+
+A vehicle is said to be punctual if it arrives at a stop on or before the scheduled time, and leaves the stop at the scheduled time. A vehicle is said to be non-punctual if it arrives at a stop after the scheduled time, or leaves the stop before or after the scheduled time. $\mathit{enter\_stop}$ and $\mathit{leave\_stop}$ are instantaneous SDE, determined from sensor data and a database of timetable information. The durative $\mathit{punctuality}$ CE is represented as a simple fluent and defined in RTEC as follows:
+%
+\begin{align}
+& \label{eq:ctm-initially-punctuality}
+\begin{mysplit}
+\initially( punctuality(\_, \_)\val punctual )
+\end{mysplit}\\
+& \label{eq:ctm-punctuality1}
+\begin{mysplit}
+\initiatedAt( \mathit{punctuality(Id, VehicleType)\val punctual,\ T} ) \leftarrow \\
+\qquad	\happensAt\mathit{( stop\_enter(Id, VehicleType, \_StopCode, scheduled),\ T)}	
+\end{mysplit}\\
+& \label{eq:ctm-punctuality2}
+\begin{mysplit}
+\initiatedAt( \mathit{punctuality(Id, VehicleType)=punctual,\ T} ) \leftarrow \\
+\qquad	\happensAt\mathit{( stop\_enter(Id, VehicleType, \_StopCode, early),\ T)}
+\end{mysplit}\\
+& \label{eq:ctm-punctuality3}
+\begin{mysplit}
+\initiatedAt( \mathit{punctuality(Id, VT)\val non\_punctual,\ T} ) \leftarrow \\
+\qquad  \happensAt\mathit{( stop\_enter(Id, VehicleType, \_StopCode , late),\ T )}
+\end{mysplit}\\
+& \label{eq:ctm-punctuality4}
+\begin{mysplit}
+\initiatedAt( \mathit{punctuality(Id, VT)\val non\_punctual,\ T} ) \leftarrow \\
+\qquad  \happensAt\mathit{( stop\_leave(Id, VehicleType, \_StopCode , early),\ T )}
+\end{mysplit}
+\end{align}
+%
+`$\_$' is an `anonymous' Prolog variable. $\mathit{Id}$ is an integer serving as the identifier of a vehicle, while $\mathit{VT}$ represents the vehicle type (tram or bus). The third argument of the $\mathit{enter\_stop}$ and $\mathit{leave\_stop}$ SDE is an integer denoting the code of a bus/tram stop, and the fourth argument expresses whether the vehicle entered/left the stop on, before or after the scheduled time.
+
+Initially, every vehicle is punctual; thereafter $\mathit{punctuality}$ is affected by the $\mathit{enter\_stop}$ and $\mathit{leave\_stop}$ SDE. The maximal intervals during which a vehicle is continuously (non-)punctual are computed from rules \eqref{eq:ctm-initially-punctuality}--\eqref{eq:ctm-punctuality4} by the built-in \holdsFor\ predicate.
+%
+\begin{align}
+& \label{eq:ctm-punctuality5}
+\begin{mysplit}
+\holdsFor( \mathit{punctuality(Id, VT)\val non\_punctual,\ NPI} ) \leftarrow \\
+\qquad \holdsFor( \mathit{punctuality(Id, VT)\val punctual,\ PI} ), \\
+\qquad \abscomplementall( [PI], NPI ).
+\end{mysplit}
+\end{align}
+%
+This rule uses the domain-independent implementation of \holdsFor\ to compute the maximal intervals for which a vehicle is continuously (non-)punctual. Punctuality change occurs at the first time-point of each of these intervals. There are other, equivalent ways of formulating this definition but since $\mathit{punctuality}$ intervals are to be computed anyway (as required by the end users), this method is the most convenient.
+
+Transport officials are also interested in recognising punctuality \emph{change}.
+The following rule expresses the definition of the instantaneous $\mathit{punctuality\_ change}$ CE:
+%
+\begin{align}
+& \label{eq:ctm-punctuality-change1}
+\begin{mysplit}
+\happensAt( \mathit{punctuality\_change(Id, VehicleType, punctual),\ T} ) \leftarrow \\
+\qquad \happensAt( \mathit{end(punctuality(Id, VehicleType)\val non\_punctual),\ T)}
+\end{mysplit}\\
+& \label{eq:ctm-punctuality-change2}
+\begin{mysplit}
+\happensAt( \mathit{punctuality\_change(Id, VehicleType, non\_punctual),\ T} ) \leftarrow \\
+\qquad	\happensAt( \mathit{end(punctuality(Id, VehicleType)\val unctual),\ T)}
+\end{mysplit}
+\end{align}
+%
+Driving style is another aspect that interests city transport officials. Two durative CE concerning driving style are defined as follows:
+%
+\begin{align}
+& \label{eq:ctm-driving-style1}
+\begin{mysplit}
+\holdsFor( \mathit{driving\_style(Id, VehicleType)=unsafe, UDI} ) \leftarrow \\
+\qquad	\holdsFor( \mathit{sharp\_turn(Id, VehicleType)=very\_sharp, VSTI}), \\
+\qquad	\holdsFor( \mathit{abrupt\_acceleration(Id, VehicleType)=very\_abrupt, VAAI}), \\
+\qquad	\holdsFor( \mathit{abrupt\_deceleration(Id, VehicleType)=very\_abrupt, VADI}), \\
+\qquad	\unionall([VSTI, VAAI, VADI], UDI).
+\end{mysplit}\\
+& \label{eq:ctm-driving-style2}
+\begin{mysplit}
+\holdsFor( \mathit{driving\_style(Id, VehicleType)=uncomfortable, UDI} ) \leftarrow \\
+\qquad	\holdsFor( \mathit{sharp\_turn(Id, VehicleType)=sharp, STI}), \\
+\qquad	\holdsFor( \mathit{abrupt\_acceleration(Id, VehicleType)=very\_abrupt, VAAI}), \\
+\qquad	\holdsFor( \mathit{abrupt\_deceleration(Id, VehicleType)=very\_abrupt, VADI}),  \\
+\qquad	\complementall(STI, [VAAI, VADI], PureSharpTurn), \\
+\qquad	\holdsFor( \mathit{abrupt\_acceleration(Id, VehicleType)=abrupt, AAI}), \\
+\qquad	\holdsFor( \mathit{abrupt\_deceleration(Id, VehicleType)=abrupt, ADI}), \\
+\qquad	\unionall([PureSharpTurn, AAI, ADI], UDI).
+\end{mysplit}
+\end{align}
+%
+Rule \eqref{eq:ctm-driving-style1} above defines unsafe driving as the driving that is characterized by very sharp turns and/or very abrupt acceleration/deceleration. Rule \eqref{eq:ctm-driving-style2}, on the other hand defines uncomfortable driving. A driver is considered to be driving uncomfortably if they take sharp turns (but not \textit{very} sharp), and they accelerate/decelerate abruptly (but not \textit{very} abruptly).
+
+\subsection{Event/Fluent Declarations}\label{sec:ctm-declarations}
+
+In subsection \ref{sec:ctm-input} we discussed the Simple, Derived Events, as well as the Composite Events of interest in this use case. In this subsection we will show how these events can be declared in the ``ctm\_declarations.prolog'' file (see also the source code of RTEC).
+
+Based on the CTM rules presented in the previous section, we have 8 input SDEs, of which 2 intantaneous (events $\mathit{stop\_enter/4}$, $\mathit{stop\_leave/4}$) and 6 durative (fluents $\mathit{sharp\_turn/2=sharp}$, $\mathit{sharp\_turn/2=very\_sharp}$, $\mathit{abrupt\_acceleration/2=abrupt}$, $\mathit{abrupt\_acceleration/2=very\_abrupt}$, $\mathit{abrupt\_deceleration/2=abrupt}$, $\mathit{abrupt\_deceleration/2=very\_abrupt}$). We also have 6 Composite Events, of which 2 Events ($\mathit{punctuality\_change(\_,\_,punctual)}$, $\mathit{punctuality\_change(\_,\_,non\_punctual)}$), 2 Simple Fluents ($\mathit{punctuality/2=punctual}$, $\mathit{punctuality/2=non\_punctual}$), and 2 Statically Determined Fluents ($\mathit{driving\_style/2=uncomfortable}$, $\mathit{driving\_style/2=unsafe}$). Table \ref{table:declarations} contains all the above-mentioned entities.
+%
+\begin{table}
+\begin{tabular}{ l | c | c |}
+\cline{2-3}
+& Input Entities & Output Entities \\ \cline{1-3}
+\multicolumn{1}{| l |}{\multirow{2}{*}{Events}} & $\mathit{stop\_enter/4}$ & $\mathit{punctuality\_change(\_,\_,punctual)}$ \\
+\multicolumn{1}{| l |}{} & $\mathit{stop\_leave/4}$ & $\mathit{punctuality\_change(\_,\_,non\_punctual)}$ \\ \hline
+\multicolumn{1}{| l |}{\multirow{2}{*}{SF}} & & $\mathit{punctuality/2=punctual}$ \\
+\multicolumn{1}{| l |}{} & & $\mathit{punctuality/2=non\_punctual}$ \\ \hline
+\multicolumn{1}{| l |}{\multirow{6}{*}{SDF}} & $\mathit{sharp\_turn/2=sharp}$ & \\
+\multicolumn{1}{| l |}{} & $\mathit{sharp\_turn/2=very\_sharp}$ & $\mathit{driving\_style/2=uncomfortable}$ \\
+\multicolumn{1}{| l |}{} & $\mathit{abrupt\_acceleration/2=abrupt}$ & $\mathit{driving\_style/2=unsafe}$ \\
+\multicolumn{1}{| l |}{} & $\mathit{abrupt\_acceleration/2=very\_abrupt}$ & \\
+\multicolumn{1}{| l |}{} & $\mathit{abrupt\_deceleration/2=abrupt}$ & \\
+\multicolumn{1}{| l |}{} & $\mathit{abrupt\_deceleration/2=very\_abrupt}$ & \\
+\hline
+\end{tabular}
+\caption{The entities of the CTM use case}
+\label{table:declarations}
+\end{table}
+%
+All these entities are indexed based on the Id of the bus that is involved in them.
+
+Next, we need to state whether the input entities that are SDFs will have their intervals collected into a list or built from time-points. In our case, for each of the input SDFs the intervals are going to be collected into a list. Therefore, we add the following code to the declarations file:
+%
+\begin{verbatim}
+collectIntervals(abrupt_acceleration(_,_)=abrupt).
+collectIntervals(abrupt_acceleration(_,_)=very_abrupt).
+collectIntervals(abrupt_deceleration(_,_)=abrupt).
+collectIntervals(abrupt_deceleration(_,_)=very_abrupt).
+collectIntervals(sharp_turn(_,_)=sharp).
+collectIntervals(sharp_turn(_,_)=very_sharp).
+\end{verbatim}
+%
+Subsequently, we need to declare the grounding of all the fluents and events that are output entities. We will assign every fluent with a list of possible groundings. All these entities have an arity of 2 and refer to a (vehicle id - vehicle type) pair. Thus, we have built a collection of Prolog facts of the form ``\textttsmall{vehicle(Id, VehicleType).}'' that contains all the vehicles' Ids and types and use this collection to ground the aforementioned entities as follows: 
+%
+\begin{verbatim}
+grounding(abrupt_acceleration(Id,VehicleType)=abrupt) 		:-
+        vehicle(Id, VehicleType). 
+grounding(abrupt_acceleration(Id,VehicleType)=very_abrupt) 	:-
+        vehicle(Id, VehicleType). 
+grounding(abrupt_deceleration(Id,VehicleType)=abrupt) 		:-
+        vehicle(Id, VehicleType). 
+grounding(abrupt_deceleration(Id,VehicleType)=very_abrupt) 	:-
+        vehicle(Id, VehicleType). 
+grounding(sharp_turn(Id,VehicleType)=sharp) 			:-
+        vehicle(Id, VehicleType). 
+grounding(sharp_turn(Id,VehicleType)=very_sharp) 		:-
+        vehicle(Id, VehicleType).
+grounding(punctuality(Id,VehicleType)=punctual) 		:-
+        vehicle(Id, VehicleType).   
+grounding(punctuality(Id,VehicleType)=non_punctual) 		:-
+        vehicle(Id, VehicleType).
+grounding(punctuality_change(Id,VehicleType,punctual)) 		:-
+        vehicle(Id, VehicleType).
+grounding(punctuality_change(Id,VehicleType,non_punctual)) 	:-
+        vehicle(Id, VehicleType).
+grounding(driving_style(Id,VehicleType)=unsafe) 		:-
+        vehicle(Id, VehicleType).
+grounding(driving_style(Id,VehicleType)=uncomfortable) 		:-
+        vehicle(Id, VehicleType).
+\end{verbatim}
+%
+Finally, we must declare the caching order of the output entities, beginning with the level-1 output entities, that only depend on input (level-0) entities in order to be computed, and forming a hierarchy. In our case, level-1 entities are the Simple Fluents $\mathit{punctuality(\_,\_)=punctual}$ and $\mathit{cachingOrder(punctuality(\_,\_)=non\_punctual)}$, as well as the SDF $\mathit{cachingOrder(driving\_style(\_,\_)=unsafe)}$ and $\mathit{cachingOrder(driving\_style(\_,\_)=uncomfortable)}$, and level-2 entities are the events $\mathit{punctuality\_change(\_,\_,punctual)}$ and $\mathit{punctuality\_change(\_,\_,non_punctual)}$.
+%
+\begin{verbatim}
+cachingOrder(punctuality(_,_)=punctual).    
+cachingOrder(punctuality(_,_)=non_punctual).
+cachingOrder(driving_style(_,_)=unsafe). 
+cachingOrder(driving_style(_,_)=uncomfortable).
+cachingOrder(punctuality_change(_,_,punctual)).
+cachingOrder(punctuality_change(_,_,non_punctual)).
+\end{verbatim}
+
+\subsection{CTM data}\label{sec:ctm-data}
+
+Now that we have analyzed the use case, and have set up our Event Description and Declarations, we must take care of the data we are going to use in order to perform the Event Recognition task. We need 2 tyoes of input data. The event narrative and a collection of facts that forms the background knowledge and concerns the grounding of the fluents and the events that are output entities (see subsection \ref{sec:ctm-declarations}).
+
+The event narrative is stored in a series of assertions. We take the input entities shown in Table \ref{table:declarations} and assert each of their occurrences under an auxiliary ``\textttsmall{updateSDE/3}'' predicate.
+%
+\begin{verbatim}
+updateSDE( sharp_turn, 0, 1000 ) :-
+assert( holdsForIESI( sharp_turn(75, bus)=sharp, (3, 50)) ),
+assert( holdsForIESI( sharp_turn(75, bus)=sharp, (88, 130)) ),
+assert( holdsForIESI( sharp_turn(76, bus)=very_sharp, (720, 912)) ),
+assert( holdsForIESI( sharp_turn(77, bus)=sharp, (959, 999)) ).
+\end{verbatim}
+%
+This event narrative excerpt shows that bus 75 performed a sharp turn from time 3 to time 50 and from time 88 to time 130. In addition, bus 76 takes a very sharp turn from time 720 until 912. Finally, bus 77 makes a sharp turn from time 959 to time 999. We construct similar narratives for all input entities, according to the scenario that we are working on.
+
+The background knowledge is stored in a separate file that, as mentioned in subsection \ref{sec:ctm-declarations} (in the grounding stage), contains Prolog facts of the form ``\textttsmall{vehicle(Id, VehicleType).}'' that depict all the vehicles, along with their type.
+%
+\begin{verbatim}
+vehicle(75, bus).
+vehicle(76, bus).
+vehicle(77, bus).
+\end{verbatim}
+%
+This background knowledge fragment shows that vehicles 75, 76, and 77 are buses.
+
+\subsection{Compilation}\label{sec:ctm-compilation}
+
+Before we are ready to run RTEC and receive the Event Recognition results, we must compile our event description, according to the rules presented in \ref{sec:compilation}. The result of the compilation is a new file that contains elements from both the event description and the declarations file. The rules are now ready to be read and understood by RTEC, during the Event Recognition process. The command and the output are totally similar to the ones we showed in subsection \ref{sec:aSimpleExample}.
+
+\subsection{Performing Event Recognition}\label{sec:ctm-execution}
+
+We have all the necessary components for the Event Recognition. We just need to prepare the main Prolog script and execute it. Using a text editor, we type the following code:
+
+\lstinputlisting[
+	style	= Prolog-cvlas,
+	caption	= {mini-ctm-queries.prolog file that contains the main ER script},
+	label	= {lst:ctm-queries}
+]{listings/mini-ctm-queries.prolog}
+
+The above code first imports all the files described in the previous subsections, then itdefines the ``\textttsmall{performER}'' predicate. The structure of the script is the same as in subsection \ref{sec:aSimpleExample}. This time our main predicate has 2 parameters, the Event Recognition step (the temporal distance between two consecutive queries) and the working memory (the interval in which RTEC will look for events/fluents). We initialise the recognition, load our narrative and execute the event assimilation just as we did in the simple example, in the Introduction. The only difference is that we create a new file named ``outputEntities.txt'' that stores the output entities that were calculated during the Event Assimilation process.
+
+We can start a Prolog session, consult ``mini-ctm-queries.prolog'' and then type ``\textttsmall{performER(60,60)}'' (that is, we ask RTEC to perform the Event Recognition with $Step\val 60$ and $Working Memory\val 60$).
+
+If Prolog replies with a message ending in ``yes'', then the procedure was successful. We can open the ``outputEntities.txt'' file and see the results.
+
+\lstinputlisting[
+	style	= Prolog-cvlas,
+	caption	= {The output entities},
+	label	= {lst:ctm-oe}
+]{listings/outputEntities.txt}

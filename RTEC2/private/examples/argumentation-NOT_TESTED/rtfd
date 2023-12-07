@@ -1,0 +1,556 @@
+% File 'rtfd'
+
+
+
+
+:- sorts
+   number;
+   agent >> smallAgent;
+   agent >> tinyAgent;
+   proposition >> tinyProposition;
+   perfName >> smallPerfName;
+   perfName >> tinyPerfName;
+   roleName.
+
+:- objects
+   1..3                             :: number;
+   claim, concede, retract          :: perfName;
+   deny, declare                    :: perfName;
+   claim, concede, retract, deny    :: smallPerfName;
+   declare                          :: tinyPerfName;
+   perfected, possesion, d1         :: proposition;
+   notPossesion, notPerfected       :: proposition;
+   d1                               :: tinyProposition;
+   det, pro, opp                    :: agent;
+   pro, opp                         :: smallAgent;
+   det                              :: tinyAgent;
+   determiner, proponent, opponent  :: roleName.
+
+:- variables
+   C1                                     :: number;
+   Pro, Opp, Det, Agent, Agent2           :: agent;
+   SAgent, SAgent2, SAgent3               :: smallAgent;
+   Role                                   :: roleName;
+   Perf, Perf2                            :: perfName;
+   SPerf                                  :: smallPerfName;
+   P, Q, Pre, Just, Cons, Justification   :: proposition;
+   %SProp, S2Prop                         :: smallProposition;
+   D                                      :: tinyProposition;
+   Act                                    :: action.
+
+:- constants
+   topic                                                          :: rigid(proposition);
+   neg(proposition, proposition)                                  :: rigid;
+   def(tinyProposition, proposition, proposition, proposition)    :: rigid;
+   initialState                                                   :: inertialFluent;
+   finalState                                                     :: inertialFluent;
+   winner(smallAgent)                                             :: inertialFluent;
+   implies(proposition, proposition)                              :: rigid;
+   accepted(proposition)                                          :: sdFluent;
+   accepts(smallAgent, proposition)                               :: sdFluent;
+   pow(smallAgent, smallPerfName, proposition)                    :: sdFluent;
+   powObject(smallAgent, perfName, smallAgent, proposition)       :: sdFluent;
+   powDeclare(smallAgent)                                         :: sdFluent;
+   %implicitPremise(smallAgent, proposition)                      :: sdFluent;
+   premise(smallAgent, proposition)                               :: inertialFluent;
+   role_of(agent)                                                 :: rigid(roleName);
+   invalidActionHappened(smallPerfName, smallAgent, proposition)  :: inertialFluent;
+   invalidDeclareHappened(smallAgent)                             :: inertialFluent;
+   turn                                                           :: inertialFluent(roleName);
+   permitted(smallAgent, smallPerfName, proposition)              :: sdFluent;
+   permittedObject(smallAgent, perfName, smallAgent, proposition) :: sdFluent;
+   permittedDeclare(smallAgent)                                   :: sdFluent;
+   obliged(tinyAgent, tinyPerfName, smallAgent)                   :: sdFluent;
+   sanctioned(smallAgent)                                         :: inertialFluent;
+   actCount, timeoutCount                                         :: inertialFluent(number);
+   oTimeout                                                       :: action;
+   pTimeout                                                       :: action;
+   dTimeout                                                       :: action;
+   endTimeout                                                     :: action;
+   claim(smallAgent, proposition)                                 :: action;
+   concede(smallAgent, proposition)                               :: action;
+   retract(smallAgent, proposition)                               :: action;
+   deny(smallAgent, proposition)                                  :: action;
+   declare(agent, smallAgent)                                     :: action;
+   object(smallAgent, perfName, agent, proposition)               :: action.
+
+
+/* SCENARIO-SPECIFIC CONSTRAINTS */
+
+caused topic = perfected.
+
+
+
+caused role_of(det)= determiner.
+caused role_of(pro)= proponent.
+caused role_of(opp)= opponent.
+
+
+% PTIMEOUT: initiate the proponent's turn
+
+pTimeout causes turn = proponent.
+
+
+% OTIMEOUT: initiate the opponent's turn
+
+oTimeout causes turn = opponent.
+
+
+% DTIMEOUT: initiate the determiner's turn
+
+dTimeout causes turn = determiner.
+
+
+% ENDTIMEOUT: initiate the determiner's turn
+
+endTimeout causes finalState.
+
+endTimeout causes -invalidActionHappened(SPerf, SAgent, Q).
+
+endTimeout causes -invalidDeclareHappened(SAgent).
+
+
+% CLAIM ACTION
+
+claim(SAgent, Q) causes premise(SAgent, Q).
+
+claim(SAgent, topic) causes -initialState if
+	pow(SAgent, claim, topic) &
+	initialState.
+
+% implicitly initiate the power to object to the invalid claim
+
+claim(SAgent, Q) causes invalidActionHappened(claim, SAgent, Q) if
+	-pow(SAgent, claim, Q) &
+	-premise(SAgent, Q).
+
+% implicitly terminate the power to object to any previous action
+
+claim(SAgent, Q) causes -invalidActionHappened(SPerf, SAgent2, P) if
+	invalidActionHappened(SPerf, SAgent2, P).
+
+
+% CONCEDE ACTION
+
+concede(SAgent, Q) causes premise(SAgent, Q).
+
+% implicitly initiate the power to object to the invalid concede
+
+concede(SAgent, Q) causes invalidActionHappened(concede, SAgent, Q) if
+	-pow(SAgent, concede, Q) &
+	-premise(SAgent, Q).
+
+% implicitly terminate the power to object to any previous action
+
+concede(SAgent, Q) causes -invalidActionHappened(SPerf, SAgent2, P) if
+	invalidActionHappened(SPerf, SAgent2, P).
+
+
+% RETRACT ACTION
+
+retract(SAgent, Q) causes -premise(SAgent, Q).
+
+% implicitly initiate the power to object to the invalid retract
+
+retract(SAgent, Q) causes invalidActionHappened(retract, SAgent, Q) if
+	-pow(SAgent, retract, Q) &
+	premise(SAgent, Q).
+
+% implicitly terminate the power to object to any previous action
+
+retract(SAgent, Q) causes -invalidActionHappened(SPerf, SAgent2, P) if
+	invalidActionHappened(SPerf, SAgent2, P).
+
+
+% DENY ACTION
+
+deny(SAgent, Q) causes -premise(SAgent, Q).
+
+% implicitly initiate the power to object to the invalid deny
+
+deny(SAgent, Q) causes invalidActionHappened(deny, SAgent, Q) if
+	-pow(SAgent, deny, Q) &
+	premise(SAgent, Q).
+
+% implicitly terminate the power to object to any previous action
+
+deny(SAgent, Q) causes -invalidActionHappened(SPerf, SAgent2, P) if
+	invalidActionHappened(SPerf, SAgent2, P).
+
+
+% DECLARE ACTION
+
+declare(Det, SAgent) causes winner(SAgent).
+
+declare(Det, SAgent) causes -winner(SAgent2) if
+	winner(SAgent2).
+
+declare(Det, SAgent) causes finalState if
+	powDeclare(SAgent).
+
+% implicitly initiate the power to object to the invalid declare
+
+declare(Det, SAgent) causes invalidDeclareHappened(SAgent) if
+	-powDeclare(SAgent).
+
+% implicitly terminate the power to object to any previous action
+
+declare(Det, SAgent) causes -invalidActionHappened(SPerf, SAgent2, P) if
+	invalidActionHappened(SPerf, SAgent2, P).
+
+declare(Det, SAgent) causes -invalidDeclareHappened(SAgent) if
+	invalidDeclareHappened(SAgent).
+
+
+% OBJECT ACTION
+
+object(SAgent, claim, SAgent2, Q) causes -premise(SAgent2, Q) if
+	powObject(SAgent, claim, SAgent2, Q).
+
+object(SAgent, concede, SAgent2, Q) causes -premise(SAgent2, Q) if
+	powObject(SAgent, concede, SAgent2, Q).
+
+object(SAgent, retract, SAgent2, Q) causes premise(SAgent2, Q) if
+	powObject(SAgent, retract, SAgent2, Q).
+
+object(SAgent, deny, SAgent2, Q) causes premise(SAgent2, Q) if
+	powObject(SAgent, deny, SAgent2, Q).
+
+object(SAgent, declare, SAgent2, Q) causes -winner(SAgent2) if
+	powObject(SAgent, declare, SAgent2, Q).
+
+% implicitly terminate the power to object to any action
+
+object(SAgent, Perf, SAgent2, Q) causes -invalidActionHappened(SPerf, SAgent3, P) if
+	powObject(SAgent, Perf, SAgent2, Q).
+
+
+% pow FLUENT
+
+default -pow(SAgent, SPerf, Q).
+
+caused pow(pro, claim, Q) if
+	role_of(pro) = turn &
+	topic = Q &
+	initialState.
+
+caused pow(SAgent, claim, Q) if
+	role_of(SAgent) = turn &
+	-initialState.
+
+caused pow(SAgent, concede, Q) if
+	-initialState &
+	role_of(SAgent) = turn &
+	premise(SAgent2, Q) &
+	SAgent2 <> SAgent.
+
+caused pow(SAgent, retract, Q) if
+	-initialState &
+	role_of(SAgent) = turn &
+	premise(SAgent, Q).
+
+caused pow(SAgent, deny, Q) if
+	-initialState &
+	role_of(SAgent) = turn &
+	premise(SAgent2, Q) &
+	SAgent2 <> SAgent.
+
+
+% powDeclare FLUENT
+
+default -powDeclare(SAgent).
+
+caused powDeclare(pro) if
+	-finalState &
+	turn = determiner &
+	accepted(topic).
+
+caused powDeclare(opp) if
+	-finalState &
+	turn = determiner &
+	-accepts(pro, topic).
+
+caused powDeclare(pro) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(opp) &
+	-sanctioned(pro).
+
+caused powDeclare(opp) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(pro) &
+	-sanctioned(opp).
+
+caused powDeclare(pro) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(pro) &
+	sanctioned(opp).
+
+caused powDeclare(opp) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(pro) &
+	sanctioned(opp).
+
+caused powDeclare(pro) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	-sanctioned(pro) &
+	-sanctioned(opp).
+
+caused powDeclare(opp) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	-sanctioned(pro) &
+	-sanctioned(opp).
+
+
+% powObject FLUENT
+
+default -powObject(SAgent, Perf, SAgent2, Q).
+
+caused powObject(SAgent, SPerf, SAgent2, Q) if
+	invalidActionHappened(SPerf, SAgent2, Q).
+
+caused powObject(SAgent, declare, SAgent2, Q) if
+	invalidDeclareHappened(SAgent2) &
+	topic = Q.
+
+
+% permitted FLUENT
+
+default -permitted(SAgent, SPerf, Q).
+
+caused permitted(SAgent, SPerf, Q) if
+	pow(SAgent, SPerf, Q) &
+	SPerf <> retract.
+
+
+% permittedObject FLUENT
+
+default -permittedObject(SAgent, Perf, SAgent2, Q).
+
+caused permittedObject(SAgent, Perf, SAgent2, Q) if
+	powObject(SAgent, Perf, SAgent2, Q).
+
+
+% permittedDeclare FLUENT
+
+default -permittedDeclare(SAgent).
+
+caused permittedDeclare(SAgent) if
+	powDeclare(SAgent).
+
+
+% obliged FLUENT
+
+default -obliged(det, declare, SAgent).
+
+caused obliged(det, declare, pro) if
+	-finalState &
+	turn = determiner &
+	accepted(topic).
+
+caused obliged(det, declare, opp) if
+	-finalState &
+	turn = determiner &
+	-accepts(pro, topic).
+
+caused obliged(det, declare, pro) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(opp) &
+	-sanctioned(pro).
+
+caused obliged(det, declare, opp) if
+	-finalState &
+	turn = determiner &
+	accepts(pro, topic) &
+	-accepted(topic) &
+	sanctioned(pro) &
+	-sanctioned(opp).
+
+
+% sanctioned FLUENT
+
+retract(SAgent, Q) causes sanctioned(SAgent).
+
+
+% accepted FLUENT
+
+default -accepted(Q).
+
+caused accepted(Q) if
+	accepts(pro, Q) &
+	accepts(opp, Q).
+
+
+% accepts FLUENT
+
+default -accepts(SAgent, Q).
+
+caused accepts(SAgent, Q) if
+	premise(SAgent, P) &
+	implies(P, Q).
+
+caused accepts(SAgent, Cons) if
+	premise(SAgent, D) &
+	def(D, Pre, Just, Cons) &
+	accepts(SAgent, Pre) &
+	neg(Just, Justification) &
+	-accepts(SAgent, Justification).
+
+/* the following laws consider facts not just premises
+caused accepts(SAgent, Cons) if
+	premise(SAgent, D) &
+	def(D, Pre, Just, Cons) &
+	premise(SAgent, Pre) &
+	neg(Just, Justification) &
+	-premise(SAgent, Justification) &
+	[/\SProp | fact(SProp) & SProp <> Justification].
+
+caused accepts(SAgent, Q) if
+	premise(SAgent, D) &
+	def(D, Pre, Just, Cons) &
+	-premise(SAgent, Pre) &
+	[\/SProp | fact(SProp) & SProp=Pre] &
+	neg(Just, Justification) &
+	-premise(SAgent, Justification) &
+	[/\S2Prop | fact(S2Prop) & S2Prop <> Justification].
+*/
+
+% def FLUENT
+
+default -def(D, Pre, Just, Cons).
+
+caused def(d1, possesion, perfected, perfected).
+
+
+% neg FLUENT
+
+default -neg(P, Q).
+
+caused neg(possesion, notPossesion).
+caused neg(notPossesion, possesion).
+
+caused neg(perfected, notPerfected).
+caused neg(notPerfected, perfected).
+
+
+% implies FLUENT
+
+default -implies(P, Q).
+
+caused implies(P, P).
+
+
+% CONSTRAIN THE invalidDeclareHappened FLUENT
+
+constraint invalidDeclareHappened(SAgent) ->> turn = determiner.
+
+
+% CONSTRAIN THE winner FLUENT
+
+constraint winner(SAgent) ->> turn = determiner.
+never winner(SAgent) & winner(SAgent2) where SAgent <> SAgent2.
+
+
+% CONSTRAIN THE initialState FLUENT
+
+constraint initialState ->> turn = proponent.
+constraint initialState ->> -sanctioned(SAgent).
+constraint initialState ->> -finalState.
+constraint initialState ->> -premise(SAgent, Q).
+constraint initialState ->> -invalidActionHappened(SPerf, SAgent, Q).
+constraint initialState ->> -invalidDeclareHappened(SAgent).
+
+
+% CONSTRAIN THE finalState FLUENT
+
+constraint finalState ->> turn = determiner.
+constraint finalState ->> -initialState.
+constraint finalState ->> -invalidDeclareHappened(SAgent).
+
+
+% RESTRICTED PROTOCOL:
+
+nonexecutable oTimeout if initialState.
+
+nonexecutable oTimeout if turn <> proponent.
+nonexecutable pTimeout if turn <> opponent.
+nonexecutable endTimeout if turn <> determiner.
+
+% the opponent always has the last word
+
+nonexecutable dTimeout if turn <> opponent.
+
+constraint initialState ->> actCount = 1.
+constraint initialState ->> timeoutCount = 1.
+
+pTimeout causes actCount = 1.
+oTimeout causes actCount = 1.
+dTimeout causes actCount = 1.
+endTimeout causes actCount = 1.
+
+Act causes actCount = 2 if
+	actCount = 1 &
+	Act <> pTimeout &
+	Act <> oTimeout &
+	Act <> dTimeout &
+	Act <> endTimeout.
+
+Act causes actCount = 3 if
+	actCount = 2 &
+	Act <> pTimeout &
+	Act <> oTimeout &
+	Act <> dTimeout &
+	Act <> endTimeout.
+
+nonexecutable Act if
+	actCount = 3 &
+	Act <> pTimeout &
+	Act <> oTimeout &
+	Act <> dTimeout &
+	Act <> endTimeout.
+
+pTimeout causes timeoutCount = 2 if
+	timeoutCount = 1.
+
+pTimeout causes timeoutCount = 3 if
+	timeoutCount = 2.
+
+nonexecutable dTimeout if timeoutCount = 1.
+nonexecutable dTimeout if timeoutCount = 2.
+
+nonexecutable pTimeout if timeoutCount = 3.
+
+nonexecutable Act if
+	initialState &
+	Act <> claim(pro, topic).
+
+
+% AT LEAST ONE ACTION SHOULD BE EXECUTED AT EACH STEP
+
+caused false after [/\Act | -Act].
+
+
+% AT MOST ONE ACTION SHOULD BE EXECUTED AT EACH STEP
+
+noconcurrency.
+

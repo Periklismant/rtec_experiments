@@ -1,0 +1,49 @@
+:- include 'rtfd'.
+
+
+:- query
+label :: 1;
+maxstep :: 1;
+0: -sanctioned(pro);
+0: sanctioned(opp);
+0: accepts(pro, topic);
+0: -accepts(opp, topic);
+0: actCount = 2;
+0: timeoutCount = 3;
+0: -winner(SAgent);
+0: -premise(pro, possesion);
+0: -premise(pro, notPossesion);
+0: -premise(pro, d1);
+0: -premise(pro, notPerfected);
+0: -premise(opp, Q);
+0: -invalidActionHappened(SPerf, SAgent, Q);
+0: -invalidDeclareHappened(SAgent);
+0: turn = determiner;
+0: declare(det, opp).
+
+:- show pow(SAgent, SPerf, Q);
+ powObject(SAgent, Perf, SAgent2, Q);
+ powDeclare(SAgent);
+ permitted(SAgent, SPerf, Q);
+ permittedObject(SAgent, Perf, SAgent2, Q);
+ permittedDeclare(SAgent);
+ obliged(det, declare, SAgent);
+ sanctioned(SAgent);
+% fact(SProp);
+ initialState;
+ finalState;
+ topic=Q;
+ neg(P, Q);
+ def(D, Pre, Just, Cons);
+ winner(Agent);
+ role_of(det)=Role;
+ role_of(pro)=Role;
+ role_of(opp)=Role;
+ turn = Role;
+ invalidActionHappened(SPerf, SAgent, Q);
+ invalidDeclareHappened(SAgent);
+ accepted(Q);
+ accepts(SAgent, Q);
+ premise(SAgent, Q);
+ actCount = C1;
+ timeoutCount = C1.

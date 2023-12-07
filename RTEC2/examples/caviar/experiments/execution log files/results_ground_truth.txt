@@ -1,0 +1,40 @@
+recognitions(ground_truth, moving, [[id4,id5],true], [(2520,5680)]).
+recognitions(ground_truth, meeting, [[id4,id5],true], [(5720,24400)]).
+recognitions(ground_truth, moving, [[id1,id2],true], [(24440,27240)]).
+recognitions(ground_truth, meeting, [[id1,id2],true], [(27280,66160)]).
+recognitions(ground_truth, moving, [[id0,id1],true], [(465760,469200)]).
+recognitions(ground_truth, meeting, [[id0,id1],true], [(469240,469560)]).
+recognitions(ground_truth, meeting, [[id0,id1],true], [(512240,515480)]).
+recognitions(ground_truth, moving, [[id1,id2],true], [(552520,564280), (570920,573160)]).
+recognitions(ground_truth, meeting, [[id1,id2],true], [(564320,570880)]).
+recognitions(ground_truth, leaving_object, [[id3,id4],true], [(590320,592360)]).
+recognitions(ground_truth, leaving_object, [[id5,id6],true], [(645040,647080)]).
+recognitions(ground_truth, leaving_object, [[id4,id6],true], [(629680,630600)]).
+recognitions(ground_truth, leaving_object, [[id3,id4],true], [(720200,721440)]).
+recognitions(ground_truth, leaving_object, [[id2,id4],true], [(752000,752440), (771480,772480)]).
+recognitions(ground_truth, moving, [[id1,id2],true], [(800200,805760)]).
+recognitions(ground_truth, moving, [[id5,id6],true], [(811080,814320)]).
+recognitions(ground_truth, moving, [[id3,id4],true], [(813960,814320)]).
+recognitions(ground_truth, meeting, [[id1,id2],true], [(798520,800160)]).
+recognitions(ground_truth, moving, [[id1,id2],true], [(828840,843320)]).
+recognitions(ground_truth, meeting, [[id1,id2],true], [(822520,828800), (843360,847400)]).
+recognitions(ground_truth, moving, [[id1,id3],true], [(855240,858640)]).
+recognitions(ground_truth, meeting, [[id1,id3],true], [(851440,855200), (858680,859440)]).
+recognitions(ground_truth, moving, [[id0,id1],true], [(882440,888200)]).
+recognitions(ground_truth, meeting, [[id0,id1],true], [(881560,882400), (888240,888800)]).
+recognitions(ground_truth, moving, [[id0,id3],true], [(913600,923280)]).
+recognitions(ground_truth, moving, [[id0,id2],true], [(912040,923360)]).
+recognitions(ground_truth, moving, [[id0,id1],true], [(910880,922480)]).
+recognitions(ground_truth, moving, [[id1,id2],true], [(912040,922480)]).
+recognitions(ground_truth, moving, [[id1,id3],true], [(913600,922480)]).
+recognitions(ground_truth, moving, [[id2,id3],true], [(913600,923280)]).
+recognitions(ground_truth, moving, [[id0,id1],true], [(928920,935840)]).
+recognitions(ground_truth, meeting, [[id0,id1],true], [(935880,939400)]).
+recognitions(ground_truth, fighting, [[id6,id7],true], [(963760,966160)]).
+recognitions(ground_truth, fighting, [[id3,id4],true], [(984120,989240)]).
+recognitions(ground_truth, fighting, [[id4,id5],true], [(1004440,1008960)]).
+recognitions(ground_truth, fighting, [[id4,id5],true], [(1042240,1046880)]).
+recognitions(ground_truth, meeting, [[id5,id6],true], [(1047760,1049560)]).
+recognitions(ground_truth, meeting, [[id2,id6],true], [(1050480,1053720)]).
+recognitions(ground_truth, fighting, [[id2,id6],true], [(1080760,1086280)]).
+recognitions(ground_truth, fighting, [[id1,id2],true], [(1122040,1124800)]).

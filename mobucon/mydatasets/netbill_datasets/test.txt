@@ -1,0 +1,14 @@
+ts,tick,0,o,[] 1
+tc,tick,0,o,[] 2
+ts,present_quote,1,agent10,[agent10,g2] 1
+tc,present_quote,1,agent10,[] 2
+ts,tick,-1,o,[] 3
+tc,tick,-1,o,[] 4
+ts,tick,-2,o,[] 5
+tc,tick,-2,o,[] 6
+ts,tick,-3,o,[] 7
+tc,tick,-3,o,[] 8
+ts,accept_quote,2,agent10,[agent10,g2] 7
+tc,accept_quote,2,agent10,[] 8
+ts,tick,-4,o,[] 9
+tc,tick,-4,o,[] 10

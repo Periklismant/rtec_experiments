@@ -1,0 +1,32 @@
+initiates(complete(gl_test,ID,O,[Patient,Level]), status(i(ID,constraint(hypo)),pend),T):-
+	Level < 50.	
+
+terminates(start(take_sugar,ID2,O2,[]), status(i(ID,constraint(hypo)),pend),T):- 
+	holds_at(status(i(ID,constraint(hypo)),pend),T),
+	happens(complete(gl_test,ID,O,[Patient,Level]),Ta),
+	Patient = O2,
+	T > Ta,
+	T =< Ta + 180.
+
+initiates(start(take_sugar,ID2,O2,[]), status(i(ID,constraint(hypo)),sat),T):- 
+	holds_at(status(i(ID,constraint(hypo)),pend),T),
+	happens(complete(gl_test,ID,O,[Patient,Level]),Ta),
+	Patient = O2,
+	T > Ta,
+	T =< Ta + 180.
+
+terminates(_, status(i(ID,constraint(hypo)),pend),T):- 
+	holds_at(status(i(ID,constraint(hypo)),pend),T),
+	happens(complete(gl_test,ID,O,[Patient,Level]),Ta),
+	T > Ta + 180.
+
+initiates(_,status(i(ID,constraint(hypo)),viol),T):- 
+	holds_at(status(i(ID,constraint(hypo)),pend),T),
+	happens(complete(gl_test,ID,O,[Patient,Level]),Ta),
+	T > Ta + 180.
+
+terminates(exec(complete), status(i(_,_),pend),T).
+
+initiates(exec(complete),status(i(ID,Name),viol),T):-
+	holds_at(status(i(ID,Name),pend),T).	
+
