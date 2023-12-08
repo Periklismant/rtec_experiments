@@ -81,8 +81,8 @@ def createIntervalsFromTimePoints(timepoints):
 
 
 
-inputFile="gklec_results/" + argv[1] + "-" + argv[2] + "-" + getInitsID(argv[3:]) +  ".txt"
-outputFile="gklec_results/" + argv[1] + "-" + argv[2] + "-" + getInitsID(argv[3:]) +  ".txt"
+inputFile="../results/gklec/" + argv[1] + "-" + argv[2] + "-" + getInitsID(argv[3:]) +  ".txt"
+outputFile="../results/gklec/" + argv[1] + "-" + argv[2] + "-" + getInitsID(argv[3:]) +  ".txt"
 #print(inputFile)
 f = open(inputFile, 'r')
 timePointsDict = dict()

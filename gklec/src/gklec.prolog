@@ -1,5 +1,3 @@
-%% added cuts for efficiency and correctness.
-
 :- dynamic cached/1, initially/1.
 
 :- discontiguous initially/1, happens/2, delay/3, overrides/3, varVal/2, appVars/2.
@@ -9,10 +7,12 @@ boolean_not(1,0).
 
 %======== domain-independent 'happens' ======% 
 
+% There is a tick event at each time-point of the window.
 happens(tick,T):-
 	endReasoningTime(EndReasoningTime),
 	T>=0, T=<EndReasoningTime.
 
+% We compute happens/2 by consulting the cache.
 happens(occurs(FX, V), T):-
 	cached(happens(occurs(FX, V), T)), 
 	%write('cached(happens(occurs('), write(FX), write(','), write(V), write(') at T='), write(T), nl, 
@@ -28,6 +28,7 @@ varVal(x, 1).
 varVal(y, 0).
 varVal(y, 1).
 
+% These are commented out because the initial variable values are asserted by the query helper predicates (see the end of the file).
 %initially(val(x,0)).
 %initially(val(y,0)).
 
@@ -35,6 +36,17 @@ delay(x,incr,2).
 delay(x,decr,2).
 delay(y,incr,2).
 delay(y,decr,2).
+
+/***********************************
+ *  Table of variable states *
+   
+   | x | y | f(x) | f(y) |
+   | 0 | 0 |  1   |  0   |
+   | 0 | 1 |  0   |  0   |
+   | 1 | 0 |  1   |  1   |
+   | 1 | 1 |  0   |  1   |
+
+***********************************/
 
 happens(occurs(f(x), V2), 1):-
 	initially(val(y, V1)),
@@ -69,31 +81,12 @@ varVal(s, 2).
 %initially(val(h,0)).
 %initially(val(s,0)).
 
-%delay(h,incr,6).
-%delay(h,decr,6).
-%delay(s,incr,6).
-%delay(s,decr,6).
-
 delay(h,incr,1).
 delay(h,decr,1).
 delay(s,incr,1).
 delay(s,decr,2).
 
-%overrides(h, s, _).
-
 has_value(antigen, 1, _).
-
-/*
-has_value(antigen, 1, T):-
-	Ttenth is T div 10, 
-	Tmod is Ttenth mod 2,
-	Tmod=0.
-
-has_value(antigen, 0, T):-
-	Ttenth is T div 10, 
-	Tmod is Ttenth mod 2,
-	Tmod=1.
-*/
 
 happens(occurs(f(h), 0), T):-
 	%write('happens(occurs(f(h),0),'), write(T), write(').'), nl,	
@@ -159,15 +152,6 @@ varVal(n, 1).
 %initially(val(cro,0)).
 %initially(val(cII,0)).
 %initially(val(n,0)).
-
-%delay(cI,incr,2).
-%delay(cI,decr,2).
-%delay(cro,incr,2).
-%delay(cro,decr,2).
-%delay(cII,incr,2).
-%delay(cII,decr,2).
-%delay(n,incr,2).
-%delay(n,decr,2).
 
 delay(cI,incr,3).
 delay(cI,decr,4).
@@ -334,13 +318,6 @@ terminates(occurs(f(X), _Vi), val(X, _Vk), [Ti, Tk]):-
 	TkMinusOne is Tk - 1, 
 	TkMinusOne > 0,
 	fchanges(f(X), Ti, TkMinusOne). % removed cut.
-/*
-terminates(occurs(f(X), _Vi), val(X, _Vk), [_Ti, Tk]):-
-	%write('terminates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by fchanges '), nl,
-	%TkMinusOne is Tk - 1, 
-	%TkMinusOne > 0,
-	overridden(X, Tk).
-*/
 
 terminates(tick, val(X, Vk), [TkMinusOne, Tk]):-
 	%write('terminates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by tick '), nl,
@@ -362,14 +339,6 @@ fchanges(f(X), T1, T2):-
 	T is T1 + 1, 
 	fchanges(f(X), T, T2).
 
-/*
-overridden(X, T):-
-	overrides(Y, X, T),
-	\+ Y=X,
-	initiates(occurs(f(Y),Vi), val(Y,V), [Ti, T]),
-	\+ terminates(occurs(f(Y), Vi), val(Y, V), [Ti, T]).
-*/
-
 %========= UTILS ================% 
 
 handleProlog(yap, cputime) :-
@@ -387,15 +356,16 @@ getCPUtime(T):-
 runQueryForAllInitCombinations([], _, _, _).
 
 runQueryForAllInitCombinations([InitValsList|RestInitValsLists], App, EndTime, TimesFileStream):-
+	write('Application: '), write(App), nl,
 	assertInits(App, InitValsList),
-	findall(_, (initially(val(F,V)), write(F=V), nl),_),
+	findall(_, (initially(val(F,V)), write('Initial value of '), write(F), write(' is '), write(V), nl),_),
 	produceLogFileInits(App, EndTime, InitValsList, LogFile),
-	write('Running Queries for App: '), write(App), write(' and InitVals: '), write(InitValsList), nl,
-	write('Writing in LogFile: '), write(LogFile), nl,
+	write('Logfile: '), write(LogFile), nl,
 	getCPUtime(Tstart),
 	query(App, EndTime, LogFile),
 	getCPUtime(Tend),
 	Tdiff is Tend - Tstart,
+        write('Execution time: '), write(Tdiff), nl,
 	write(TimesFileStream, Tdiff), nl(TimesFileStream),
 	retractInits(App),
 	retractAllCached,
@@ -449,7 +419,7 @@ runQueries(_, T, Tend, _):-
 	T>Tend, !.
 
 runQueries(Vars, T, Tend, LogFileStream):-
-	nl, write('Timepoint: '), write(T), nl,
+        %nl, write('Timepoint: '), write(T), nl,
 
 	checkAllVars(Vars, T, LogFileStream),
 
@@ -505,7 +475,7 @@ valsToNum(Vals, NumID):-
 	valsToNum0(Vals, 1, 0, NumID).
 
 produceLogFileInits(App, EndTime, InitValsList, LogFile):-
-	atom_concat('gklec_results/', App, LogFilePrefix0),
+	atom_concat('../results/gklec/', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),
@@ -516,7 +486,7 @@ produceLogFileInits(App, EndTime, InitValsList, LogFile):-
 	atom_concat(LogFile0, '.txt', LogFile).
 
 produceLogFile(App, EndTime, LogFile):-
-	atom_concat('gklec_results/', App, LogFilePrefix0),
+	atom_concat('../results/gklec/', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),

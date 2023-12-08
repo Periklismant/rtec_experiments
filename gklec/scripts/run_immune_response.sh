@@ -3,11 +3,13 @@
 EndTimes='100 200 400 800'
 
 for EndTime in $EndTimes; do
+        cd ../src
 	swipl -l gklec.prolog -q -g "runQueryAllInits(immune_g, ${EndTime}), halt."
 
 	HVals='0 1 2'
 	SVals='0 1 2'
 
+        cd ../scripts
 	for HVal in $HVals; do
 		for SVal in $SVals; do
 			python3 transform_flec_logs.py immune_g ${EndTime} ${HVal} ${SVal}
