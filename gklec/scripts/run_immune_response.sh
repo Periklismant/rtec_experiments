@@ -1,6 +1,7 @@
 #!/bin/bash
 
-EndTimes='100 200 400 800'
+#EndTimes='100 200 400 800'
+EndTimes='100'
 
 for EndTime in $EndTimes; do
         cd ../src
