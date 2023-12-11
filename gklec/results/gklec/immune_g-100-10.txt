@@ -1,7 +1,0 @@
-recognitions(predictions,f,[[h],1],[(1,2)]).
-recognitions(predictions,val,[[h],0],[(1,2),(3,101)]).
-recognitions(predictions,val,[[s],2],[(2,101)]).
-recognitions(predictions,f,[[s],2],[(1,101)]).
-recognitions(predictions,f,[[h],0],[(2,101)]).
-recognitions(predictions,val,[[h],1],[(2,3)]).
-recognitions(predictions,val,[[s],1],[(1,2)]).
