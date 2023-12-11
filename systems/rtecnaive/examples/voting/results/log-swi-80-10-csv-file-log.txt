@@ -1,0 +1,16 @@
++397+790+1270+1657+2122+6056+3526+5896+10402+39629
+
+Recognition Time average (ms)		: 7174.5
+Recognition Time standard deviation (ms): 11213.55658343953
+Recognition Time worst (ms)		: 39629
+
+Input Entities average			: 209304.8
+Input Entities standard deviation	: 99869.52960417909
+
+Output Entities (average number of fluent-value pairs)	: 21456.9
+Output Entities (standard deviation)	  		: 4753.420335926542
+Output Entities (average number of intervals)	: 49711.4
+Output Entities (standard deviation)	  	: 23354.589262926464
+Output Entities (average number of timepoints)	: 235856.1
+Output Entities (standard deviation)	 	: 119509.52229211696
+	Rule Evaluations: [6823,30623,52959,75373,97695,119903,141947,164407,163169,161764], with Sum: 1014663, and Avg: 101466

@@ -1,43 +1,26 @@
 #!/bin/bash 
 
-# Paths relative to this directory 
-rtecnaive_path="../systems/rtecnaive"
-rtec_path="../systems/rtec"
 
-window_sizes=(10 20 40 80)
+#Applications=("voting" "netbill")
+Applications=("netbillnop")
+Systems=("rtec" "rtecnaive")
+#Systems=("rtecnaive")
+window_sizes=(80)
 
-# Path relative to systems/rtec/execution\ scripts
-voting_dataset="../../../datasets/voting/naive_comparison_input.csv"
 
-# Voting Experiments
-echo "%%% Running Voting Experiments %%%"
-for window_size in ${window_sizes[@]}; do
-    echo "Window size: ${window_size}"
-    cd ${rtec_path}/execution\ scripts
-
-    echo -e "\tRunning RTEC->"
-    ./run_rtec.sh --app=voting --window-size=${window_size} --input=${voting_dataset} > ../../../logs/naivecomp_rtec_voting_win${window_size}.txt
-
-    cd ../../${rtec_path}/execution\ scripts
-    echo -e "\tRunning RTEC->-naive"
-    ./run_rtec.sh --app=voting --window-size=${window_size} --input=${voting_dataset} > ../../../logs/naivecomp_rtecnaive_voting_win${window_size}.txt
-
-done 
-
-cd ../../scripts
-
-# Path relative to systems/rtec/execution\ scripts
-netbill_dataset="../../../datasets/netbill/naive_comparison_input.csv"
-
-# Netbill Experiments
-echo "%%% Running Netbill Experiments %%%"
-for window_size in ${window_sizes[@]}; do
-    echo "Window size: ${window_size}"
-    cd ${rtec_path}/execution\ scripts
-    echo -e "\tRunning RTEC->"
-    ./run_rtec.sh --app=netbill --window-size=${window_size} --input=${netbill_dataset} > ../logs/naivecomp_rtec_voting_win${window_size}.txt
-    cd ../../${rtec_path}/execution\ scripts
-    echo -e "\tRunning RTEC->-naive"
-    ./run_rtec.sh --app=netbill --window-size=${window_size} --input=${netbill_dataset} > ../logs/naivecomp_rtecnaive_netbill_win${window_size}.txt
-done 
-
+for App in ${Applications[@]}; do
+	echo "%%% Running ${App} experiments %%%"
+	# Path relative to systems/rtec/execution\ scripts
+	dataset="../../../datasets/${App}/naive_comparison_input.csv"
+	for system in ${Systems[@]}; do
+		echo "- System: ${system}" 
+		# Paths relative to this directory 
+		system_path="../systems/${system}"
+		for window_size in ${window_sizes[@]}; do
+			echo -e "\t* Window size: ${window_size}"
+			cd ${system_path}/execution\ scripts
+			./run_rtec.sh --app=${App} --window-size=${window_size} --step=80 --input=${voting_dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=80
+			cd ../../../scripts
+		done
+	done
+done

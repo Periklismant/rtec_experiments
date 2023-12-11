@@ -1,0 +1,16 @@
++396+696+1049+1247+1513+3450+2349+4189+6864+20945
+
+Recognition Time average (ms)		: 4269.8
+Recognition Time standard deviation (ms): 5865.572722249721
+Recognition Time worst (ms)		: 20945
+
+Input Entities average			: 209304.8
+Input Entities standard deviation	: 99869.52960417909
+
+Output Entities (average number of fluent-value pairs)	: 21456.9
+Output Entities (standard deviation)	  		: 4753.420335926542
+Output Entities (average number of intervals)	: 49711.4
+Output Entities (standard deviation)	  	: 23354.589262926464
+Output Entities (average number of timepoints)	: 235856.1
+Output Entities (standard deviation)	 	: 119509.52229211696
+	Number of Deadline initiations: [6749,21454,34970,48345,61749,75016,88210,101668,101653,100401], with Sum: 640215, and Avg: 64021

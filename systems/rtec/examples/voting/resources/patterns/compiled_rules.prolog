@@ -4,21 +4,25 @@ initiatedAt(status(_100)=null, _110, -1, _118) :-
      _110=< -1,
      -1<_118.
 
-initiatedAt(status(_110)=proposed, _156, _80, _162) :-
-     happensAtIE(propose(_114,_110),_80),_156=<_80,_80<_162,
+initiatedAt(status(_110)=proposed, _168, _80, _174) :-
+     happensAtIE(propose(_114,_110),_80),_168=<_80,_80<_174,
+     updateVariableTemp(rule_evaluations,1),
      holdsAtCyclic(_110,status(_110)=null,_80).
 
-initiatedAt(status(_110)=voting, _156, _80, _162) :-
-     happensAtIE(second(_114,_110),_80),_156=<_80,_80<_162,
+initiatedAt(status(_110)=voting, _168, _80, _174) :-
+     happensAtIE(second(_114,_110),_80),_168=<_80,_80<_174,
+     updateVariableTemp(rule_evaluations,1),
      holdsAtCyclic(_110,status(_110)=proposed,_80).
 
-initiatedAt(status(_110)=voted, _168, _80, _174) :-
-     happensAtIE(close_ballot(_114,_110),_80),_168=<_80,_80<_174,
+initiatedAt(status(_110)=voted, _180, _80, _186) :-
+     happensAtIE(close_ballot(_114,_110),_80),_180=<_80,_80<_186,
+     updateVariableTemp(rule_evaluations,1),
      role_of(_114,chair),
      holdsAtCyclic(_110,status(_110)=voting,_80).
 
-initiatedAt(status(_110)=null, _170, _80, _176) :-
-     happensAtIE(declare(_114,_110,_118),_80),_170=<_80,_80<_176,
+initiatedAt(status(_110)=null, _182, _80, _188) :-
+     happensAtIE(declare(_114,_110,_118),_80),_182=<_80,_80<_188,
+     updateVariableTemp(rule_evaluations,1),
      role_of(_114,chair),
      holdsAtCyclic(_110,status(_110)=voted,_80).
 
@@ -36,15 +40,13 @@ initiatedAt(outcome(_110)=_86, _164, _80, _170) :-
      holdsAtProcessedSimpleFluent(_110,status(_110)=voted,_80),
      role_of(_114,chair).
 
-initiatedAt(auxPerCloseBallot(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(status(_110)=voting),_80),
-     _136=<_80,
-     _80<_142.
+initiatedAt(auxPerCloseBallot(_110)=true, _148, _80, _154) :-
+     happensAtProcessedSimpleFluent(_110,start(status(_110)=voting),_80),_148=<_80,_80<_154,
+     updateVariableTemp(rule_evaluations,1).
 
-initiatedAt(auxPerCloseBallot(_110)=false, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(status(_110)=proposed),_80),
-     _136=<_80,
-     _80<_142.
+initiatedAt(auxPerCloseBallot(_110)=false, _148, _80, _154) :-
+     happensAtProcessedSimpleFluent(_110,start(status(_110)=proposed),_80),_148=<_80,_80<_154,
+     updateVariableTemp(rule_evaluations,1).
 
 initiatedAt(per(close_ballot(_114,_116))=true, _164, _80, _170) :-
      happensAtProcessedSimpleFluent(_116,end(auxPerCloseBallot(_116)=true),_80),_164=<_80,_80<_170,
@@ -65,17 +67,20 @@ initiatedAt(obl(declare(_114,_116,carried))=false, _144, _80, _150) :-
      _144=<_80,
      _80<_150.
 
-initiatedAt(sanctioned(_110)=true, _160, _80, _166) :-
-     happensAtIE(close_ballot(_110,_116),_80),_160=<_80,_80<_166,
+initiatedAt(sanctioned(_110)=true, _172, _80, _178) :-
+     happensAtIE(close_ballot(_110,_116),_80),_172=<_80,_80<_178,
+     updateVariableTemp(rule_evaluations,1),
      \+holdsAtProcessedSimpleFluent(_110,per(close_ballot(_110,_116))=true,_80).
 
-initiatedAt(sanctioned(_110)=true, _190, _80, _196) :-
-     happensAtProcessedSimpleFluent(_124,end(status(_124)=voted),_80),_190=<_80,_80<_196,
+initiatedAt(sanctioned(_110)=true, _202, _80, _208) :-
+     happensAtProcessedSimpleFluent(_124,end(status(_124)=voted),_80),_202=<_80,_80<_208,
+     updateVariableTemp(rule_evaluations,1),
      \+happensAtIE(declare(_110,_124,carried),_80),
      holdsAtProcessedSimpleFluent(_110,obl(declare(_110,_124,carried))=true,_80).
 
-initiatedAt(sanctioned(_110)=true, _194, _80, _200) :-
-     happensAtProcessedSimpleFluent(_124,end(status(_124)=voted),_80),_194=<_80,_80<_200,
+initiatedAt(sanctioned(_110)=true, _206, _80, _212) :-
+     happensAtProcessedSimpleFluent(_124,end(status(_124)=voted),_80),_206=<_80,_80<_212,
+     updateVariableTemp(rule_evaluations,1),
      \+happensAtIE(declare(_110,_124,not_carried),_80),
      \+holdsAtProcessedSimpleFluent(_110,obl(declare(_110,_124,carried))=true,_80).
 

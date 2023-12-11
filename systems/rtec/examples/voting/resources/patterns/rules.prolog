@@ -44,22 +44,22 @@ fi(status(M)=voted, status(M)=null, 10).
 initially(status(_M)=null).
 initiatedAt(status(M)=proposed, T) :-
 	happensAt(propose(_P,M), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(status(M)=null, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(status(M)=voting, T) :-
 	happensAt(second(_S,M), T),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(status(M)=proposed, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(status(M)=voted, T) :-
 	happensAt(close_ballot(C,M), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	role_of(C,chair),
 	holdsAt(status(M)=voting, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(status(M)=null, T) :-
 	happensAt(declare(C,M,_), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	role_of(C,chair),
 	holdsAt(status(M)=voted, T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 /*********************
     voted(V,M)=Vote
@@ -68,10 +68,8 @@ initiatedAt(status(M)=null, T) :-
 initiatedAt(voted(V,M)=Vote, T) :-
 	happensAt(vote(V,M,Vote), T), 
 	holdsAt(status(M)=voting, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(voted(_V,M)=null, T) :-
 	happensAt(start(status(M)=null), T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 /*****************************
       outcome(M)=Outcome
@@ -81,10 +79,8 @@ initiatedAt(outcome(M)=Outcome, T) :-
 	happensAt(declare(C,M,Outcome), T), 
 	holdsAt(status(M)=voted, T),	
 	role_of(C,chair).
-        %updateVariableTemp(rule_evaluations, 1).
 terminatedAt(outcome(M)=_O, T) :-
 	happensAt(start(status(M)=proposed), T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 /*********************
   INSTITUTIONAL POWER
@@ -108,18 +104,16 @@ holdsFor(pow(declare(_C,M))=true, I) :-
 fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, 8).
 
 initiatedAt(auxPerCloseBallot(M)=true, T) :-
-	happensAt(start(status(M)=voting), T).
-        %updateVariableTemp(rule_evaluations, 1).
+	happensAt(start(status(M)=voting), T),
+        updateVariableTemp(rule_evaluations, 1).
 initiatedAt(auxPerCloseBallot(M)=false, T) :-
-	happensAt(start(status(M)=proposed), T).
-        %updateVariableTemp(rule_evaluations, 1).
+	happensAt(start(status(M)=proposed), T),
+        updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(close_ballot(_C,M))=true, T) :-
-        happensAt(end(auxPerCloseBallot(M)=true), T),
+    happensAt(end(auxPerCloseBallot(M)=true), T),
 	holdsAt(status(M)=voting, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(close_ballot(_C,M))=false, T) :-
 	happensAt(start(status(M)=voted), T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 happensAt(auxMotionOutcomeEvent(M,carried), T) :-
 	happensAt(start(status(M)=voted), T),
@@ -127,18 +121,15 @@ happensAt(auxMotionOutcomeEvent(M,carried), T) :-
     findall(V, holdsAt(voted(V,M)=nay, T), NayList), length(NayList, NL),
     % standing rules: simple majority
     AL>=NL.
-    %updateVariableTemp(rule_evaluations, 1).
 
 /*****************
   OBLIGATION
  *****************/
 
- initiatedAt(obl(declare(_C,M,carried))=true, T):-
-     happensAt(auxMotionOutcomeEvent(M,carried), T).
-     %updateVariableTemp(rule_evaluations, 1).
+initiatedAt(obl(declare(_C,M,carried))=true, T):-
+	happensAt(auxMotionOutcomeEvent(M,carried), T).
 initiatedAt(obl(declare(_C,M,carried))=false, T) :-
 	happensAt(start(status(M)=null), T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 /**********
   SANCTION 
@@ -148,18 +139,18 @@ fi(sanctioned(C)=true, sanctioned(C)=false, 4).
 
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(close_ballot(C,M), T), 
+    	updateVariableTemp(rule_evaluations, 1),
 	\+ holdsAt(per(close_ballot(C,M))=true, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(end(status(M)=voted), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	\+ happensAt(declare(C,M,carried), T),
 	holdsAt(obl(declare(C,M,carried))=true, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(end(status(M)=voted), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	\+ happensAt(declare(C,M,not_carried), T),
 	\+ holdsAt(obl(declare(C,M,carried))=true, T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 % The elements of these domains are derived from the ground arguments of input entitites
 dynamicDomain(person(_P)).

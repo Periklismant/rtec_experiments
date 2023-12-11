@@ -153,7 +153,7 @@ writeAllGlobals(LogFileStream):-
 %logVariable(process_sdfluent_time, '\tProcess SD Fluents times: ', processEntityFlag).
 %logVariable(process_output_event_time, '\tProcess Output Events times: ', processEntityFlag).
 %logVariable(process_deadline_initiations, '\tCompute deadline initiations times: ', processEntityFlag).
-logVariable(rule_evaluations, '\tNumber of Deadline initiations: ', processEntityFlag).
+logVariable(rule_evaluations, '\tNumber of rule evaluations: ', processEntityFlag).
 
 %logVariable(deadlines_time, 'Deadlines times: ', notTemp).
 %logVariable(user_time, 'User Queries times: ', notTemp).

@@ -44,22 +44,26 @@ fi(status(M)=voted, status(M)=null, 10).
 initially(status(_M)=null).
 initiatedAt(status(M)=proposed, T) :-
 	happensAt(propose(_P,M), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(status(M)=null, T).
         %updateVariableTemp(rule_evaluations, 1).
 
 initiatedAt(status(M)=voting, T) :-
 	happensAt(second(_S,M), T),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(status(M)=proposed, T).
         %updateVariableTemp(rule_evaluations, 1).
 
 initiatedAt(status(M)=voted, T) :-
 	happensAt(close_ballot(C,M), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	role_of(C,chair),
 	holdsAt(status(M)=voting, T).
         %updateVariableTemp(rule_evaluations, 1).
 
 initiatedAt(status(M)=null, T) :-
 	happensAt(declare(C,M,_), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	role_of(C,chair),
 	holdsAt(status(M)=voted, T).
         %updateVariableTemp(rule_evaluations, 1).
@@ -112,11 +116,11 @@ holdsFor(pow(declare(_C,M))=true, I) :-
 fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, 8).
 
 initiatedAt(auxPerCloseBallot(M)=true, T) :-
-	happensAt(start(status(M)=voting), T).
-        %updateVariableTemp(rule_evaluations, 1).
+	happensAt(start(status(M)=voting), T),
+        updateVariableTemp(rule_evaluations, 1).
 initiatedAt(auxPerCloseBallot(M)=false, T) :-
-	happensAt(start(status(M)=proposed), T).
-        %updateVariableTemp(rule_evaluations, 1).
+	happensAt(start(status(M)=proposed), T),
+        updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(close_ballot(_C,M))=true, T) :-
         happensAt(end(auxPerCloseBallot(M)=true), T),
 	holdsAt(status(M)=voting, T).
@@ -152,15 +156,18 @@ fi(sanctioned(C)=true, sanctioned(C)=false, 4).
 
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(close_ballot(C,M), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	\+ holdsAt(per(close_ballot(C,M))=true, T).
         %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(end(status(M)=voted), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	\+ happensAt(declare(C,M,carried), T),
 	holdsAt(obl(declare(C,M,carried))=true, T).
         %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(end(status(M)=voted), T), 
+        updateVariableTemp(rule_evaluations, 1),
 	\+ happensAt(declare(C,M,not_carried), T),
 	\+ holdsAt(obl(declare(C,M,carried))=true, T).
         %updateVariableTemp(rule_evaluations, 1).
