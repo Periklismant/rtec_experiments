@@ -1,0 +1,703 @@
+/**************************************************************************
+     * Modelling Biological Feedback Loops using Kinetic Logic *
+
+ * The values of system variables, such as 'x' and 'y', are described with 
+ * the fluent val/2. val(x)=v denotes that the variable 'x' has the value 'v'.
+
+ * Variable values are subject to change according to the structure and the 
+ * dynamic of the feedback loop. 
+ * 
+ * In general: x'(t) = fx(x,y,t) - x(t),
+ *     where x(t) is the value of x at timepoint t, 
+ *           fx(x,y,t) is the functions which regulates changes in the value of 'x'
+ *           and x'(t) denotes a future increase/decrease in the value of 'x'.     
+ * 
+ * if x'(t)>0 (resp. '<'), then x(t')=x(t)+1 (resp. '-'), where t'=t + dx{+} (resp. '{-}')
+ * unless the change is cancelled.
+ *
+ * A change is cancelled if the value of function fx changes between t and t'.
+
+ * These functions are represented using fluents.
+ * holdsAt(f(x)=v,t) denotes that fx(x,y,t)=v at time-point t.
+ 
+ ** Each feedback loop must have distinct variable names ** 
+ **************************************************************************/
+
+/****************************
+ * Loop Dependent Fluents   *
+ ****************************/
+
+/*********************************
+*   Function value calculation   *
+**********************************/
+
+%% Events are generated based on the current values of the variables of the system.
+
+%% These rules are specific to the structure and the parameters (eg deadline values).
+%% of each feedback loop
+
+%%% Test Cases %%%
+
+/****************************
+ *   SIMPLE NEGATIVE LOOP   *
+ ****************************/
+
+/***********************************
+ *   2-variable negative loop  *
+
+      /---- '+' --->\             
+     x               y
+      \<--- '-' ----/
+
+ ***********************************/
+
+/***********************************
+ *  Table of variable states *
+   
+   | x | y | f(x) | f(y) |
+   | 0 | 0 |  1   |  0   |
+   | 0 | 1 |  0   |  0   |
+   | 1 | 0 |  1   |  1   |
+   | 1 | 1 |  0   |  1   |
+
+ ***********************************/
+%% function values are generated based on the current state.
+%
+%initially(val(x)=0).
+%initially(val(y)=0).
+initiatedAt(val(x)=0,-1,-1,0).
+initiatedAt(val(y)=0,-1,-1,0).
+
+%% f(x) = not(y)
+initiatedAt(f(x)=Vfx, Ts, T, Te) :-
+     %write('\tf(x)='), write(Vfx), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl, 
+     boolean_not(Vfx, Vy),
+     %happensAtProcessedSimpleFluent(y, start(val(y)=Vy), T),
+     %write('\t\tquerying: val(y)='), write(Vy), nl,
+     initiatedAtCyclic(y, val(y)=Vy, Ts, T, Te), Ts=<T, T<Te.
+     %write('\t\tval(y)='), write(Vy), write(' initiates at T='), write(T), nl,
+     %write('\tf(x)='), write(Vfx), write(' between '), write(Ts), write(' and '), write(Te),  write(' at '), write(T), nl.
+
+%% f(y) = x 
+initiatedAt(f(y)=Vx, Ts, T, Te) :-
+     %write('\tf(y)='), write(Vx), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl, 
+     %happensAtProcessedSimpleFluent(x, start(val(x)=Vx), T),
+     %write('\t\tquerying: val(x)='), write(Vx), nl,
+     initiatedAtCyclic(x, val(x)=Vx, Ts, T, Te), Ts=<T, T<Te.
+     %write('\t\tval(x)='), write(Vx), write(' initiates at T='), write(T), nl,
+     %write('\tf(y)='), write(Vx), write(' between '), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl. 
+
+
+/****************************
+ *      IMMUNE_G LOOP       *
+ ****************************/
+
+% persistAll(+FVPList, +T)
+% Matches if for every FVP U in FVPList, we have:
+%  U holds at T and it is not terminated at T or
+%  U is initiated at T.
+persistAll([], _).
+persistAll([FVP|RestFVPs], T):-
+     indexOf(Index, FVP),
+        %write('\t\t\t\tin persistAll for '), write(FVP), write(' at '), write(T), nl,
+     holdsAtCyclic(Index, FVP, T),
+        %write('\t\t\t\t it holds!'), nl,
+     \+ terminatedAtCyclic(Index, FVP, T), !, 
+     persistAll(RestFVPs, T).
+persistAll([FVP|RestFVPs], T):-
+     indexOf(Index, FVP),
+     initiatedAtCyclic(Index, FVP, T),
+     persistAll(RestFVPs, T).
+
+% initiatedAtCyclicAny0(+FVPList, PrevFVPs, +Ts, -T, +Te)
+% Matches if there is a time-point T between Ts and Te, for which there is some FVP in FVPList, such that FVP is initiated at T while the remaining FVPs persist at T.
+initiatedAtCyclicAny0([FVP|RestFVPs], PrevFVPs, Ts, T, Te):-
+     indexOf(Index, FVP),
+        %write('\t\t\tquerying initiatedAtCyclic for '), write(FVP), nl,
+     %initiatedAtCached(FVP, Ts, T, Te), Ts=<T, T<Te,
+     initiatedAtCyclic(Index, FVP, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\t\tinitiatedAtCyclic '), write(FVP), write(' at '), write(T), nl,
+     %nextTimePoint(T, Tnext),
+     append(RestFVPs, PrevFVPs, AllRestFVPs),
+        %write('\t\t\tCheck whether the remaining FVPs: '), write(AllRestFVPs), write('persist'), nl,
+     persistAll(AllRestFVPs, T),
+        %write('\t\t\tThey persist!'), nl, 
+      !.
+
+initiatedAtCyclicAny0([FVP|RestFVPs], PrevFVPs, Ts, T, Te):-
+     initiatedAtCyclicAny0(RestFVPs, [FVP|PrevFVPs], Ts, T, Te).
+
+initiatedAtCyclicAny(FVPList, Ts, T, Te):-
+     initiatedAtCyclicAny0(FVPList, [], Ts, T, Te).
+
+antigen(_, 1).
+
+%initially(val(h)=2).
+%initially(val(s)=0).
+
+initiatedAt(val(h)=2,-1,-1,0).
+initiatedAt(val(s)=0,-1,-1,0).
+
+% removed antigen param
+%
+/***********************************
+ *  Table of variable states *
+   
+   | h | s | f(h) | f(s) |
+   | 0 | 0 |  1   |  0   |
+   | 0 | 1 |  1   |  2   |
+   | 0 | 2 |  0   |  2   |
+   | 1 | 0 |  1   |  1   |
+   | 1 | 1 |  1   |  2   |
+   | 1 | 2 |  0   |  2   |
+   | 2 | 0 |  2   |  1   |
+   | 2 | 1 |  2   |  2   |
+   | 2 | 2 |  2   |  2   |
+
+ ***********************************/
+
+%initiatedAt(f(h)=0, Ts, T, Te) :-
+%     write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+%     var_value(h, Valh), Valh<2,
+%     initiatedAtCyclic(h, val(h)=Valh, Ts, T, Te), Ts=<T, T>Te, antigen(T, 0).
+
+initiatedAt(f(h)=0, Ts, T, Te) :-
+        %write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(h, Valh), Valh<2,
+        %write('\t\tinitiatedCyclicAny for '), write('val(s)=2'), write(' and '), write('val(h)='), write(Valh), nl, 
+     initiatedAtCyclicAny([val(s)=2, val(h)=Valh], Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclicAny for '), write(val(s)=2), write(' and '), write(val(h)=Valh), write(' at T='), write(T), nl.
+     %initiatedAtCyclic(s, val(s)=2, Ts, T, Te), Ts=<T, T>Te,
+     %nextTimePoint(T, Tnext),
+     %holdsAtCyclic(h, val(h)=Valh, Tnext).
+initiatedAt(f(h)=1, Ts, T, Te) :-
+        %write('\tf(h)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(s, Vs), Vs<2,
+     var_value(h, Vh), Vh<2,
+        %write('\t\tinitiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), nl, 
+     initiatedAtCyclicAny([val(s)=Vs, val(h)=Vh], Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
+     %nextTimePoint(T, Tnext),
+     %holdsAtCyclic(h, val(h)=Vh, T).
+initiatedAt(f(h)=2, Ts, T, Te) :-
+        %write('\tf(h)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+        %write('\t\tinitiatedCyclic for '), write(val(h)=2), nl,
+      initiatedAtCyclic(h, val(h)=2, Ts, T, Te), Ts=<T, T<Te.
+      %initiatedAtCached(val(h)=2, Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclic for '), write(val(h)=2), write(' at T='), write(T), nl. 
+
+initiatedAt(f(s)=0, Ts, T, Te) :-
+        %write('\tf(s)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+        %write('\t\tinitiatedCyclicAny for '), write('val(s)=0 and '), write('val(h)=0'), nl, 
+    initiatedAtCyclicAny([val(s)=0, val(h)=0], Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)=0'), write(' at T='), write(T), nl.
+initiatedAt(f(s)=1, Ts, T, Te) :-
+        %write('\tf(s)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(h, Vh), Vh>=1,
+        %write('\t\tinitiatedCyclicAny for '), write('val(s)=0 and '), write('val(h)='), write(Vh), nl, 
+     initiatedAtCyclicAny([val(s)=0, val(h)=Vh], Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
+initiatedAt(f(s)=2, Ts, T, Te) :-
+        %write('\tf(s)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(s, Vs), Vs>=1,
+        %write('\t\tinitiatedCyclic for '), write('val(s)=2'), nl,
+    initiatedAtCyclic(s, val(s)=Vs, Ts, T, Te), Ts=<T, T<Te.
+    %initiatedAtCached(val(s)=Vs, Ts, T, Te), Ts=<T, T<Te.
+        %write('\t\tsucceeded initiatedCyclic for '), write('val(s)=2'), write(' at T='), write(T), nl. 
+
+
+
+
+/****************************
+ *       PHAGE_G LOOP       *
+ ****************************/
+
+/***********************************
+ *  Table of variable states *
+   
+   | cI | cro | cII  |  n   | f(cI) | f(cro) | f(cII) | f(n)
+   | 0  | 0   |  0   |  0   |  	2   |   3    |   0    |  1  
+   | 0  | 0   |  0   |  1   |   2   |   3    |   1    |  1
+   | 0  | 0   |  1   |  0   |   2   |   3    |   0    |  1
+   | 0  | 0   |  1   |  1   |   2   |   3    |   1    |  1
+   | 0  | 1   |  0   |  0   |   0   |   3    |   0    |  1 	
+   | 0  | 1   |  0   |  1   |   0   |   3    |   1    |  1
+   | 0  | 1   |  1   |  0   |   0   |   3    |   0    |  1
+   | 0  | 1   |  1   |  1   |   0   |   3    |   1    |  1
+   | 0  | 2   |  0   |  0   |   0   |   3    |   0    |  0 	
+   | 0  | 2   |  0   |  1   |   0   |   3    |   1    |  0
+   | 0  | 2   |  1   |  0   |   0   |   3    |   0    |  0
+   | 0  | 2   |  1   |  1   |   0   |   3    |   1    |  0
+   | 0  | 3   |  0   |  0   |   0   |   2    |   0    |  0 	
+   | 0  | 3   |  0   |  1   |   0   |   2    |   0    |  0
+   | 0  | 3   |  1   |  0   |   0   |   2    |   0    |  0
+   | 0  | 3   |  1   |  1   |   0   |   2    |   0    |  0
+   | 1  | 0   |  0   |  0   |   2   |   3    |   0    |  0 	
+   | 1  | 0   |  0   |  1   |   2   |   3    |   1    |  0
+   | 1  | 0   |  1   |  0   |   2   |   3    |   0    |  0
+   | 1  | 0   |  1   |  1   |   2   |   3    |   1    |  0
+   | 1  | 1   |  0   |  0   |   0   |   3    |   0    |  0 	
+   | 1  | 1   |  0   |  1   |   0   |   3    |   1    |  0
+   | 1  | 1   |  1   |  0   |   0   |   3    |   0    |  0
+   | 1  | 1   |  1   |  1   |   0   |   3    |   1    |  0
+   | 1  | 2   |  0   |  0   |   0   |   3    |   0    |  0 	
+   | 1  | 2   |  0   |  1   |   0   |   3    |   1    |  0
+   | 1  | 2   |  1   |  0   |   0   |   3    |   0    |  0
+   | 1  | 2   |  1   |  1   |   0   |   3    |   1    |  0
+   | 1  | 3   |  0   |  0   |   0   |   2    |   0    |  0 	
+   | 1  | 3   |  0   |  1   |   0   |   2    |   0    |  0
+   | 1  | 3   |  1   |  0   |   0   |   2    |   0    |  0
+   | 1  | 3   |  1   |  1   |   0   |   2    |   0    |  0
+   | 2  | 0   |  0   |  0   |   2   |   0    |   0    |  0 	
+   | 2  | 0   |  0   |  1   |   2   |   0    |   0    |  0
+   | 2  | 0   |  1   |  0   |   2   |   0    |   0    |  0
+   | 2  | 0   |  1   |  1   |   2   |   0    |   0    |  0
+   | 2  | 1   |  0   |  0   |   0   |   0    |   0    |  0 	
+   | 2  | 1   |  0   |  1   |   0   |   0    |   0    |  0
+   | 2  | 1   |  1   |  0   |   0   |   0    |   0    |  0
+   | 2  | 1   |  1   |  1   |   0   |   0    |   0    |  0
+   | 2  | 2   |  0   |  0   |   0   |   0    |   0    |  0 	
+   | 2  | 2   |  0   |  1   |   0   |   0    |   0    |  0
+   | 2  | 2   |  1   |  0   |   0   |   0    |   0    |  0
+   | 2  | 2   |  1   |  1   |   0   |   0    |   0    |  0
+   | 2  | 3   |  0   |  0   |   0   |   0/2  |   0    |  0 	
+   | 2  | 3   |  0   |  1   |   0   |   0/2  |   0    |  0
+   | 2  | 3   |  1   |  0   |   0   |   0/2  |   0    |  0
+   | 2  | 3   |  1   |  1   |   0   |   0/2  |   0    |  0
+
+ ***********************************/
+
+%initiatedAt(val(cI)=0, Ts, 0, Te) :- Ts=<0, 0<Te.
+
+%initiatedAt(val(cro)=0, Ts, 0, Te) :- Ts=<0, 0<Te.
+
+%initiatedAt(val(cII)=0, Ts, 0, Te) :- Ts=<0, 0<Te.
+
+%initiatedAt(val(n)=0, Ts, 0, Te) :- Ts=<0, 0<Te.
+%
+initially(val(cI)=2).
+initially(val(cro)=0).
+initially(val(cII)=1).
+initially(val(n)=0).
+
+initiatedAt(val(cI)=2,-1,-1,0).
+initiatedAt(val(cro)=0,-1,-1,0).
+initiatedAt(val(cII)=1,-1,-1,0).
+initiatedAt(val(n)=0,-1,-1,0).
+
+initiatedAt(f(cI)=2, Ts, T, Te) :-
+   initiatedAtCyclic(cro, val(cro)=0, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cI)=0, Ts, T, Te) :-
+   var_value(cro, Vcro), Vcro>=1,
+   initiatedAtCyclic(cro, val(cro)=Vcro, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cro)=3, Ts, T, Te) :-
+   var_value(cI, VcI), VcI<2,
+   var_value(cro, Vcro), Vcro<3,
+   initiatedAtCyclicAny([val(cI)=VcI, val(cro)=Vcro], Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cro)=0, Ts, T, Te) :-
+   var_value(cI, VcI), VcI>=2,
+   initiatedAtCyclic(cI, val(cI)=VcI, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cro)=2, Ts, T, Te) :-
+   initiatedAtCyclic(cro, val(cro)=3, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cII)=0, Ts, T, Te) :-
+   initiatedAtCyclic(n, val(n)=0, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cII)=1, Ts, T, Te) :-
+   var_value(cI, VcI), VcI<2,
+   var_value(cro, Vcro), Vcro<3,
+   var_value(n, Vn), Vn>=1,
+   initiatedAtCyclicAny([val(n)=Vn, val(cI)=VcI, val(cro)=Vcro], Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cII)=0, Ts, T, Te) :-
+   var_value(cI, VcI), VcI>=2,
+   initiatedAtCyclic(cI, val(cI)=VcI, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(cII)=0, Ts, T, Te) :-
+   initiatedAtCyclic(cro, val(cro)=3, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(n)=1, Ts, T, Te) :-
+      %write('\tf(n)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+   var_value(cI, VcI), VcI<1,
+   var_value(cro, Vcro), Vcro<2,
+      %write('\t\tinitiatedCyclicAny for '), write('val(cI)='), write(VcI), write(' and '), write('val(cro)='), write(Vcro), nl, 
+   initiatedAtCyclicAny([val(cI)=VcI, val(cro)=Vcro], Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(n)=0, Ts, T, Te) :-
+      %write('\tf(n)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+   var_value(cI, VcI), VcI>=1,
+   initiatedAtCyclic(cI, val(cI)=VcI, Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(n)=0, Ts, T, Te) :-
+      %write('\tf(n)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+   var_value(cro, Vcro), Vcro>=2,
+   initiatedAtCyclic(cro, val(cro)=Vcro, Ts, T, Te), Ts=<T, T<Te.
+
+/****************************
+ * function value inertia   *
+ ****************************/
+
+% --- input events report changes in function values
+% Note that holdsAt(f(X)=V, T) is true at the subsequent time-point
+% after happensAt(f(X,V), T).
+
+/****************************
+ * Loop Independent Fluents *
+ ****************************/
+
+%% These rules model Kinetic Logic and are applied regardless of the structure
+%% of the feedback loop under consideration.
+
+/****************************
+ *  variable value change   *
+ ****************************/
+
+initiatedAt(val(Var)=ValNew, Ts, T, Te) :-
+        %write('\tval('), write(Var), write(')='), write(ValNew), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+        %write('\t\tquerying: order('), write(Var), write(', incr)=fulfilled'), nl,
+     initiatedAtCyclic(Var, order(Var, incr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
+     %initiatedAtCached(order(Var, incr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\torder=fulfilled matched at T='), write(T), nl,
+     var_value(Var, VarVal),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
+     holdsAtCyclic(Var, val(Var)=VarVal, T),
+        %write('\t\tval('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
+     var_value(Var, FVarVal),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
+     holdsAtCyclic(Var, f(Var)=FVarVal, T),
+        %write('\t\tf('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
+     Rate is FVarVal - VarVal, 
+     Rate>0,
+        %write('\tval('), write(Var), write(')='), write(ValNew), write(' at T='), write(T), nl, 
+     ValNew is VarVal + 1.
+     	%write('\t\tf matched!'), nl,
+     	%write('\tval('), write(Var), write(')=1 between '), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl. 
+
+
+initiatedAt(val(Var)=ValNew, Ts, T, Te):-
+   Val is ValNew - 1,
+   var_value(Var, Val),
+   initiatedAtPrev(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+   holdsAtCyclic(Var, lastChange(Var)=incr, T), 
+   %holdsAtCyclic(Var, order(Var, incr)=fulfilled, T), 
+   %\+ holdsAtCyclic(Var, order(Var, decr)=fulfilled, T),
+   var_value(Var, FVarVal),
+   holdsAtCyclic(Var, f(Var)=FVarVal, T),
+   Rate is FVarVal - Val, 
+   Rate>0, 
+   ValNew is Val + 1, 
+   var_value(Var, ValNew),
+   prevTimePoint(T, Tprev),
+   var_value(Var, FVarVal2),
+   %initiatedAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
+   holdsAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
+
+
+initiatedAt(val(Var)=ValNew, Ts, T, Te) :-
+        %write('\tval('), write(Var), write(')='), write(ValNew), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+        %write('\t\tquerying: order('), write(Var), write(', decr)=fulfilled'), nl,
+    initiatedAtCyclic(Var, order(Var, decr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
+    %initiatedAtCached(order(Var, decr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\torder=fulfilled matched at T='), write(T), nl,
+     var_value(Var, VarVal),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
+     holdsAtCyclic(Var,val(Var)=VarVal,T),
+        %write('\t\tval('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
+     var_value(Var, FVarVal),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
+     holdsAtCyclic(Var,f(Var)=FVarVal,T),
+        %write('\t\tf('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
+     Rate is FVarVal - VarVal, 
+     Rate<0,
+        %write('\tval('), write(Var), write(')='), write(ValNew), write(' at T='), write(T), nl, 
+     ValNew is VarVal - 1. 
+     %write('\t\tf matched!'), nl,
+     %write('\tval('), write(Var), write(')=0 between '), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl.
+
+initiatedAt(val(Var)=ValNew, Ts, T, Te):-
+   Val is ValNew + 1,
+   var_value(Var, Val),
+   initiatedAtPrev(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+   holdsAtCyclic(Var, lastChange(Var)=decr, T), 
+   %holdsAtCyclic(Var, order(Var, decr)=fulfilled, T), 
+   %\+ holdsAtCyclic(Var, order(Var, incr)=fulfilled, T),
+   var_value(Var, FVarVal),
+   holdsAtCyclic(Var, f(Var)=FVarVal, T),
+   Rate is FVarVal - Val, 
+   Rate<0, 
+   ValNew is Val - 1, 
+   var_value(Var, ValNew),
+   prevTimePoint(T, Tprev),
+   var_value(Var, FVarVal2),
+   %initiatedAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
+   holdsAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
+
+/************************************************
+ *  Order to change the value of a variable     *
+ ***********************************************/
+
+% If the value of the function is greater than the value 
+% of the corresponding variable, then an order to increase
+% the value of the variable by 1 is staged at time-point T.
+
+% This order is fulfilled, i.e. the value of x increases by 1,
+% at time-point T + dx{+}, unless it is cancelled at some time-point
+% in [T, T + dx{+} - 1].
+
+initiatedAt(order(Var,incr)=pending, Ts, T, Te) :-
+     var_value(Var, FVal),
+     var_value(Var, Val),
+     initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+     initiatedAtCyclic(Var, val(Var)=Val, T),
+     Rate is FVal - Val, 
+     Rate>0.
+
+initiatedAt(order(Var,incr)=pending, Ts, T, Te) :-
+     var_value(Var, FVal),
+     var_value(Var, Val), 
+     initiatedAtCyclicAny([val(Var)=Var, f(Var)=FVal], Ts, T, Te), Ts=<T, T<Te,
+     %initiatedAtCyclic(Var, val(Var)=Val, T),
+     Rate is FVal - Val, 
+     Rate>0.
+
+initiatedAt(order(Var, incr)=pending, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' ? '), nl,
+     var_value(Var, FVal), 
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
+     initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+      %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,     
+     var_value(Var, Val),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
+     holdsAtCyclic(Var,val(Var)=Val,T),
+        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
+     Rate is FVal - Val, 
+     Rate>0.
+
+initiatedAt(order(Var, incr)=pending, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' ? '), nl,
+     var_value(Var, Val), 
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
+     initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+      %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,     
+     var_value(Var, FVal),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
+     holdsAtCyclic(Var, f(Var)=FVal,T),
+        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
+     Rate is FVal - Val, 
+     Rate>0.
+        %write('\torder('), write(Var), write(', incr)=pending  at T='), write(T), nl. 
+          %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl.
+          %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' at '), write(T), nl.
+
+initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
+     var_value(Var, FVal),
+     var_value(Var, Val),
+     initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+     initiatedAtCyclic(Var, val(Var)=Val, T),
+     Rate is FVal - Val, 
+     Rate<0.
+
+
+initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
+     var_value(Var, FVal),
+     var_value(Var, Val),
+     Val>FVal, 
+     initiatedAtCyclicAny([val(Var)=Val, f(Var)=FVal], Ts, T, Te), Ts=<T, T<Te,
+     %initiatedAtCyclicAny(Var, f(Var)=FVal, T).
+     Rate is FVal - Val, 
+     Rate<0.
+
+initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(Var, FVal),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
+     initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+     %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,
+     var_value(Var, Val),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
+     holdsAtCyclic(Var,val(Var)=Val,T),
+     \+ terminatedAtCyclic(Var, val(Var)=Val, T),
+        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
+     Rate is FVal - Val, 
+     Rate<0.
+        %write('\torder('), write(Var), write(', decr)=pending  at T='), write(T), nl. 
+          %write('\t\tval('), write(Var), write(')='), write('1'), write(' at T='), write(T), nl,
+          %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' at '), write(T),  nl.
+initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(Var, Val),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
+     initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+     %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,
+     var_value(Var, FVal),
+        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
+     holdsAtCyclic(Var,f(Var)=FVal,T),
+     \+ terminatedAtCyclic(Var, f(Var)=FVal, T),
+        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
+     Rate is FVal - Val, 
+     Rate<0.
+
+initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(Var, Vf),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(Vf), nl,
+     initiatedAtCyclic(Var, f(Var)=Vf,Ts,T,Te), Ts=<T, T<Te,
+     %initiatedAtCached(f(Var)=Vf, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(Vf), write(') at T='), write(T), nl,
+     holdsAtCyclic(Var, order(Var,Sign)=pending, T),
+     \+ initiatedAtCyclic(Var, order(Var,Sign)=pending, T), 
+     var_value(Var,Vfcurr),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(Vfcurr), nl,
+     holdsAtCyclic(Var, f(Var)=Vfcurr,T),
+        %write('\t\tf('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
+     Vf\=Vfcurr.
+        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled at T='), write(T), nl.
+     %write('\t\tval('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
+     %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl.
+
+initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
+        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(Var, Vf),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(Vf), nl,
+     initiatedAtCyclic(Var, f(Var)=Vf,Ts,T,Te), Ts=<T, T<Te,
+     %initiatedAtCached(f(Var)=Vf, Ts, T, Te), Ts=<T, T<Te,
+        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(Vf), write(') at T='), write(T), nl,
+     holdsAtCyclic(Var, order(Var,Sign)=pending, T),
+     \+ initiatedAtCyclic(Var, order(Var,Sign)=pending, T), 
+     var_value(Var,Vfcurr),
+        %write('\t\tquerying: f('), write(Var), write(')='), write(Vfcurr), nl,
+     holdsAtCyclic(Var, f(Var)=Vfcurr,T),
+        %write('\t\tf('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
+     Vf\=Vfcurr.
+
+
+initiatedAt(lastChange(Var)=incr, Ts, T, Te):-
+   var_value(Var, Val),
+   initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+   OldVal is Val - 1,
+   var_value(Var, OldVal),
+   holdsAtCyclic(Var, val(Var)=OldVal, T).
+
+initiatedAt(lastChange(Var)=decr, Ts, T, Te):-
+   var_value(Var, Val),
+   initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
+   OldVal is Val + 1,
+   var_value(Var, OldVal),
+   holdsAtCyclic(Var, val(Var)=OldVal, T).
+
+cachingOrder2(Var, val(Var)=Val) :-
+     variable(Var), var_value(Var,Val).
+cachingOrder2(Var, f(Var)=Val):- 
+     variable(Var), var_value(Var,Val).
+cachingOrder2(Var, order(Var,Sign)=pending):-
+     variable(Var), sign(Sign).
+cachingOrder2(Var, order(Var,Sign)=cancelled):- 
+     variable(Var), sign(Sign).
+cachingOrder2(Var, order(Var,Sign)=fulfilled):- 
+     variable(Var), sign(Sign).
+cachingOrder2(Var, lastChange(Var)=incr):-  
+      variable(Var).
+cachingOrder2(Var, lastChange(Var)=decr):-  
+      variable(Var).
+
+simpleFluent(val(_)=0).				
+outputEntity(val(_)=0).		
+index(val(Var)=0, Var). 
+
+simpleFluent(val(_)=1).				
+outputEntity(val(_)=1).		
+index(val(Var)=1, Var). 
+
+simpleFluent(val(_)=2).				
+outputEntity(val(_)=2).		
+index(val(Var)=2, Var). 
+
+simpleFluent(val(_)=3).				
+outputEntity(val(_)=3).		
+index(val(Var)=3, Var). 
+
+simpleFluent(f(_)=0).				
+outputEntity(f(_)=0).		
+index(f(Var)=0, Var).
+
+simpleFluent(f(_)=1).				
+outputEntity(f(_)=1).		
+index(f(Var)=1, Var).
+
+simpleFluent(f(_)=2).				
+outputEntity(f(_)=2).		
+index(f(Var)=2, Var).
+
+simpleFluent(f(_)=3).				
+outputEntity(f(_)=3).		
+index(f(Var)=3, Var).
+
+simpleFluent(order(_,_)=pending).				
+outputEntity(order(_,_)=pending).		
+index(order(Var,_)=pending, Var). 
+
+simpleFluent(order(_,_)=cancelled).				
+outputEntity(order(_,_)=cancelled).		
+index(order(Var,_)=cancelled, Var). 
+
+simpleFluent(order(_,_)=fulfilled).				
+outputEntity(order(_,_)=fulfilled).		
+index(order(Var,_)=fulfilled, Var). 
+
+simpleFluent(lastChange(_)=incr).				
+outputEntity(lastChange(_)=incr).		
+index(lastChange(Var)=incr, Var). 
+
+simpleFluent(lastChange(_)=decr).				
+outputEntity(lastChange(_)=decr).		
+index(lastChange(Var)=decr, Var). 
+
+cyclic(val(_)=0).
+cyclic(val(_)=1).
+cyclic(val(_)=2).
+cyclic(val(_)=3).
+cyclic(f(_)=0).
+cyclic(f(_)=1).
+cyclic(f(_)=2).
+cyclic(f(_)=3).
+cyclic(order(_,_)=pending).
+cyclic(order(_,_)=cancelled).
+cyclic(order(_,_)=fulfilled).
+cyclic(lastChange(_)=incr).
+cyclic(lastChange(_)=decr).
+
+grounding(val(Var)=Val):- variable(Var), var_value(Var,Val).
+grounding(f(Var)=Val):- variable(Var), var_value(Var,Val).
+grounding(order(Var,Sign)=pending):- variable(Var), sign(Sign).
+grounding(order(Var,Sign)=cancelled):- variable(Var), sign(Sign).
+grounding(order(Var,Sign)=fulfilled):- variable(Var), sign(Sign).
+grounding(lastChange(Var)=incr):- variable(Var).
+grounding(lastChange(Var)=decr):- variable(Var).
+
+%cachingOrder2(x, val(x)=1).
+%cachingOrder2(y, f(y)=1).
+%cachingOrder2(y, val(y)=1).
+%cachingOrder2(x, f(x)=0).
+%cachingOrder2(x, val(x)=0).
+%cachingOrder2(y, f(y)=0).
+%cachingOrder2(y, val(y)=0).
+%cachingOrder2(x, f(x)=1).
+%cachingOrder2(Var, f(Var)=Val):- 
+%     variable(Var), var_value(Var,Val).
+
+
+fi(order(Var,Sign)=pending,order(Var,Sign)=fulfilled, D) :- 
+     deadline(Var,Sign,D).
+     %write('\t\tmaxDuration for: '), write(Var), write(' '), write(Sign), write(' '), write(D), nl.
+
+%maxDuration(order(Var,Sign)=fulfilled,order(Var,Sign)=fulfilled, 1).
+
+

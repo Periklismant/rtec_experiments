@@ -3,7 +3,7 @@
 EndTimes='100 200 400 800'
 
 for EndTime in $EndTimes; do
-	swipl -l gklec.prolog -q -g "runQueryAllInits(phage_g, ${EndTime}), halt."
+	swipl -l ../src/gklec.prolog -q -g "runQueryAllInits(phage_g, ${EndTime}), halt."
 
 	CIVals='0 1 2'
 	CroVals='0 1 2 3'

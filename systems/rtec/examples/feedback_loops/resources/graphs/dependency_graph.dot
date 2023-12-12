@@ -1,0 +1,31 @@
+digraph
+{
+	node [shape=record, style=filled, fillcolor=white, fontsize=16.0];
+	rankdir=LR;
+	ranksep="1.2 equally"
+
+	0 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="win_lottery(_)" border="1" color="black">win_lottery(_)</td></tr>
+		<tr><td port="go_to(_, _)" border="1" color="black">go_to(_, _)</td></tr>
+		<tr><td port="lose_wallet(_)" border="1" color="black">lose_wallet(_)</td></tr>
+	</table>>
+	]
+
+	1 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="rich(_)=true" border="1" color="black">rich(_)=true</td></tr>
+		<tr><td port="location(_)=pub" border="1" color="black">location(_)=pub</td></tr>
+	</table>>
+	]
+
+	2 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="happy(_)=true" border="1" color="black">happy(_)=true</td></tr>
+	</table>>
+	]
+
+
+	0:"win_lottery(_)" -> 1:"rich(_)=true"
+	0:"lose_wallet(_)" -> 1:"rich(_)=true"
+	0:"go_to(_, _)" -> 1:"location(_)=_"
+	1:"rich(_)=true" -> 2:"happy(_)=true"
+	1:"location(_)=pub" -> 2:"happy(_)=true"
+}

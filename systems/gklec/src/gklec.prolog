@@ -86,7 +86,16 @@ delay(h,decr,1).
 delay(s,incr,1).
 delay(s,decr,2).
 
-has_value(antigen, 1, _).
+has_value(antigen, 1, T):-
+    TDivTen is T//10,
+    Mod is TDivTen mod 2,
+    Mod=1.
+
+has_value(antigen, 0, T):-
+    TDivTen is T//10,
+    Mod is TDivTen mod 2,
+    Mod=0.
+
 
 /***********************************
  *  Table of variable states *
@@ -134,11 +143,20 @@ happens(occurs(f(s), 1), T):-
 	pos(val(h, 1), T), 
 	assertz(cached(happens(occurs(f(s), 1), T))).
 
+% The commented definition of f(s)=0 is the one used in Srinivasan et al. 2022.
+% We decided to use the following rule in order to allow for infinitely evolving variable changes.
+% Otherwise, variable values do not change after reaching a certain state, regardless of the initial values.
 happens(occurs(f(s), 0), T):-
 	%write('happens(occurs(f(s),0),'), write(T), write(').'), nl,
 	neg(val(h, 1), T),
-	neg(val(s, 1), T), 
+        has_value(antigen, 0, T),
 	assertz(cached(happens(occurs(f(s), 0), T))).
+
+%happens(occurs(f(s), 0), T):-
+	%write('happens(occurs(f(s),0),'), write(T), write(').'), nl,
+        %neg(val(h, 1), T),
+        %neg(val(s, 1), T), 
+        %assertz(cached(happens(occurs(f(s), 0), T))).
 
 happens(occurs(f(s), 2), T):-
 	%write('happens(occurs(f(s),2),'), write(T), write(').'), nl,
