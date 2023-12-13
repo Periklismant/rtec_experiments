@@ -1,0 +1,11 @@
+recognitions(predictions,voting_in_progress,[[0],true],[(7,12),(14,17),(22,27),(28,31)]).
+recognitions(predictions,voting_in_progress,[[1],true],[(5,10),(13,15),(18,23),(27,31)]).
+recognitions(predictions,voting_in_progress,[[2],true],[(3,8),(14,19),(23,28),(29,31)]).
+recognitions(predictions,voting_in_progress,[[3],true],[(3,8),(12,17),(29,31)]).
+recognitions(predictions,voting_in_progress,[[4],true],[(12,17),(26,31)]).
+recognitions(predictions,voting_in_progress,[[0],false],[(17,22),(27,28)]).
+recognitions(predictions,voting_in_progress,[[1],false],[(15,18),(23,27)]).
+recognitions(predictions,voting_in_progress,[[2],false],[(13,14),(19,23),(28,29)]).
+recognitions(predictions,voting_in_progress,[[3],false],[(8,12),(22,29)]).
+recognitions(predictions,voting_in_progress,[[4],false],[(17,26)]).
+

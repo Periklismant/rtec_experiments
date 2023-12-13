@@ -73,6 +73,30 @@ dependency_graph_flag = true
 dependency_graph_directory = '../examples/maritime/resources/graphs'
 include_input = false
 
+[voting_fragment]
+# Execution Parameters 
+window_size = 30
+step = 30
+start_time = 0
+end_time = 30
+clock_tick = 1
+# Input Specification Parameters
+input_mode = "csv"
+input_providers = ['../../../datasets/voting_fragment/voting-5.csv']
+stream_rate = 1
+# Knowledge Base
+event_description = '../examples/voting_fragment/resources/patterns/rules.prolog'
+background_knowledge = ['../examples/voting_fragment/dataset/auxiliary/voting-5.prolog']
+# Output Specification Parameters
+output_mode = "file"
+results_directory = "../examples/voting_fragment/results"
+# Compiler parameters
+compile=true
+dependency_graph_flag = true
+dependency_graph_directory = '../examples/voting_fragment/resources/graphs'
+include_input = false
+
+
 [voting]
 # Execution Parameters 
 window_size = 10

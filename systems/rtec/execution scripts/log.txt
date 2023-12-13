@@ -1,0 +1,39 @@
+
+Window size: 30
+Step: 30
+Start time: 0
+End time: 30
+Input mode: csv
+Stream rate: 1
+Input stream providers: ../examples/voting_fragment/dataset/csv/voting-40.csv
+Compile flag: true
+Hi
+Executing: ./aux/compile.sh --event-description=../examples/voting_fragment/resources/patterns/rules.prolog --dependency-graph --dependency-graph-directory=../examples/voting_fragment/resources/graphs --no-events
+Successful compilation! Compiled event description in: ../examples/voting_fragment/resources/patterns/compiled_rules.prolog
+Executing: swipl -l continuousQueries.prolog -g continuousQueries(voting_fragment,[event_description_files=['../examples/voting_fragment/dataset/auxiliary/voting-40.prolog','../examples/voting_fragment/resources/patterns/compiled_rules.prolog'],window_size=30,step=30,start_time=0,end_time=30,clock_tick=1,input_mode=csv,input_providers=['../examples/voting_fragment/dataset/csv/voting-40.csv'],stream_rate=1,output_mode=file,results_directory='../examples/voting_fragment/results']),halt.
+                                                                 
+	8 888888888o. 8888888 8888888888 8 8888888888       ,o888888o.    
+	8 8888    `88.      8 8888       8 8888            8888     `88.  
+	8 8888     `88      8 8888       8 8888         ,8 8888       `8. 
+	8 8888     ,88      8 8888       8 8888         88 8888           
+	8 8888.   ,88'      8 8888       8 888888888888 88 8888           
+	8 888888888P'       8 8888       8 8888         88 8888           
+	8 8888`8b           8 8888       8 8888         88 8888           
+	8 8888 `8b.         8 8888       8 8888         `8 8888       .8' 
+	8 8888   `8b.       8 8888       8 8888            8888     ,88'  
+	8 8888     `88.     8 8888       8 888888888888     `8888888P'   
+	
+Initialising logs...
+Current Window                         	: (0, 30]
+Recognition Time (ms)			: 0
+Input Entities				: 40
+Output Entities (# fluent-value pairs)	: 10
+Output Entities (# intervals)		: 28
+Output Entities (# timepoints)		: 105
+=========================================================
+Recognition Time average (ms)			: 0
+Input Entities average				: 40
+Output Entities (average # fluent-value pairs)	: 10
+Output Entities (average # intervals)		: 28
+Output Entities (average # timepoints)		: 105
+=========================================================

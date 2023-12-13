@@ -1,0 +1,14 @@
+digraph
+{
+	node [shape=record, style=filled, fillcolor=white, fontsize=16.0];
+	rankdir=LR;
+	ranksep="1.2 equally"
+
+	1 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="voting_in_progress(_)=true" border="1" color="red">voting_in_progress(_)=true</td></tr>
+		<tr><td port="voting_in_progress(_)=false" border="1" color="red">voting_in_progress(_)=false</td></tr>
+	</table>>
+	]
+
+
+}

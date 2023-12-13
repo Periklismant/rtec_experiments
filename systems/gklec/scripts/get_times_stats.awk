@@ -10,7 +10,6 @@ END{
     avg = sum/count
     stdev=sqrt((sumsq-sum^2/count)/count)
     printf "Average reasoning time: %f \n", avg
-    printf "Standard deviation: %f \n", stdev
 }
 
 
