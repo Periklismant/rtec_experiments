@@ -169,74 +169,39 @@ initiatedAtCyclicAny(FVPList, Ts, T, Te):-
 
  ***********************************/
 
-%initiatedAt(f(h)=0, Ts, T, Te) :-
-%     write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-%     var_value(h, Valh), Valh<2,
-%     initiatedAtCyclic(h, val(h)=Valh, Ts, T, Te), Ts=<T, T>Te, antigen(T, 0).
-%
-%
-% New definition for f(h)=0
 initiatedAt(f(h)=0, Ts, T, Te) :-
-        %write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     var_value(s, Vals), Vals<2,
-        %write('\t\tinitiatedCyclicAny for '), write('val(s)=2'), write(' and '), write('val(h)='), write(Valh), nl, 
+     var_value(s, Vals), Vals>0,
      initiatedAtCyclicAny([val(h)=0, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
 
-%initiatedAt(f(h)=0, Ts, T, Te) :-
-        %write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     %var_value(h, Valh), Valh<2,
-        %write('\t\tinitiatedCyclicAny for '), write('val(s)=2'), write(' and '), write('val(h)='), write(Valh), nl, 
-     %initiatedAtCyclicAny([val(s)=2, val(h)=Valh], Ts, T, Te), Ts=<T, T<Te.
-        %write('\t\tsucceeded initiatedCyclicAny for '), write(val(s)=2), write(' and '), write(val(h)=Valh), write(' at T='), write(T), nl.
-     %initiatedAtCyclic(s, val(s)=2, Ts, T, Te), Ts=<T, T>Te,
-     %nextTimePoint(T, Tnext),
-     %holdsAtCyclic(h, val(h)=Valh, Tnext).
+initiatedAt(f(h)=0, Ts, T, Te) :-
+     initiatedAtCyclicAny([val(h)=1, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
+
 initiatedAt(f(h)=1, Ts, T, Te) :-
-        %write('\tf(h)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     var_value(s, Vs), Vs<2,
-     var_value(h, Vh), Vh<2,
-        %write('\t\tinitiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), nl, 
-     initiatedAtCyclicAny([val(s)=Vs, val(h)=Vh], Ts, T, Te), Ts=<T, T<Te.
-     %antigen(1, T).
-        %write('\t\tsucceeded initiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
-     %nextTimePoint(T, Tnext),
-     %holdsAtCyclic(h, val(h)=Vh, T).
+     initiatedAtCyclicAny([val(h)=0, val(s)=0], Ts, T, Te), Ts=<T, T<Te.
+
+initiatedAt(f(h)=1, Ts, T, Te) :-
+     var_value(s, Vals), Vals<2,
+     initiatedAtCyclicAny([val(h)=1, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
+
 initiatedAt(f(h)=2, Ts, T, Te) :-
-        %write('\tf(h)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-        %write('\t\tinitiatedCyclic for '), write(val(h)=2), nl,
       initiatedAtCyclic(h, val(h)=2, Ts, T, Te), Ts=<T, T<Te.
-      %%initiatedAtCached(val(h)=2, Ts, T, Te), Ts=<T, T<Te.
-        %write('\t\tsucceeded initiatedCyclic for '), write(val(h)=2), write(' at T='), write(T), nl. 
 
-%
-% New: to counter the absence of the antigen
-initiatedAt(f(s)=0, Ts, T, Te) :-
-    initiatedAtCyclicAny([val(h)=0, val(s)=1], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(s)=0, Ts, T, Te) :-
-        %write('\tf(s)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-        %write('\t\tinitiatedCyclicAny for '), write('val(s)=0 and '), write('val(h)=0'), nl, 
-    initiatedAtCyclicAny([val(s)=2, val(h)=0], Ts, T, Te), Ts=<T, T<Te.
-        %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)=0'), write(' at T='), write(T), nl.
-        %
-% New: to counter the absence of the antigen
+    var_value(s, Vals), Vals<2,
+    initiatedAtCyclicAny([val(h)=0, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
+
 initiatedAt(f(s)=1, Ts, T, Te) :-
-     initiatedAtCyclicAny([val(h)=0, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
+    initiatedAtCyclicAny([val(h)=0, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
         
 initiatedAt(f(s)=1, Ts, T, Te) :-
-        %write('\tf(s)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     var_value(h, Vh), Vh>=1,
-        %write('\t\tinitiatedCyclicAny for '), write('val(s)=0 and '), write('val(h)='), write(Vh), nl, 
-     initiatedAtCyclicAny([val(s)=0, val(h)=Vh], Ts, T, Te), Ts=<T, T<Te.
-        %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
+    var_value(h, Vh), Vh>0,
+    initiatedAtCyclicAny([val(h)=Vh, val(s)=0], Ts, T, Te), Ts=<T, T<Te.
+
 initiatedAt(f(s)=2, Ts, T, Te) :-
-        %write('\tf(s)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     var_value(h, Vh), Vh>=1,
-     var_value(s, Vs), Vs>=1,
-        %write('\t\tinitiatedCyclic for '), write('val(s)=2'), nl,
+    var_value(h, Vh), Vh>0,
+    var_value(s, Vs), Vs>0,
     initiatedAtCyclicAny([val(h)=Vh, val(s)=Vs], Ts, T, Te), Ts=<T, T<Te.
-    %initiatedAtCached(val(s)=Vs, Ts, T, Te), Ts=<T, T<Te.
-        %write('\t\tsucceeded initiatedCyclic for '), write('val(s)=2'), write(' at T='), write(T), nl. 
 
 /****************************
  *       PHAGE_G LOOP       *
@@ -332,7 +297,8 @@ initiatedAt(f(cro)=0, Ts, T, Te) :-
    initiatedAtCyclic(cI, val(cI)=VcI, Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(cro)=2, Ts, T, Te) :-
-   initiatedAtCyclic(cro, val(cro)=3, Ts, T, Te), Ts=<T, T<Te.
+   var_value(cI, VcI), VcI<2,
+   initiatedAtCyclicAny([val(cro)=3, val(cI)=VcI], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(cII)=0, Ts, T, Te) :-
    initiatedAtCyclic(n, val(n)=0, Ts, T, Te), Ts=<T, T<Te.
@@ -351,10 +317,8 @@ initiatedAt(f(cII)=0, Ts, T, Te) :-
    initiatedAtCyclic(cro, val(cro)=3, Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(n)=1, Ts, T, Te) :-
-      %write('\tf(n)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
    var_value(cI, VcI), VcI<1,
    var_value(cro, Vcro), Vcro<2,
-      %write('\t\tinitiatedCyclicAny for '), write('val(cI)='), write(VcI), write(' and '), write('val(cro)='), write(Vcro), nl, 
    initiatedAtCyclicAny([val(cI)=VcI, val(cro)=Vcro], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(n)=0, Ts, T, Te) :-
@@ -387,25 +351,14 @@ initiatedAt(f(n)=0, Ts, T, Te) :-
  ****************************/
 
 initiatedAt(val(Var)=ValNew, Ts, T, Te) :-
-        %write('\tval('), write(Var), write(')='), write(ValNew), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-        %write('\t\tquerying: order('), write(Var), write(', incr)=fulfilled'), nl,
      initiatedAtCyclic(Var, order(Var, incr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
-     %initiatedAtCached(order(Var, incr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\torder=fulfilled matched at T='), write(T), nl,
      var_value(Var, VarVal),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
      holdsAtCyclic(Var, val(Var)=VarVal, T),
-        %write('\t\tval('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
      var_value(Var, FVarVal),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
      holdsAtCyclic(Var, f(Var)=FVarVal, T),
-        %write('\t\tf('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
      Rate is FVarVal - VarVal, 
      Rate>0,
-        %write('\tval('), write(Var), write(')='), write(ValNew), write(' at T='), write(T), nl, 
      ValNew is VarVal + 1.
-     	%write('\t\tf matched!'), nl,
-     	%write('\tval('), write(Var), write(')=1 between '), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl. 
 
 
 initiatedAt(val(Var)=ValNew, Ts, T, Te):-
@@ -413,8 +366,6 @@ initiatedAt(val(Var)=ValNew, Ts, T, Te):-
    var_value(Var, Val),
    initiatedAtPrev(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
    holdsAtCyclic(Var, lastChange(Var)=incr, T), 
-   %holdsAtCyclic(Var, order(Var, incr)=fulfilled, T), 
-   %\+ holdsAtCyclic(Var, order(Var, decr)=fulfilled, T),
    var_value(Var, FVarVal),
    holdsAtCyclic(Var, f(Var)=FVarVal, T),
    Rate is FVarVal - Val, 
@@ -423,38 +374,24 @@ initiatedAt(val(Var)=ValNew, Ts, T, Te):-
    var_value(Var, ValNew),
    prevTimePoint(T, Tprev),
    var_value(Var, FVarVal2),
-   %initiatedAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
    holdsAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
 
 
 initiatedAt(val(Var)=ValNew, Ts, T, Te) :-
-        %write('\tval('), write(Var), write(')='), write(ValNew), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-        %write('\t\tquerying: order('), write(Var), write(', decr)=fulfilled'), nl,
     initiatedAtCyclic(Var, order(Var, decr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
-    %initiatedAtCached(order(Var, decr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\torder=fulfilled matched at T='), write(T), nl,
      var_value(Var, VarVal),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
      holdsAtCyclic(Var,val(Var)=VarVal,T),
-        %write('\t\tval('), write(Var), write(')='), write(VarVal), write(' at '), write(T), nl,
      var_value(Var, FVarVal),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
      holdsAtCyclic(Var,f(Var)=FVarVal,T),
-        %write('\t\tf('), write(Var), write(')='), write(FVarVal), write(' at '), write(T), nl,
      Rate is FVarVal - VarVal, 
      Rate<0,
-        %write('\tval('), write(Var), write(')='), write(ValNew), write(' at T='), write(T), nl, 
      ValNew is VarVal - 1. 
-     %write('\t\tf matched!'), nl,
-     %write('\tval('), write(Var), write(')=0 between '), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl.
 
 initiatedAt(val(Var)=ValNew, Ts, T, Te):-
    Val is ValNew + 1,
    var_value(Var, Val),
    initiatedAtPrev(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
-   holdsAtCyclic(Var, lastChange(Var)=decr, T), 
-   %holdsAtCyclic(Var, order(Var, decr)=fulfilled, T), 
-   %\+ holdsAtCyclic(Var, order(Var, incr)=fulfilled, T),
+   holdsAtCyclic(Var, lastChange(Var)=decr, T),
    var_value(Var, FVarVal),
    holdsAtCyclic(Var, f(Var)=FVarVal, T),
    Rate is FVarVal - Val, 
@@ -463,7 +400,6 @@ initiatedAt(val(Var)=ValNew, Ts, T, Te):-
    var_value(Var, ValNew),
    prevTimePoint(T, Tprev),
    var_value(Var, FVarVal2),
-   %initiatedAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
    holdsAtCyclic(Var, f(Var)=FVarVal2, Tprev), FVarVal2=FVarVal.
 
 /************************************************
@@ -490,40 +426,24 @@ initiatedAt(order(Var,incr)=pending, Ts, T, Te) :-
      var_value(Var, FVal),
      var_value(Var, Val), 
      initiatedAtCyclicAny([val(Var)=Var, f(Var)=FVal], Ts, T, Te), Ts=<T, T<Te,
-     %initiatedAtCyclic(Var, val(Var)=Val, T),
      Rate is FVal - Val, 
      Rate>0.
 
 initiatedAt(order(Var, incr)=pending, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' ? '), nl,
      var_value(Var, FVal), 
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
      initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-      %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,     
      var_value(Var, Val),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
      holdsAtCyclic(Var,val(Var)=Val,T),
-        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
      Rate is FVal - Val, 
      Rate>0.
 
 initiatedAt(order(Var, incr)=pending, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' ? '), nl,
      var_value(Var, Val), 
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
      initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
-      %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,     
      var_value(Var, FVal),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
      holdsAtCyclic(Var, f(Var)=FVal,T),
-        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
      Rate is FVal - Val, 
      Rate>0.
-        %write('\torder('), write(Var), write(', incr)=pending  at T='), write(T), nl. 
-          %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl.
-          %write('\torder('), write(Var), write(', incr)=pending between '), write(Ts), write(','), write(Te), write(' at '), write(T), nl.
 
 initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
      var_value(Var, FVal),
@@ -539,75 +459,44 @@ initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
      var_value(Var, Val),
      Val>FVal, 
      initiatedAtCyclicAny([val(Var)=Val, f(Var)=FVal], Ts, T, Te), Ts=<T, T<Te,
-     %initiatedAtCyclicAny(Var, f(Var)=FVal, T).
      Rate is FVal - Val, 
      Rate<0.
 
 initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
      var_value(Var, FVal),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
      initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-     %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,
      var_value(Var, Val),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
      holdsAtCyclic(Var,val(Var)=Val,T),
      \+ terminatedAtCyclic(Var, val(Var)=Val, T),
-        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
      Rate is FVal - Val, 
      Rate<0.
-        %write('\torder('), write(Var), write(', decr)=pending  at T='), write(T), nl. 
-          %write('\t\tval('), write(Var), write(')='), write('1'), write(' at T='), write(T), nl,
-          %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' at '), write(T),  nl.
+
 initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(', decr)=pending between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
      var_value(Var, Val),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(FVal), nl,
      initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
-     %initiatedAtCached(f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedCyclic(f('), write(Var), write(')='), write(FVal), write(' at T='), write(T), nl,
      var_value(Var, FVal),
-        %write('\t\tquerying: val('), write(Var), write(')='), write(Val), nl,
      holdsAtCyclic(Var,f(Var)=FVal,T),
      \+ terminatedAtCyclic(Var, f(Var)=FVal, T),
-        %write('\t\tval('), write(Var), write(')='), write(Val), write(' at T='), write(T), nl,
      Rate is FVal - Val, 
      Rate<0.
 
 initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' ? '), nl,
      var_value(Var, Vf),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(Vf), nl,
      initiatedAtCyclic(Var, f(Var)=Vf,Ts,T,Te), Ts=<T, T<Te,
-     %initiatedAtCached(f(Var)=Vf, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(Vf), write(') at T='), write(T), nl,
      holdsAtCyclic(Var, order(Var,Sign)=pending, T),
      \+ initiatedAtCyclic(Var, order(Var,Sign)=pending, T), 
      var_value(Var,Vfcurr),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(Vfcurr), nl,
      holdsAtCyclic(Var, f(Var)=Vfcurr,T),
-        %write('\t\tf('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
      Vf\=Vfcurr.
-        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled at T='), write(T), nl.
-     %write('\t\tval('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
-     %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' at '), write(T), nl.
 
 initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
-        %write('\torder('), write(Var), write(','), write(Sign), write(')=cancelled between'), write(Ts), write(' and '), write(Te), write(' ? '), nl,
      var_value(Var, Vf),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(Vf), nl,
      initiatedAtCyclic(Var, f(Var)=Vf,Ts,T,Te), Ts=<T, T<Te,
-     %initiatedAtCached(f(Var)=Vf, Ts, T, Te), Ts=<T, T<Te,
-        %write('\t\tinitiatedAtCyclic(f('), write(Var), write(')='), write(Vf), write(') at T='), write(T), nl,
      holdsAtCyclic(Var, order(Var,Sign)=pending, T),
      \+ initiatedAtCyclic(Var, order(Var,Sign)=pending, T), 
      var_value(Var,Vfcurr),
-        %write('\t\tquerying: f('), write(Var), write(')='), write(Vfcurr), nl,
      holdsAtCyclic(Var, f(Var)=Vfcurr,T),
-        %write('\t\tf('), write(Var), write(')='), write(Vfcurr), write(' at T='), write(T), nl,
      Vf\=Vfcurr.
-
 
 initiatedAt(lastChange(Var)=incr, Ts, T, Te):-
    var_value(Var, Val),
@@ -623,30 +512,20 @@ initiatedAt(lastChange(Var)=decr, Ts, T, Te):-
    var_value(Var, OldVal),
    holdsAtCyclic(Var, val(Var)=OldVal, T).
 
-%cachingOrder2(antigen, antigen=0).
-%cachingOrder2(antigen, antigen=1).
 cachingOrder2(Var, val(Var)=Val) :-
      variable(Var), var_value(Var,Val).
 cachingOrder2(Var, f(Var)=Val):- 
      variable(Var), var_value(Var,Val).
-cachingOrder2(Var, order(Var,Sign)=pending):-
+ cachingOrder2(Var, order(Var,Sign)=pending):-
      variable(Var), sign(Sign).
-cachingOrder2(Var, order(Var,Sign)=cancelled):- 
-     variable(Var), sign(Sign).
-cachingOrder2(Var, order(Var,Sign)=fulfilled):- 
-     variable(Var), sign(Sign).
-cachingOrder2(Var, lastChange(Var)=incr):-  
+ cachingOrder2(Var, order(Var,Sign)=cancelled):- 
+    variable(Var), sign(Sign).
+ cachingOrder2(Var, order(Var,Sign)=fulfilled):- 
+  variable(Var), sign(Sign).
+ cachingOrder2(Var, lastChange(Var)=incr):-  
+       variable(Var).
+  cachingOrder2(Var, lastChange(Var)=decr):-  
       variable(Var).
-cachingOrder2(Var, lastChange(Var)=decr):-  
-      variable(Var).
-
-%simpleFluent(antigen(_)=0).				
-%outputEntity(antigen(_)=0).		
-%index(antigen=0, antigen). 
-
-%simpleFluent(antigen(_)=1).				
-%outputEntity(antigen(_)=1).		
-%index(antigen=1, antigen). 
 
 simpleFluent(val(_)=0).				
 outputEntity(val(_)=0).		
@@ -714,8 +593,6 @@ cyclic(order(_,_)=fulfilled).
 cyclic(lastChange(_)=incr).
 cyclic(lastChange(_)=decr).
 
-%grounding(antigen=0).
-%grounding(antigen=0).
 grounding(val(Var)=Val):- variable(Var), var_value(Var,Val).
 grounding(f(Var)=Val):- variable(Var), var_value(Var,Val).
 grounding(order(Var,Sign)=pending):- variable(Var), sign(Sign).
@@ -724,22 +601,7 @@ grounding(order(Var,Sign)=fulfilled):- variable(Var), sign(Sign).
 grounding(lastChange(Var)=incr):- variable(Var).
 grounding(lastChange(Var)=decr):- variable(Var).
 
-%cachingOrder2(x, val(x)=1).
-%cachingOrder2(y, f(y)=1).
-%cachingOrder2(y, val(y)=1).
-%cachingOrder2(x, f(x)=0).
-%cachingOrder2(x, val(x)=0).
-%cachingOrder2(y, f(y)=0).
-%cachingOrder2(y, val(y)=0).
-%cachingOrder2(x, f(x)=1).
-%cachingOrder2(Var, f(Var)=Val):- 
-%     variable(Var), var_value(Var,Val).
-
 
 fi(order(Var,Sign)=pending,order(Var,Sign)=fulfilled, D) :- 
      deadline(Var,Sign,D).
-     %write('\t\tmaxDuration for: '), write(Var), write(' '), write(Sign), write(' '), write(D), nl.
-
-%maxDuration(order(Var,Sign)=fulfilled,order(Var,Sign)=fulfilled, 1).
-
 

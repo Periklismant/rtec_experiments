@@ -140,7 +140,7 @@ startedBetween4(_Index, F=V, T1, T2) :-
 % calcEarlyBoundary(+InitTime, +T1MinusDuration, -EarlierT1)        
 calcEarlyBoundary(InitTime, T1MinusDuration, EarlierT1) :-
 	T1MinusDuration=<InitTime, !,
-		EarlierT1=InitTime.
+	EarlierT1=InitTime.
         %nextTimePoint(InitTime, EarlierT1).
 %T1MinusDuration>InitTime,        
 calcEarlyBoundary(_, EarlierT1, EarlierT1).        

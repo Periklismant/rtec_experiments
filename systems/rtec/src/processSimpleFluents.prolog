@@ -42,7 +42,7 @@ setTheSceneSimpleFluent(_EPList, F=V, InitTime, StPoint) :-
                 %initially(F=V), StPoint=[1] 
                 % initiatedAt(F=V, 0, 0, 1), StPoint=[0] % StPoint=[0]
 				% initiatedAt(F=V, -1, -1, 0), StPoint=[0]
-				(initiatedAt(F=V, -1, -1, 0); initially(F=V)), StPoint=[0]
+		(initiatedAt(F=V, -1, -1, 0); initially(F=V)), StPoint=[0]
 		;
 		StPoint=[] 
 	), !.

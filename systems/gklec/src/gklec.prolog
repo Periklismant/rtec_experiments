@@ -15,7 +15,6 @@ happens(tick,T):-
 % We compute happens/2 by consulting the cache.
 happens(occurs(FX, V), T):-
 	cached(happens(occurs(FX, V), T)), 
-	%write('cached(happens(occurs('), write(FX), write(','), write(V), write(') at T='), write(T), nl, 
 	!.
 
 %======== Simple feedback loop ==============%
@@ -86,6 +85,7 @@ delay(h,decr,1).
 delay(s,incr,1).
 delay(s,decr,2).
 
+/*
 has_value(antigen, 1, T):-
     TDivTen is T//10,
     Mod is TDivTen mod 2,
@@ -95,71 +95,66 @@ has_value(antigen, 0, T):-
     TDivTen is T//10,
     Mod is TDivTen mod 2,
     Mod=0.
-
+*/
 
 /***********************************
  *  Table of variable states *
    
-   | h | s | f(h) | f(s) |
-   | 0 | 0 |  1   |  0   |
-   | 0 | 1 |  1   |  2   |
-   | 0 | 2 |  0   |  2   |
-   | 1 | 0 |  1   |  1   |
-   | 1 | 1 |  1   |  2   |
-   | 1 | 2 |  0   |  2   |
-   | 2 | 0 |  2   |  1   |
-   | 2 | 1 |  2   |  2   |
-   | 2 | 2 |  2   |  2   |
+   | h | s | f(h) | f(s)    |
+   | 0 | 0 |  1   |  0      |
+   | 0 | 1 |  1   |  2->0   |
+   | 0 | 2 |  0   |  2->1   |
+   | 1 | 0 |  1   |  1      |
+   | 1 | 1 |  1   |  2      |
+   | 1 | 2 |  0   |  2      |
+   | 2 | 0 |  2   |  1      |
+   | 2 | 1 |  2   |  2      |
+   | 2 | 2 |  2   |  2      |
 
  ***********************************/
 
 happens(occurs(f(h), 0), T):-
-	%write('happens(occurs(f(h),0),'), write(T), write(').'), nl,	
-	neg(val(h, 2), T),
-	has_value(antigen, 0, T),
+	holds(val(h, 0), T), 
+        pos(val(s, 1), T),
 	assertz(cached(happens(occurs(f(h), 0), T))).
 
 happens(occurs(f(h), 0), T):-
-	%write('happens(occurs(f(h),0),'), write(T), write(').'), nl,
-	neg(val(h, 2), T),
-	pos(val(s, 2), T), 
+	holds(val(h, 1), T), 
+	holds(val(s, 2), T), 
 	assertz(cached(happens(occurs(f(h), 0), T))).
 
-happens(occurs(f(h), 2), T):-
-	%write('happens(occurs(f(h),2),'), write(T), write(').'), nl,
-	pos(val(h, 2), T), 
-	assertz(cached(happens(occurs(f(h), 2), T))).
-
 happens(occurs(f(h), 1), T):-
-	%write('happens(occurs(f(h),1),'), write(T), write(').'), nl,
-	neg(val(h, 2), T),
-	neg(val(s, 2), T),
-	has_value(antigen, 1, T), 
+	holds(val(h, 0), T), 
+	holds(val(s, 0), T), 
 	assertz(cached(happens(occurs(f(h), 1), T))).
 	
-happens(occurs(f(s), 1), T):-
-	%write('happens(occurs(f(s),1),'), write(T), write(').'), nl,
-	neg(val(s, 1), T),
-	pos(val(h, 1), T), 
-	assertz(cached(happens(occurs(f(s), 1), T))).
+happens(occurs(f(h), 1), T):-
+	holds(val(h, 1), T), 
+	neg(val(s, 2), T), 
+	assertz(cached(happens(occurs(f(h), 1), T))).
 
-% The commented definition of f(s)=0 is the one used in Srinivasan et al. 2022.
-% We decided to use the following rule in order to allow for infinitely evolving variable changes.
-% Otherwise, variable values do not change after reaching a certain state, regardless of the initial values.
+happens(occurs(f(h), 2), T):-
+	holds(val(h, 2), T), 
+	assertz(cached(happens(occurs(f(h), 2), T))).
+
+
 happens(occurs(f(s), 0), T):-
-	%write('happens(occurs(f(s),0),'), write(T), write(').'), nl,
-	neg(val(h, 1), T),
-        has_value(antigen, 0, T),
+	holds(val(h, 0), T), 
+	neg(val(s, 2), T),
 	assertz(cached(happens(occurs(f(s), 0), T))).
 
-%happens(occurs(f(s), 0), T):-
-	%write('happens(occurs(f(s),0),'), write(T), write(').'), nl,
-        %neg(val(h, 1), T),
-        %neg(val(s, 1), T), 
-        %assertz(cached(happens(occurs(f(s), 0), T))).
+happens(occurs(f(s), 1), T):-
+	holds(val(h, 0), T), 
+	holds(val(s, 2), T), 
+	assertz(cached(happens(occurs(f(s), 1), T))).
+
+happens(occurs(f(s), 1), T):-
+	pos(val(h, 1), T), 
+	holds(val(s, 0), T), 
+	assertz(cached(happens(occurs(f(s), 1), T))).
 
 happens(occurs(f(s), 2), T):-
-	%write('happens(occurs(f(s),2),'), write(T), write(').'), nl,
+	pos(val(h, 1), T), 
 	pos(val(s, 1), T), 
 	assertz(cached(happens(occurs(f(s), 2), T))).
 
@@ -251,66 +246,55 @@ delay(n,decr,2).
 
  ***********************************/
 happens(occurs(f(cI), 2), T):-
-	%write('happens(occurs(f(cI),2),'), write(T), write(').'), nl,	
 	neg(val(cro, 1), T),
 	assertz(cached(happens(occurs(f(cI), 2), T))).
 
 happens(occurs(f(cI), 0), T):-
-	%write('happens(occurs(f(cI),0),'), write(T), write(').'), nl,
 	pos(val(cro, 1), T), 
 	assertz(cached(happens(occurs(f(cI), 0), T))).
 
 happens(occurs(f(cro), 3), T):-
-	%write('happens(occurs(f(cro),3),'), write(T), write(').'), nl,
 	neg(val(cI, 2), T),
 	neg(val(cro, 3), T), 
 	assertz(cached(happens(occurs(f(cro), 3), T))).
 
 happens(occurs(f(cro), 0), T):-
-	%write('happens(occurs(f(cro),0),'), write(T), write(').'), nl,
 	pos(val(cI, 2), T), 
 	assertz(cached(happens(occurs(f(cro), 0), T))).
 	
 happens(occurs(f(cro), 2), T):-
-	%write('happens(occurs(f(cro),2),'), write(T), write(').'), nl,
 	pos(val(cro, 3), T), 
+        neg(val(cI, 2), T),
 	assertz(cached(happens(occurs(f(cro), 2), T))).
 
 happens(occurs(f(cII), 0), T):-
-	%write('happens(occurs(f(cII),0),'), write(T), write(').'), nl,
 	neg(val(n, 1), T), 
 	assertz(cached(happens(occurs(f(cII), 0), T))).
 
 happens(occurs(f(cII), 1), T):-
-	%write('happens(occurs(f(cII),1),'), write(T), write(').'), nl,
 	neg(val(cI, 2), T),
 	neg(val(cro, 3), T),
 	pos(val(n, 1), T), 
 	assertz(cached(happens(occurs(f(cII), 1), T))).
 
 happens(occurs(f(cII), 0), T):-
-	%write('happens(occurs(f(cII),0),'), write(T), write(').'), nl,
 	pos(val(cI, 2), T), 
 	assertz(cached(happens(occurs(f(cII), 0), T))).
 
 happens(occurs(f(cII), 0), T):-
-	%write('happens(occurs(f(cII),0),'), write(T), write(').'), nl,
 	pos(val(cro, 3), T), 
 	assertz(cached(happens(occurs(f(cII), 0), T))).
 
 happens(occurs(f(n), 1), T):-
-	%write('happens(occurs(f(n),1),'), write(T), write(').'), nl,
 	neg(val(cI, 1), T),
 	neg(val(cro, 2), T), 
 	assertz(cached(happens(occurs(f(n), 1), T))).
 
 happens(occurs(f(n), 0), T):-
-	%write('happens(occurs(f(n),0),'), write(T), write(').'), nl,
 	pos(val(cI, 1), T),
 	assertz(cached(happens(occurs(f(n), 0), T))).
 
 happens(occurs(f(n), 0), T):-
-	%write('happens(occurs(f(n),0),'), write(T), write(').'), nl,
 	pos(val(cro, 2), T),
 	assertz(cached(happens(occurs(f(n), 0), T))).
 
@@ -328,16 +312,13 @@ neg(val(Var, V),T):-
 
 holds(val(X, V), T):-
 	cached(holds(val(X, V), T)), 
-	%write('cached(holds(val('), write(X), write(','), write(V), write(') at T='), write(T), nl,	
 	!.
 
 holds(val(X,V), 0):-
-	%write('holds(val('), write(X), write(','), write(V), write(') at T=0'), write(' by initially '), nl,	
 	initially(val(X,V)), 
 	assertz(cached(holds(val(X, V), 0))).
 
 holds(val(X,V), Tk):-
-	%write('holds(val('), write(X), write(','), write(V), write(') at T='), write(Tk), nl,
 	Tk>0,
 	happens(tick,Tk),
 	initiates(Event,val(X,V),[Ti,Tk]),
@@ -354,7 +335,6 @@ initiates(_, val(X,Vk), [_, T]):-
 	initially(val(X, Vk)).
 
 initiates(occurs(f(X),Vi), val(X,Vk), [Ti,Tk]):-
-	%write('initiates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by incr'), nl,
 	delay(X, incr, D),
 	Ti is Tk - D,
 	Ti>0,
@@ -368,7 +348,6 @@ initiates(occurs(f(X),Vi), val(X,Vk), [Ti,Tk]):-
 	Vk is VkAtPrev + 1.
 
 initiates(occurs(f(X),Vi), val(X,Vk), [Ti,Tk]):-
-	%write('initiates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by decr '), nl,
 	delay(X, decr, D),
 	Ti is Tk - D,
 	Ti>0,
@@ -382,47 +361,38 @@ initiates(occurs(f(X),Vi), val(X,Vk), [Ti,Tk]):-
 	Vk is VkAtPrev - 1.
 
 initiates(tick, val(X,V), [Ti, Tk]):-
-	%write('initiates(val('), write(X), write(','), write(V), write(') at T='), write(Tk), write(' by tick '), nl,	
 	Ti is Tk - 1,
 	Ti >= 0,
 	happens(tick, Ti),
 	holds(val(X,V), Ti).
 
 rate(X, T, D, R):-
-	%write('rate('), write(X), write(','), write(T), write(','), write(D), write(','), write(R), write(')'), nl,
 	Td is T - D,
 	Td>0,
 	happens(occurs(f(X), V1), Td),
-	%write('\tvalue of f('), write(X), write(') is '), write(V1), nl,
 	holds(val(X, V), Td),
-	%write('\tvalue of '), write(X), write(' is '), write(V), nl,
 	R is V1 - V. 
-	%write('\tR is '), write(R), nl.
 
 %======== domain-independent 'terminates' ===%
 
 terminates(occurs(f(X), _Vi), val(X, _Vk), [Ti, Tk]):-
-	%write('terminates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by fchanges '), nl,
 	TkMinusOne is Tk - 1, 
 	TkMinusOne > 0,
 	fchanges(f(X), Ti, TkMinusOne). % removed cut.
 
 terminates(tick, val(X, Vk), [TkMinusOne, Tk]):-
-	%write('terminates(val('), write(X), write(','), write(Vk), write(') at T='), write(Tk), write(' by tick '), nl,
 	TkMinusOne is Tk - 1,
 	TkMinusOne > 0,
 	initiates(occurs(f(X),Vi), val(X,Vk2), [Ti, Tk]), \+Vk2=Vk,
 	\+ terminates(occurs(f(X), Vi), val(X, Vk2), [Ti, Tk]).
 
 fchanges(f(X), T1, T2):-
-	%write('fchanges(f('), write(X), write('), '), write(T1), write(', '), write(T2), nl,
 	T1 =< T2, 
 	happens(occurs(f(X), V1), T1),
 	happens(occurs(f(X), V2), T2),
 	\+V1=V2, !.
 	
 fchanges(f(X), T1, T2):-
-	%write('fchanges(f('), write(X), write('), '), write(T1), write(', '), write(T2), nl,
 	T1<T2,
 	T is T1 + 1, 
 	fchanges(f(X), T, T2).
@@ -469,7 +439,6 @@ runQueryAllInits(App, EndTime):-
 	close(TimesFileStream).
 
 query(App, EndTime, LogFile):-
-	%produceLogFile(App, EndTime, LogFile),
 	open(LogFile, write, LogFileStream),
 	write(LogFileStream, 'Application: '), write(LogFileStream, App), nl(LogFileStream),
 	write(LogFileStream, 'Running Feedback Loop for all time-points in (0, '), write(LogFileStream, EndTime), write(LogFileStream, '].'), nl(LogFileStream),
@@ -486,18 +455,14 @@ query(App, EndTime, LogFile):-
 
 checkAllVars([], _, _).
 checkAllVars([Var|RestVars], T, LogFileStream):-
-	%findall(Val, varVal(Var, Val), Vals),
-	%nl, write('Querying: '), write(Var), write('='), write(Val), nl, nl, 
-	findall(Val, (varVal(Var, Val), %nl, write('Querying: '), write(Var), write('='), write(Val), nl, nl,
+	findall(Val, (varVal(Var, Val), 
 					holds(val(Var, Val), T), write(LogFileStream, 'holdsAt(val('), write(LogFileStream, Var), write(LogFileStream, ','), 
 					write(LogFileStream, Val), write(LogFileStream, '),'), write(LogFileStream, T), write(LogFileStream, ').'), nl(LogFileStream)), _),
 	checkAllVars(RestVars, T, LogFileStream).
 
 checkAllFVars([], _, _).
 checkAllFVars([Var|RestVars], T, LogFileStream):-
-	%findall(Val, varVal(Var, Val), Vals),
-	%nl, write('Querying: f('), write(Var), write(')='), write(Val), nl, nl, 
-	findall(Val, (varVal(Var, Val), %nl, write('Querying: f('), write(Var), write(')='), write(Val), nl, nl, 
+	findall(Val, (varVal(Var, Val), 
 					happens(occurs(f(Var), Val), T), write(LogFileStream, 'happens(occurs(f('), write(LogFileStream, Var), 
 					write(LogFileStream, '),'), write(LogFileStream, Val), write(LogFileStream, '),'), write(LogFileStream, T), 
 					write(LogFileStream, ').'), nl(LogFileStream)), _),
@@ -507,12 +472,8 @@ runQueries(_, T, Tend, _):-
 	T>Tend, !.
 
 runQueries(Vars, T, Tend, LogFileStream):-
-        %nl, write('Timepoint: '), write(T), nl,
-
 	checkAllVars(Vars, T, LogFileStream),
-
 	checkAllFVars(Vars, T, LogFileStream),
-
 	Tnext is T + 1,
 	runQueries(Vars, Tnext, Tend, LogFileStream).
 

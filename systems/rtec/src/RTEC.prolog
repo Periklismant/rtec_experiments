@@ -174,7 +174,9 @@ eventRecognition(QueryTime, WM) :-
 	inputProcessing(InitTime, QueryTime),
 	preProcessing(QueryTime),
 	% CYCLES & DEADLINES CHANGE
-	findall((Index,F=V,SPoints), (startingPoints(Index,F=V,SPoints),retract(startingPoints(Index,F=V,SPoints))), _),
+        findall((Index,F=V,SPoints), (startingPoints(Index,F=V,SPoints), retract(startingPoints(Index,F=V,SPoints))), _),
+        %findall((Index,F=V,SPoints), (startingPoints(Index,F=V,SPoints), write(startingPoints(Index,F=V,SPoints)), nl,
+        %                              retractStartingPoints(Index, F=V, SPoints, InitTime)), _),
 	findall((Index,F=V,EPoints), (endingPoints(Index,F=V,EPoints),retract(endingPoints(Index,F=V,EPoints))), _),
 	findall((Index,F=V,Range), (processedRangeTerm(Index,F=V,Range),retract(processedRangeTerm(Index,F=V,Range))), _),
 	findall((Index,F=V,Range), (processedRangeInit(Index,F=V,Range),retract(processedRangeInit(Index,F=V,Range))), _),
@@ -218,6 +220,23 @@ processEntity(Index, OE, InitTime, QueryTime) :-
 		processEvent(Index, OE)
 	), !.
 
+/*
+retractStartingPoints(Index, F=V, SPoints, InitTime):-
+    getPointsAfterInitTime(SPoints, InitTime, PointsThatRemain),
+    PointsThatRemain=[], !,
+    retract(startingPoints(Index, F=V, SPoints)).
+    %assertz(startingPoints(Index, F=V, PointsThatRemain)).
+retractStartingPoints(Index, F=V, SPoints, InitTime):-
+    getPointsAfterInitTime(SPoints, InitTime, PointsThatRemain),
+    retract(startingPoints(Index, F=V, SPoints)),
+    assertz(startingPoints(Index, F=V, PointsThatRemain)), write(PointsThatRemain), nl.
+    %
+getPointsAfterInitTime([], _, []).
+getPointsAfterInitTime([SPoint|RestSPoints],InitTime,PointsThatRemain):-
+    SPoint=<InitTime, !,
+    getPointsAfterInitTime(RestSPoints,InitTime,PointsThatRemain).
+getPointsAfterInitTime([SPoint|RestSPoints],_InitTime,[SPoint|RestSPoints]).
+*/
 
 /******************* deadlines treatment *********************/
 
@@ -365,19 +384,26 @@ prepareCyclic.
 assertInitiallyCyclic :-
 	initTime(InitTime),
 	InitTime>0, !, 
-	nextTimePoint(InitTime, NextInitTime),
+        nextTimePoint(InitTime, NextInitTime),
 	findall(F=V, 
 	  (
 	    cyclic(F=V),
 	    indexOf(Index, F=V),
-	    simpleFPList(Index, F=V, I1, I2),
-	    amalgamatePeriods(I2, I1, I),
-	    tinIntervals(NextInitTime, I),
-	    assertz(initiallyCyclic(F=V)), 
-
-	  		addStartingPointAllVals(Index, F=V, InitTime),
-			addProcessedRangeAllVals(Index, F=V, InitTime),
-	  		addCyclicPointAllFVPs(Index, F=V, InitTime, t)
+            /*
+            startingPoints(Index, F=V, [SPoint]),
+            prevTimePoint(SPoint, PrevTimepoint),
+            addStartingPointAllVals(Index, F=V, PrevTimepoint),
+            addProcessedRangeAllVals(Index, F=V, SPoint),
+            addCyclicPointAllFVPs(Index, F=V, SPoint, t),
+            assertz(initiallyCyclic(F=V))
+            */
+            simpleFPList(Index, F=V, I1, I2),
+            amalgamatePeriods(I2, I1, I),
+            tinIntervals(NextInitTime, I),
+            assertz(initiallyCyclic(F=V)), 
+            		addStartingPointAllVals(Index, F=V, InitTime),
+            		addProcessedRangeAllVals(Index, F=V, InitTime),
+            		addCyclicPointAllFVPs(Index, F=V, InitTime, t)
 		),
 	  _).
 assertInitiallyCyclic :-
@@ -686,54 +712,56 @@ initiatedAtCyclic(Index, F=V, T1, T, T2):-
 % case: stop when we reach time-point T2.
 computeInitiationsInRange(_, T1, T2, []):-
 	T1>=T2, !.
-% case: F=V is initiated at T1.
+% case: the initiation of F=V has been processed by an intermediate query, and F=V is initiated at T1.
 computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
-	%writeAll(['\t\tIn: computeInitiationsInRange(', F=V, T1, T2, ')']),
 	nextTimePoint(T1, T1next),
-	%writeAll(['\t\tQuerying: initiatedAt(', F=V, T1, T1, T1next, ')']),
-	initiatedAt(F=V, T1, T1, T1next), !,
-	%write('\t\t\tinitiation point: '), write(T1), nl,
-	indexOf(Index, F=V),
-	%write('\t\t\tStarting Points before: '), write(startingPoints(Index,F=V,SPoints)), nl,
-	%write('\t\t\tProcessed Range before: '), write(processedRangeInit(Index,F=V,ProcessedRange)), nl,
-	%write('\t\t\tCyclic Points before: '), write(storedCyclicPoints(Index,F=V,CyclicPoints)), nl,
+        indexOf(Index,F=V),
+        processedRangeInit(Index, F=V, ProcRange),
+        tinIntervals(T1, ProcRange),
+	startingPoints(Index, F=V, SPoints),
+	member(S, SPoints), !,
+	prevTimePoint(S, T1),
 	addStartingPointAllVals(Index, F=V, T1),
 	addProcessedRangeAllVals(Index, F=V, T1),
 	addCyclicPointAllFVPs(Index, F=V, T1next, t),
-	%write('\t\t\tcached starting point for '), write(F=V), write(' at '), write(T), write(' with value "t"'), nl,
-	%simpleFluent(F=V2), \+V2=V,
-	%indexOf(Index2, F=V2),
-	%addCyclicPointAllFVPs(Index2, F=V2, T1next, f), 
-	%addEndingPoint(Index2, F=V2, T1, T1),
+	computeInitiationsInRange(F=V, T1next, T2, Tail).
+% case: the initiation of F=V has been processed by an intermediate query, and F=V is not initiated at T1.
+computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
+	nextTimePoint(T1, T1next),
+        indexOf(Index,F=V),
+        processedRangeInit(Index, F=V, ProcRange),
+        tinIntervals(T1, ProcRange), !,
+	addProcessedRangeInit(Index, F=V, T1),
+	computeInitiationsInRange(F=V, T1next, T2, Tail).
+
+% case: F=V is initiated at T1.
+computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
+	nextTimePoint(T1, T1next),
+        indexOf(Index,F=V),
+	initiatedAt(F=V, T1, T1, T1next), !,
+	indexOf(Index, F=V),
+	addStartingPointAllVals(Index, F=V, T1),
+	addProcessedRangeAllVals(Index, F=V, T1),
+	addCyclicPointAllFVPs(Index, F=V, T1next, t),
 	computeInitiationsInRange(F=V, T1next, T2, Tail).
 % case: F=V is not initiated at T1.
 computeInitiationsInRange(F=V, T1, T2, InitList):-
-	%writeAll(['\t\tIn: computeInitiationsInRange(', F=V, T1, T2]),
 	nextTimePoint(T1, T1next),
-	%write('\t\t'), write(T1), write(' is not an initiation point'), nl,
 	indexOf(Index, F=V),
 	addProcessedRangeInit(Index, F=V, T1),
-	%processedRangeInit(Index,F=V,ProcessedRange), 
-	%writeAll(['\t\t\tprocessedRangeInit: ', ProcessedRange]), nl,
-	%addLastProcessedPointSP(Index, F=V, T1),
 	computeInitiationsInRange(F=V, T1next, T2, InitList).
 
 % computeInitiationsInRangeAll(+F=V, +Ranges, -FlatInits)
 % Compute all the initiation points of F=V in the temporal ranges stored in list Ranges.
 % The derived initiation points are stored in list FlatInits.
 computeInitiationsInRangeAll(F=V, Ranges, FlatInits):-
-	%write('Ranges: '), write(Ranges), nl,
 	computeInitiationsInRangeAll0(F=V, Ranges, Inits),
-	%write('Inits: '), write(Inits), nl,
 	flatten(Inits, FlatInits).
-	%write('FlatInits: '), write(FlatInits), nl.
 % auxiliary predicate
 %computeInitiationsInRangeAll0(+F=V, +Ranges, -FlatInits)
 computeInitiationsInRangeAll0(_, [], []).
 computeInitiationsInRangeAll0(F=V, [(T1, T2)|RestRanges], [Inits|RestInits]):-
-	%write('checking initiations between '), write(T1), write(' and '), write(T2), nl,
 	computeInitiationsInRange(F=V, T1, T2, Inits),
-	%write('my inits: '), write(Inits), nl, 
 	computeInitiationsInRangeAll0(F=V, RestRanges, RestInits).
 
 initiatedAtPrev(Index, F=V, T1, T, T2) :-
@@ -771,7 +799,6 @@ initiatedAtPrev(Index, F=V, T1, T, T2) :-
 	%nextTimePoint(EarlierT, NextEarlierT),
 	T is EarlierT+Duration.
 	%deadlineConditions(Index, F=V, NextEarlierT, T).
-
 
 % The implementation of terminatedAtCyclic is very similar to that of initiatedAtCyclic.
 % For further documentation, see the comments in initiatedAtCyclic.
@@ -903,15 +930,21 @@ computeTerminationsInRangeAll0(F=V, [(T1, T2)|RestRanges], [Terms|RestTerms]):-
 
 %%%%%%% Auxiliary predicates for initiatedAtCyclic/terminatedAtCyclic %%%%%%%%%%
 
+% addStartingPointsAllVals(+Index, +F=V, +SPoints)
+addStartingPointsAllVals(_Index, _U, []).
+addStartingPointsAllVals(Index, F=V, [SPoint|RestSPoints]):-
+    prevTimePoint(SPoint,InitPoint),
+    addStartingPointAllVals(Index, F=V, InitPoint),
+    addStartingPointsAllVals(Index, F=V, RestSPoints).
 
-% addStartingPointAllVals(+Index, +F=V, -InitPoint)
+% addStartingPointAllVals(+Index, +F=V, +InitPoint)
 addStartingPointAllVals(Index, F=V, InitPoint):-
 	addStartingPoint(Index, F=V, InitPoint),
 	simpleFluent(F=V2), \+V=V2,
 	indexOf(Index2, F=V2),
 	addEndingPoint(Index2, F=V2, InitPoint).
 
-% addEndingPoint(+Index, +F=V, -TermPoint)
+% addEndingPoint(+Index, +F=V, +TermPoint)
 addEndingPoint(Index, F=V, TermPoint):-
 	retract(endingPoints(Index, F=V, EPoints)), !,
 	addProcessedRangeTerm(Index, F=V, TermPoint),
@@ -937,10 +970,7 @@ addCyclicPointAllFVPs(Index, F=V, T, f):-
 addProcessedRangeInit(Index, F=V, T):-
 	retract(processedRangeInit(Index, F=V, OldProcessedIntervals)), !,
 	nextTimePoint(T, Tnext),
-	%write('OldProcessedIntervals: '), write(OldProcessedIntervals), nl,
 	union_all([[(T,Tnext)], OldProcessedIntervals], NewProcessedRange),
-	%write('NewProcessedIntervals: '), write(NewProcessedRange), nl,
-	%computeNewProcessedRange(T, [Tlow, Thigh], NewProcessedRange),
 	assertz(processedRangeInit(Index, F=V, NewProcessedRange)).
 addProcessedRangeInit(Index, F=V, T):-
 	nextTimePoint(T, Tnext),
