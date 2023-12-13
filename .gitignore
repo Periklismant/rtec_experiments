@@ -2,3 +2,5 @@ logs/*.txt
 systems/gklec/results*.txt
 systems/gklec/results/*/*.txt
 systems/gklec/scripts/*.txt
+systems/rtec/execution\ scripts/logs/*.txt
+systems/rtec/examples/feedback_loops/results/*.txt

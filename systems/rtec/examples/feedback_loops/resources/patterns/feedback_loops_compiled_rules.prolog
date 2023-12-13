@@ -65,8 +65,8 @@
 %
 %initially(val(x)=0).
 %initially(val(y)=0).
-initiatedAt(val(x)=0,-1,-1,0).
-initiatedAt(val(y)=0,-1,-1,0).
+%initiatedAt(val(x)=0,-1,-1,0).
+%initiatedAt(val(y)=0,-1,-1,0).
 
 %% f(x) = not(y)
 initiatedAt(f(x)=Vfx, Ts, T, Te) :-
@@ -130,29 +130,42 @@ initiatedAtCyclicAny0([FVP|RestFVPs], PrevFVPs, Ts, T, Te):-
 initiatedAtCyclicAny(FVPList, Ts, T, Te):-
      initiatedAtCyclicAny0(FVPList, [], Ts, T, Te).
 
-antigen(_, 1).
+%initiatedAt(antigen=1, _, T, _):-
+    %TDivTen is T//10,
+    %Mod is TDivTen mod 2,
+    %Mod=1.
+
+%initiatedAt(antigen=0, _, T, _):-
+    %TDivTen is T//10,
+    %Mod is TDivTen mod 2,
+    %Mod=0.
+
+%antigen(1, T):-
+    %TDivTen is T//10,
+    %write(TDivTen),nl,
+    %Mod is TDivTen mod 2,
+    %Mod=1.
+
 
 %initially(val(h)=2).
 %initially(val(s)=0).
 
-initiatedAt(val(h)=2,-1,-1,0).
-initiatedAt(val(s)=0,-1,-1,0).
+%initiatedAt(val(h)=2,-1,-1,0).
+%initiatedAt(val(s)=0,-1,-1,0).
 
-% removed antigen param
-%
 /***********************************
  *  Table of variable states *
    
-   | h | s | f(h) | f(s) |
-   | 0 | 0 |  1   |  0   |
-   | 0 | 1 |  1   |  2   |
-   | 0 | 2 |  0   |  2   |
-   | 1 | 0 |  1   |  1   |
-   | 1 | 1 |  1   |  2   |
-   | 1 | 2 |  0   |  2   |
-   | 2 | 0 |  2   |  1   |
-   | 2 | 1 |  2   |  2   |
-   | 2 | 2 |  2   |  2   |
+   | h | s | f(h) | f(s)    |
+   | 0 | 0 |  1   |  0      |
+   | 0 | 1 |  1   |  2->0   |
+   | 0 | 2 |  0   |  2->1   |
+   | 1 | 0 |  1   |  1      |
+   | 1 | 1 |  1   |  2      |
+   | 1 | 2 |  0   |  2      |
+   | 2 | 0 |  2   |  1      |
+   | 2 | 1 |  2   |  2      |
+   | 2 | 2 |  2   |  2      |
 
  ***********************************/
 
@@ -160,12 +173,20 @@ initiatedAt(val(s)=0,-1,-1,0).
 %     write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
 %     var_value(h, Valh), Valh<2,
 %     initiatedAtCyclic(h, val(h)=Valh, Ts, T, Te), Ts=<T, T>Te, antigen(T, 0).
-
+%
+%
+% New definition for f(h)=0
 initiatedAt(f(h)=0, Ts, T, Te) :-
         %write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
-     var_value(h, Valh), Valh<2,
+     var_value(s, Vals), Vals<2,
         %write('\t\tinitiatedCyclicAny for '), write('val(s)=2'), write(' and '), write('val(h)='), write(Valh), nl, 
-     initiatedAtCyclicAny([val(s)=2, val(h)=Valh], Ts, T, Te), Ts=<T, T<Te.
+     initiatedAtCyclicAny([val(h)=0, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
+
+%initiatedAt(f(h)=0, Ts, T, Te) :-
+        %write('\tf(h)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     %var_value(h, Valh), Valh<2,
+        %write('\t\tinitiatedCyclicAny for '), write('val(s)=2'), write(' and '), write('val(h)='), write(Valh), nl, 
+     %initiatedAtCyclicAny([val(s)=2, val(h)=Valh], Ts, T, Te), Ts=<T, T<Te.
         %write('\t\tsucceeded initiatedCyclicAny for '), write(val(s)=2), write(' and '), write(val(h)=Valh), write(' at T='), write(T), nl.
      %initiatedAtCyclic(s, val(s)=2, Ts, T, Te), Ts=<T, T>Te,
      %nextTimePoint(T, Tnext),
@@ -176,6 +197,7 @@ initiatedAt(f(h)=1, Ts, T, Te) :-
      var_value(h, Vh), Vh<2,
         %write('\t\tinitiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), nl, 
      initiatedAtCyclicAny([val(s)=Vs, val(h)=Vh], Ts, T, Te), Ts=<T, T<Te.
+     %antigen(1, T).
         %write('\t\tsucceeded initiatedCyclicAny for '), write('val(s)='), write(Vs), write(' and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
      %nextTimePoint(T, Tnext),
      %holdsAtCyclic(h, val(h)=Vh, T).
@@ -183,14 +205,24 @@ initiatedAt(f(h)=2, Ts, T, Te) :-
         %write('\tf(h)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
         %write('\t\tinitiatedCyclic for '), write(val(h)=2), nl,
       initiatedAtCyclic(h, val(h)=2, Ts, T, Te), Ts=<T, T<Te.
-      %initiatedAtCached(val(h)=2, Ts, T, Te), Ts=<T, T<Te.
+      %%initiatedAtCached(val(h)=2, Ts, T, Te), Ts=<T, T<Te.
         %write('\t\tsucceeded initiatedCyclic for '), write(val(h)=2), write(' at T='), write(T), nl. 
+
+%
+% New: to counter the absence of the antigen
+initiatedAt(f(s)=0, Ts, T, Te) :-
+    initiatedAtCyclicAny([val(h)=0, val(s)=1], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(s)=0, Ts, T, Te) :-
         %write('\tf(s)=0'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
         %write('\t\tinitiatedCyclicAny for '), write('val(s)=0 and '), write('val(h)=0'), nl, 
-    initiatedAtCyclicAny([val(s)=0, val(h)=0], Ts, T, Te), Ts=<T, T<Te.
+    initiatedAtCyclicAny([val(s)=2, val(h)=0], Ts, T, Te), Ts=<T, T<Te.
         %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)=0'), write(' at T='), write(T), nl.
+        %
+% New: to counter the absence of the antigen
+initiatedAt(f(s)=1, Ts, T, Te) :-
+     initiatedAtCyclicAny([val(h)=0, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
+        
 initiatedAt(f(s)=1, Ts, T, Te) :-
         %write('\tf(s)=1'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
      var_value(h, Vh), Vh>=1,
@@ -199,14 +231,12 @@ initiatedAt(f(s)=1, Ts, T, Te) :-
         %write('\t\tsucceeded initiatedCyclicAny for '),  write('val(s)=0 and '), write('val(h)='), write(Vh), write(' at T='), write(T), nl.
 initiatedAt(f(s)=2, Ts, T, Te) :-
         %write('\tf(s)=2'), write(' between '), write(Ts), write(' and '), write(Te), write(' ? '), nl,
+     var_value(h, Vh), Vh>=1,
      var_value(s, Vs), Vs>=1,
         %write('\t\tinitiatedCyclic for '), write('val(s)=2'), nl,
-    initiatedAtCyclic(s, val(s)=Vs, Ts, T, Te), Ts=<T, T<Te.
+    initiatedAtCyclicAny([val(h)=Vh, val(s)=Vs], Ts, T, Te), Ts=<T, T<Te.
     %initiatedAtCached(val(s)=Vs, Ts, T, Te), Ts=<T, T<Te.
         %write('\t\tsucceeded initiatedCyclic for '), write('val(s)=2'), write(' at T='), write(T), nl. 
-
-
-
 
 /****************************
  *       PHAGE_G LOOP       *
@@ -275,15 +305,15 @@ initiatedAt(f(s)=2, Ts, T, Te) :-
 
 %initiatedAt(val(n)=0, Ts, 0, Te) :- Ts=<0, 0<Te.
 %
-initially(val(cI)=2).
-initially(val(cro)=0).
-initially(val(cII)=1).
-initially(val(n)=0).
-
-initiatedAt(val(cI)=2,-1,-1,0).
-initiatedAt(val(cro)=0,-1,-1,0).
-initiatedAt(val(cII)=1,-1,-1,0).
-initiatedAt(val(n)=0,-1,-1,0).
+%initially(val(cI)=2).
+%initially(val(cro)=0).
+%initially(val(cII)=1).
+%initially(val(n)=0).
+%
+%initiatedAt(val(cI)=2,-1,-1,0).
+%initiatedAt(val(cro)=0,-1,-1,0).
+%initiatedAt(val(cII)=1,-1,-1,0).
+%initiatedAt(val(n)=0,-1,-1,0).
 
 initiatedAt(f(cI)=2, Ts, T, Te) :-
    initiatedAtCyclic(cro, val(cro)=0, Ts, T, Te), Ts=<T, T<Te.
@@ -593,6 +623,8 @@ initiatedAt(lastChange(Var)=decr, Ts, T, Te):-
    var_value(Var, OldVal),
    holdsAtCyclic(Var, val(Var)=OldVal, T).
 
+%cachingOrder2(antigen, antigen=0).
+%cachingOrder2(antigen, antigen=1).
 cachingOrder2(Var, val(Var)=Val) :-
      variable(Var), var_value(Var,Val).
 cachingOrder2(Var, f(Var)=Val):- 
@@ -607,6 +639,14 @@ cachingOrder2(Var, lastChange(Var)=incr):-
       variable(Var).
 cachingOrder2(Var, lastChange(Var)=decr):-  
       variable(Var).
+
+%simpleFluent(antigen(_)=0).				
+%outputEntity(antigen(_)=0).		
+%index(antigen=0, antigen). 
+
+%simpleFluent(antigen(_)=1).				
+%outputEntity(antigen(_)=1).		
+%index(antigen=1, antigen). 
 
 simpleFluent(val(_)=0).				
 outputEntity(val(_)=0).		
@@ -674,6 +714,8 @@ cyclic(order(_,_)=fulfilled).
 cyclic(lastChange(_)=incr).
 cyclic(lastChange(_)=decr).
 
+%grounding(antigen=0).
+%grounding(antigen=0).
 grounding(val(Var)=Val):- variable(Var), var_value(Var,Val).
 grounding(f(Var)=Val):- variable(Var), var_value(Var,Val).
 grounding(order(Var,Sign)=pending):- variable(Var), sign(Sign).

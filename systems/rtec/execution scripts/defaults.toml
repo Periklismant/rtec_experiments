@@ -45,6 +45,7 @@ background_knowledge = ['../examples/toy/dataset/auxiliary/toy_var_domain.prolog
 output_mode = "file"
 results_directory = "../examples/toy/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/toy/resources/graphs'
 include_input = false
@@ -67,6 +68,7 @@ background_knowledge = ['../examples/maritime/resources/auxiliary/compare.prolog
 output_mode = "file"
 results_directory = "../examples/maritime/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/maritime/resources/graphs'
 include_input = false
@@ -89,6 +91,7 @@ background_knowledge = ['../examples/voting/dataset/auxiliary/voting_static_gene
 output_mode = "file"
 results_directory = "../examples/voting/results"
 # Compiler parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/voting/resources/graphs'
 include_input = false
@@ -111,6 +114,7 @@ background_knowledge = ['../examples/netbill/dataset/auxiliary/netbill_static_ge
 output_mode = "file"
 results_directory = "../examples/netbill/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/netbill/resources/graphs'
 include_input = false
@@ -133,6 +137,7 @@ background_knowledge = ['../examples/netbillp/dataset/auxiliary/netbill_static_g
 output_mode = "file"
 results_directory = "../examples/netbillp/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/netbillp/resources/graphs'
 include_input = false
@@ -155,6 +160,7 @@ background_knowledge = ['../examples/netbillnop/dataset/auxiliary/netbill_static
 output_mode = "file"
 results_directory = "../examples/netbillnop/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/netbillnop/resources/graphs'
 include_input = false
@@ -177,6 +183,7 @@ background_knowledge = ['../examples/caviar/resources/auxiliary/pre-processing.p
 output_mode = "file"
 results_directory = "../examples/caviar/results"
 # Compiler Parameters
+compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/caviar/resources/graphs'
 include_input = false
@@ -199,7 +206,28 @@ background_knowledge = ['../examples/ctm/dataset/auxiliary/vehicles.prolog']
 output_mode = "file"
 results_directory = "../examples/ctm/results"
 # Compiler Parameters
+compile = true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/ctm/resources/graphs'
+include_input = false
+
+[feedback_loops]
+# RTEC execution parameters 
+event_description = '../examples/feedback_loops/resources/patterns/feedback_loops_compiled_rules.prolog'
+input_mode = "csv"
+input_providers = ['../examples/feedback_loops/dataset/csv/input.csv']
+results_directory = "../examples/feedback_loops/results"
+window_size = 10
+step = 10
+start_time = 0
+end_time = 400
+clock_tick = 1
+goals = []
+background_knowledge = ['../examples/feedback_loops/resources/auxiliary/static_info.prolog']
+stream_rate = 1
+# Compiler parameters
+compile = false
+dependency_graph_flag = true
+dependency_graph_directory = '../examples/feedback_loops/resources/graphs'
 include_input = false
 

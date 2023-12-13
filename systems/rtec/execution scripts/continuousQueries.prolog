@@ -20,9 +20,7 @@
 % handleApplication includes hard-coded execution parameters, such as 
 % window and step sizes, for certain applications
 % handleApplication assigns the parameter values provided by the user to the appropriate variables. 
-% The parameters for which no value was provided are assigned an application-specific default value.
 :- ['handleApplication.prolog'].
-% The logger contains predicates for printing out logs and results.
 :- ['logger.prolog'].
 
 % Continuous query processing with RTEC on application <App> with the execution parameters <ParamList>.
@@ -43,9 +41,9 @@ continuousQueries(App, ParamList) :-
     init_input(InputMode, InputPaths, InputStreams, PointerPositions, InputThreadIDs),
     % Create a log file for writing execution statistics.
     init_log_file(LogFile),
+    initGlobals,
     QueryTime is StartReasoningTime + Step,
     init_output(OutputMode, ResultsFile, WM, Step, QueryTime, OutputThreadID),
-        initGlobals,
     % initialise RTEC, i.e., assert the parameters provided in the predicate below, so that they are accessible by any predicate.
     initialiseRecognition(StreamOrderFlag, DynamicGroundingFlag, PreprocessingFlag, ForgetThreshold, DynamicGroundingThreshold, ClockTick),
     % In case that the input is a live stream, sleep until the first query time, which is specified with the <Step> parameter.
@@ -56,7 +54,7 @@ continuousQueries(App, ParamList) :-
     closeInput(InputMode, InputPaths, InputStreams, InputThreadIDs),
     open(LogFile, append, LogFileStream),
     logWindowStats(LogFileStream, RecTimes, InputList, OutputLists),
-        writeAllGlobals(LogFileStream),
+    writeAllGlobals(LogFileStream),
     close(LogFileStream),
     closeOutput(OutputMode, OutputThreadID), !.
 

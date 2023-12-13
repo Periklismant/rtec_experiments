@@ -39,8 +39,10 @@ isThereASimpleFPList(_Index, _U, []).
 setTheSceneSimpleFluent(_EPList, F=V, InitTime, StPoint) :-
 	InitTime=<0,
 	( 
-                %initially(F=V), StPoint=[0] 
-                initiatedAt(F=V, -1, -1, 0), StPoint=[0]
+                %initially(F=V), StPoint=[1] 
+                % initiatedAt(F=V, 0, 0, 1), StPoint=[0] % StPoint=[0]
+				% initiatedAt(F=V, -1, -1, 0), StPoint=[0]
+				(initiatedAt(F=V, -1, -1, 0); initially(F=V)), StPoint=[0]
 		;
 		StPoint=[] 
 	), !.
@@ -81,7 +83,18 @@ initList(F=V, InitTime, QueryTime, InitList) :-
 % if there is no initiating point
 
 initList(_, _, _, []).
- 
+
+/*
+initPoint(F=V, InitTime, EndTime, S) :-
+	cyclic(F=V), !,
+	indexOf(Index, F=V),
+	(startingPoints(Index, F=V, SPoints),
+	member(S, SPoints), S>=InitTime, S<EndTime
+	; 
+	initiatedAtCyclic(Index, F=V, InitTime, Ts, EndTime),
+	%initiatedAt(F=V, InitTime, Ts, EndTime),
+	nextTimePoint(Ts, S)).
+*/
 
 initPoint(F=V, InitTime, EndTime, NextTs) :-
 	initiatedAt(F=V, InitTime, Ts, EndTime),
@@ -105,6 +118,22 @@ terminList(F=V, InitTime, QueryTime, TerminList) :-
 
 terminList(_, _, _, []).
 
+%% New:
+/*
+termPoint(F=V, InitTime, EndTime, E) :-
+	cyclic(F=V), !,
+	indexOf(Index, F=V),
+	(endingPoints(Index, F=V, EPoints), \+EPoints=[],
+	 member(E, EPoints), E>=InitTime, E<EndTime
+	 ;
+	 %terminatedAtCyclic(Index, F=V, InitTime, Ts, EndTime),
+	 nextTimePoint(Ts, E)
+	 ;
+	 simpleFluent(F=V2), \+V=V2,
+	 indexOf(Index2, F=V2), 
+	 %initiatedAtCyclic(Index2, F=V2, InitTime, Ts, EndTime),
+	 nextTimePoint(Ts, E)).
+	 */
 
 termPoint(F=V, InitTime, EndTime, NextTs) :-
 	broken(F=V, InitTime, Ts, EndTime),

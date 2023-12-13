@@ -13,7 +13,7 @@ and declare all fluent-value pairs that are initiated by means of deadlines as c
 gather all broken, started incarnations at the same place in the code, and give them consistent names (Between, At, Once, etc)
 
 optimisations: for cyclic fluents, check whether they have been processed; if they have, then restrict attention to cached starting points; other optimisations?
-
+G
 replace bronkenOnce with brokenOnceAt
 
 brokenOnce: shall we enforce early that T2>T1?
@@ -140,6 +140,7 @@ startedBetween4(_Index, F=V, T1, T2) :-
 % calcEarlyBoundary(+InitTime, +T1MinusDuration, -EarlierT1)        
 calcEarlyBoundary(InitTime, T1MinusDuration, EarlierT1) :-
 	T1MinusDuration=<InitTime, !,
-        nextTimePoint(InitTime, EarlierT1).
+		EarlierT1=InitTime.
+        %nextTimePoint(InitTime, EarlierT1).
 %T1MinusDuration>InitTime,        
 calcEarlyBoundary(_, EarlierT1, EarlierT1).        

@@ -20,9 +20,11 @@ function get_all_defaults (){
 	[ -z $output_mode ] && output_mode=`get_default_param $application output_mode`
 	[ -z $results_directory ] && results_directory=`get_default_param $application results_directory`
         # Compiler Parameters
+	[ -z $compile ] &&  [ `get_default_param $application compile` == "true" ] && compile="true" 
 	[ -z $dependency_graph ] &&  [ `get_default_param $application dependency_graph_flag` == "true" ] && dependency_graph="true" 
 	[ -z $dependency_graph_directory ] && dependency_graph_directory=`get_default_param $application dependency_graph_directory`
 	[ -z $include_input ] &&  [ `get_default_param $application include_input` == "true" ] && include_input="true" 
+        echo $include_input
 }
 
 function input_parser (){
@@ -84,6 +86,9 @@ function input_parser (){
 	      results_directory="${arg#*=}"
 	      ;;
             # Compiler Parameters
+            --compile)
+              compile="true"
+              ;;
             --dependency-graph)
               dependency_graph="true"
               ;;
@@ -109,7 +114,7 @@ function set_prolog_command() {
         # Effects: <prolog_command> contains the execution command for running RTEC in SWI Prolog for the chosen application and execution parameters.
         # Knowledge Base
 	# This function is called after compilation. So, the compiled event description is available in the following file:
-	compiled_event_description=${event_description%/*}/compiled_rules.prolog # "%/*" fetches all characters of string until the last occurrence of "/"
+        [ -z $compile ] && compiled_event_description=${event_description} || compiled_event_description=${event_description%/*}/compiled_rules.prolog # "%/*" fetches all characters of string until the last occurrence of "/"
 	background_knowledge+=("${compiled_event_description}")
 	# Construct an RTEC query corresponding to the provided parameters
 	printf -v event_description_files "'%s'," "${background_knowledge[@]}"

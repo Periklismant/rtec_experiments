@@ -8,10 +8,10 @@ appVars(phage_g, [cI, cro, cII, n]).
 %variable(h).
 %variable(s).
 
-variable(cI).
-variable(cro).
-variable(cII).
-variable(n).
+%variable(cI).
+%variable(cro).
+%variable(cII).
+%variable(n).
 
 var_value(x,0).
 var_value(x,1).
