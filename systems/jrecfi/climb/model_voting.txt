@@ -25,7 +25,9 @@ terminates(_, status(i(Motion,constraint(closePermission(Motion))),no),T):-
         happens(complete(open_ballot,_ID,_O,[Motion]), Ta),
         holds_at(status(i(Motion,constraint(closePermission(Motion))),null),Ta).
 
+initiates(_, status(i(m0,constraint(closePermission(m0))),null), 1).
 initiates(_, status(i(m1,constraint(closePermission(m1))),null), 1).
 initiates(_, status(i(m2,constraint(closePermission(m2))),null), 1).
 initiates(_, status(i(m3,constraint(closePermission(m3))),null), 1).
+initiates(_, status(i(m3,constraint(closePermission(m4))),null), 1).
 
