@@ -1,9 +1,0 @@
-ts,gl_test,1,dr_a,[john] 100
-ts,gl_test,2,dr_b,[james] 120
-tc,gl_test,2,dr_b,[49] 140
-ts,gl_test,3,dr_c,[johanna] 160
-tc,gl_test,1,dr_a,[80] 200
-tc,gl_test,3,dr_c,[42] 230
-ts,take_sugar,1,johanna,[] 300
-tc,take_sugar,1,johanna,[] 350
-
