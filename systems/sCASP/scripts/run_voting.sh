@@ -6,7 +6,7 @@ for event_no in ${EventNos[@]}; do
     echo "?- holdsAt(permitted_to_close(M), T)." > query.pl
     echo "#include '../input/voting-${event_no}.pl'." > event_description.pl
     cat ../event_descriptions/voting.pl >> event_description.pl
-    time scasp --prev_forall -n0 event_description.pl query.pl > ../logs/voting-${event_no}.log &&
+    time scasp --prev_forall -n0 event_description.pl query.pl > ../logs/voting-${event_no}.txt &&
     rm query.pl
     rm event_description.pl
 done

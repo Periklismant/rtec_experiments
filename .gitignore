@@ -6,3 +6,4 @@ systems/gklec/scripts/*.txt
 systems/rtec/execution\ scripts/logs/*.txt
 systems/rtec/examples/feedback_loops/results/*.txt
 systems/jrecfi/scripts/__pycache__/*
+systems/sCASP/logs/*.txt
