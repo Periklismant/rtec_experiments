@@ -189,6 +189,29 @@ dependency_graph_flag = true
 dependency_graph_directory = '../examples/netbillnop/resources/graphs'
 include_input = false
 
+[netbill_fragment]
+# Execution Parameters 
+window_size = 50
+step = 50
+start_time = 0
+end_time = 50
+clock_tick = 1
+# Input Specification Parameters
+input_mode = "csv"
+input_providers = ['../../../datasets/netbill_fragment/netbill-5.csv']
+stream_rate = 1
+# Knowledge Base
+event_description = '../examples/netbill_fragment/resources/patterns/rules.prolog'
+background_knowledge = ['../examples/netbill_fragment/dataset/auxiliary/netbill-5.prolog']
+# Output Specification Parameters
+output_mode = "file"
+results_directory = "../examples/netbill_fragment/results"
+# Compiler parameters
+compile=true
+dependency_graph_flag = true
+dependency_graph_directory = '../examples/netbill_fragment/resources/graphs'
+include_input = false
+
 [caviar]
 # Execution Parameters 
 window_size = 100000
