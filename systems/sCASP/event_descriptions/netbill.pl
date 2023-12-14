@@ -3,9 +3,6 @@
 %% Include the BASIC EVENT CALCULUS THEORY
 #include '../src/bec.incl'.
 
-%% Load event narrative
-#include '../input/netbill-1-50.pl'.
-
 %% Grounding of Entities %% 
 goods(book).
 price(10).
