@@ -1,0 +1,2 @@
+We are on a J2SE 18 plaftorm
+tuProlog system - release 3.3
