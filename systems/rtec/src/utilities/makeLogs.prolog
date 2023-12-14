@@ -98,8 +98,22 @@ writeGlobal(LogFileStream, VariableName, VariableMessage):-
 	(skipLogs, ! ; global_list(VariableName, ListName),
 	write(LogFileStream, VariableMessage), nb_getval(ListName, L), 
 	write(LogFileStream, L), write(LogFileStream, ', with Sum: '), 
-	nb_getval(VariableName, V), write(LogFileStream, V), write(LogFileStream, ', and Avg: '), 
-	length(L, Len), (Len>0, Avg is div(V,Len), write(LogFileStream, Avg); Len=0), nl(LogFileStream)).
+	nb_getval(VariableName, V), write(LogFileStream, V), write(LogFileStream, ', and Avg: '),
+	length(L, Len), (Len>0, Avg is div(V,Len), write(LogFileStream, Avg), 
+    write(LogFileStream, ', and StDev: '), computeStDev(L, Len, Avg, StDev), write(LogFileStream, StDev)
+    ; Len=0),
+    nl(LogFileStream)).
+
+% computeStDev(+L, +Len, +Avg, -StDev)
+computeStDev(L, Len, Avg, StDev):-
+    computeSumOfSquares(L, SumOfSquares),
+    StDev is sqrt((SumOfSquares/Len) - Avg**2).
+
+% computeSumOfSquares(+L, -SumOfSquares)
+computeSumOfSquares([], 0).
+computeSumOfSquares([Num|RestNums], SumOfSquares):-
+    computeSumOfSquares(RestNums, SumOfRest),
+    SumOfSquares is Num**2+SumOfRest.
 
 % All variables are written in logs.
 % Check if log messages are written in the correct order.

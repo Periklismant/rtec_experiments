@@ -37,11 +37,13 @@ role_of is rigid, ie it is not a fluent. Agents may be temporarily suspended tho
 
 % ----- a quote enables the consumer to create a contract by accepting it
 initiatedAt(quote(Merch,Cons,GD)=true, T) :-
-	happensAt(present_quote(Merch,Cons,GD,_Price), T).
+	happensAt(present_quote(Merch,Cons,GD,_Price), T),
+        updateVariableTemp(rule_evaluations, 1).
 terminatedAt(quote(Merch,Cons,GD)=true, T) :-
-	happensAt(accept_quote(Cons,Merch,GD), T).
+	happensAt(accept_quote(Cons,Merch,GD), T),
+        updateVariableTemp(rule_evaluations, 1).
 % ----- a quote is terminated 5 time-points after initiated
-fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 5).
+fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 10).
 p(quote(_M,_C,_GD)=true).
 
  % *   contract	 *
@@ -54,7 +56,7 @@ initiatedAt(contract(Merch,Cons,GD)=true, T) :-
 	\+ holdsAt(suspended(Merch,merchant)=true, T),
 	\+ holdsAt(suspended(Cons,consumer)=true, T). 
 % ----- a contract is terminated 10 time-points after initiated 
-fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 5).
+fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 10).
 
 % INSTITUTIONAL POWER
 
@@ -70,10 +72,12 @@ holdsFor(pow(accept_quote(Cons,Merch,GD))=true, I) :-
 
 % permitted by default; thus we only model (and ground) prohibitions
 initiatedAt(per(present_quote(Merch,Cons))=false, T) :-
-	happensAt(present_quote(Merch,Cons,_GD,_Price), T).
+	happensAt(present_quote(Merch,Cons,_GD,_Price), T),
+        updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(present_quote(Merch,Cons))=true, T) :-
-	happensAt(request_quote(Cons,Merch,_GD), T).
-fi(per(present_quote(Merch,Cons))=false, per(present_quote(Merch,Cons))=true, 10).
+	happensAt(request_quote(Cons,Merch,_GD), T),
+        updateVariableTemp(rule_evaluations, 1).
+fi(per(present_quote(Merch,Cons))=false, per(present_quote(Merch,Cons))=true, 20).
 p(per(present_quote(_Merch,_Cons))=false).
 
 % *     OBLIGATION      *
@@ -112,22 +116,25 @@ initiatedAt(obl(send_goods(Merch,iServer,GD))=false, T1, T, T2) :-
 % ----- then it will be suspended
 initiatedAt(suspended(Merch,merchant)=true, T) :-
 	happensAt(present_quote(Merch,Cons,_GD,_Price), T),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(per(present_quote(Merch,Cons))=false, T).
 % ----- failure to discharge the obligation to send an EPO by the end of the contract 
 % ----- suspends the merchant 
 initiatedAt(suspended(Merch,merchant)=true, T1, T, T2) :-
 	% end(F=V) events are not supported for cyclic fluents F
 	initiatedAt(contract(Merch,_Cons,GD)=false, T1, T, T2),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(obl(send_goods(Merch,iServer,GD))=true, T).
 % ----- failure to discharge the obligation to send an EPO by the end of the contract 
 % ----- suspends the consumer 
 initiatedAt(suspended(Cons,consumer)=true, T1, T, T2) :-
 	% end(F=V) events are not supported for cyclic fluents F
 	initiatedAt(contract(_Merch,Cons,GD)=false, T1, T, T2),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(obl(send_EPO(Cons,iServer,GD))=true, T).	
 % ----- a suspension is terminated 10 time-points after initiated, 
 % ----- unless re-initiated in the meantime
-fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 3).
+fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 6).
 p(suspended(_Ag,_Role)=true).
 
 

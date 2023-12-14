@@ -41,7 +41,7 @@ continuousQueries(App, ParamList) :-
     init_input(InputMode, InputPaths, InputStreams, PointerPositions, InputThreadIDs),
     % Create a log file for writing execution statistics.
     init_log_file(LogFile),
-    initGlobals,
+    (skipLogs, ! ; initGlobals),
     QueryTime is StartReasoningTime + Step,
     init_output(OutputMode, ResultsFile, WM, Step, QueryTime, OutputThreadID),
     % initialise RTEC, i.e., assert the parameters provided in the predicate below, so that they are accessible by any predicate.
@@ -54,7 +54,7 @@ continuousQueries(App, ParamList) :-
     closeInput(InputMode, InputPaths, InputStreams, InputThreadIDs),
     open(LogFile, append, LogFileStream),
     logWindowStats(LogFileStream, RecTimes, InputList, OutputLists),
-    writeAllGlobals(LogFileStream),
+    (skipLogs, ! ; writeAllGlobals(LogFileStream)),
     close(LogFileStream),
     closeOutput(OutputMode, OutputThreadID), !.
 

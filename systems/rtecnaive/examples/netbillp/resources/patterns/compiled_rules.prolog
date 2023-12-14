@@ -1,9 +1,8 @@
 :- dynamic person/1, person_pair/2.
 
-initiatedAt(quote(_110,_112,_114)=true, _136, _80, _142) :-
-     happensAtIE(present_quote(_110,_112,_114,_124),_80),
-     _136=<_80,
-     _80<_142.
+initiatedAt(quote(_110,_112,_114)=true, _148, _80, _154) :-
+     happensAtIE(present_quote(_110,_112,_114,_124),_80),_148=<_80,_80<_154,
+     updateVariableTemp(rule_evaluations,1).
 
 initiatedAt(contract(_110,_112,_114)=true, _222, _80, _228) :-
      happensAtIE(accept_quote(_112,_110,_114),_80),_222=<_80,_80<_228,
@@ -11,15 +10,13 @@ initiatedAt(contract(_110,_112,_114)=true, _222, _80, _228) :-
      \+holdsAtCyclic(_110,suspended(_110,merchant)=true,_80),
      \+holdsAtCyclic(_112,suspended(_112,consumer)=true,_80).
 
-initiatedAt(per(present_quote(_114,_116))=false, _138, _80, _144) :-
-     happensAtIE(present_quote(_114,_116,_124,_126),_80),
-     _138=<_80,
-     _80<_144.
+initiatedAt(per(present_quote(_114,_116))=false, _150, _80, _156) :-
+     happensAtIE(present_quote(_114,_116,_124,_126),_80),_150=<_80,_80<_156,
+     updateVariableTemp(rule_evaluations,1).
 
-initiatedAt(per(present_quote(_114,_116))=true, _136, _80, _142) :-
-     happensAtIE(request_quote(_116,_114,_124),_80),
-     _136=<_80,
-     _80<_142.
+initiatedAt(per(present_quote(_114,_116))=true, _148, _80, _154) :-
+     happensAtIE(request_quote(_116,_114,_124),_80),_148=<_80,_80<_154,
+     updateVariableTemp(rule_evaluations,1).
 
 initiatedAt(obl(send_EPO(_114,iServer,_118))=false, _152, _80, _158) :-
      happensAtIE(send_EPO(_114,iServer,_118,_128),_80),_152=<_80,_80<_158,
@@ -30,8 +27,9 @@ initiatedAt(obl(send_goods(_114,iServer,_118))=false, _168, _80, _174) :-
      decrypt(_128,_130,_144),
      meets(_144,_118).
 
-initiatedAt(suspended(_110,merchant)=true, _168, _80, _174) :-
-     happensAtIE(present_quote(_110,_118,_120,_122),_80),_168=<_80,_80<_174,
+initiatedAt(suspended(_110,merchant)=true, _180, _80, _186) :-
+     happensAtIE(present_quote(_110,_118,_120,_122),_80),_180=<_80,_80<_186,
+     updateVariableTemp(rule_evaluations,1),
      holdsAtProcessedSimpleFluent(_110,per(present_quote(_110,_118))=false,_80).
 
 initiatedAt(obl(send_EPO(_122,iServer,_126))=true, _80, _82, _84) :-
@@ -48,16 +46,17 @@ initiatedAt(obl(send_goods(_122,iServer,_126))=false, _80, _82, _84) :-
 
 initiatedAt(suspended(_118,merchant)=true, _80, _82, _84) :-
      initiatedAt(contract(_118,_132,_134)=false,_80,_82,_84),
+     updateVariableTemp(rule_evaluations,1),
      holdsAtCyclic(_118,obl(send_goods(_118,iServer,_134))=true,_82).
 
 initiatedAt(suspended(_118,consumer)=true, _80, _82, _84) :-
      initiatedAt(contract(_130,_118,_134)=false,_80,_82,_84),
+     updateVariableTemp(rule_evaluations,1),
      holdsAtCyclic(_118,obl(send_EPO(_118,iServer,_134))=true,_82).
 
-terminatedAt(quote(_110,_112,_114)=true, _134, _80, _140) :-
-     happensAtIE(accept_quote(_112,_110,_114),_80),
-     _134=<_80,
-     _80<_140.
+terminatedAt(quote(_110,_112,_114)=true, _146, _80, _152) :-
+     happensAtIE(accept_quote(_112,_110,_114),_80),_146=<_80,_80<_152,
+     updateVariableTemp(rule_evaluations,1).
 
 holdsForSDFluent(pow(accept_quote(_114,_116,_118))=true,_80) :-
      holdsForProcessedSimpleFluent(_116,quote(_116,_114,_118)=true,_138),
@@ -65,19 +64,19 @@ holdsForSDFluent(pow(accept_quote(_114,_116,_118))=true,_80) :-
      holdsForProcessedSimpleFluent(_116,suspended(_116,merchant)=true,_174),
      relative_complement_all(_138,[_156,_174],_80).
 
-fi(quote(_114,_116,_118)=true,quote(_114,_116,_118)=false,5):-
+fi(quote(_114,_116,_118)=true,quote(_114,_116,_118)=false,10):-
      grounding(quote(_114,_116,_118)=true),
      grounding(quote(_114,_116,_118)=false).
 
-fi(contract(_114,_116,_118)=true,contract(_114,_116,_118)=false,5):-
+fi(contract(_114,_116,_118)=true,contract(_114,_116,_118)=false,10):-
      grounding(contract(_114,_116,_118)=true),
      grounding(contract(_114,_116,_118)=false).
 
-fi(per(present_quote(_118,_120))=false,per(present_quote(_118,_120))=true,10):-
+fi(per(present_quote(_118,_120))=false,per(present_quote(_118,_120))=true,20):-
      grounding(per(present_quote(_118,_120))=false),
      grounding(per(present_quote(_118,_120))=true).
 
-fi(suspended(_114,_116)=true,suspended(_114,_116)=false,3):-
+fi(suspended(_114,_116)=true,suspended(_114,_116)=false,6):-
      grounding(suspended(_114,_116)=true),
      grounding(suspended(_114,_116)=false).
 

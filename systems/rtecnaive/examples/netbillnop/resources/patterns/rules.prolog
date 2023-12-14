@@ -41,7 +41,7 @@ initiatedAt(quote(Merch,Cons,GD)=true, T) :-
 terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T).
 % ----- a quote is terminated 5 time-points after initiated
-fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 5).
+fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 10).
 p(quote(_M,_C,_GD)=true).
 
  % *   contract	 *
@@ -49,13 +49,13 @@ p(quote(_M,_C,_GD)=true).
 % ----- accepting a quote initiates a contract 
 initiatedAt(contract(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T),
+        updateVariableTemp(rule_evaluations, 1),
 	holdsAt(quote(Merch,Cons,GD)=true, T),
 	% contracts may be established only between (non-suspended) consumers and merchants
 	\+ holdsAt(suspended(Merch,merchant)=true, T),
-	\+ holdsAt(suspended(Cons,consumer)=true, T),
-        updateVariableTemp(rule_evaluations, 1).
+	\+ holdsAt(suspended(Cons,consumer)=true, T).
 % ----- a contract is terminated 10 time-points after initiated 
-fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 5).
+fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 10).
 
 % ----- we do not define institutional power for the remaining actions
 
@@ -66,7 +66,7 @@ initiatedAt(per(present_quote(Merch,Cons))=false, T) :-
 	happensAt(present_quote(Merch,Cons,_GD,_Price), T).
 initiatedAt(per(present_quote(Merch,Cons))=true, T) :-
 	happensAt(request_quote(Cons,Merch,_GD), T).
-fi(per(present_quote(Merch,Cons))=false, per(present_quote(Merch,Cons))=true, 10).
+fi(per(present_quote(Merch,Cons))=false, per(present_quote(Merch,Cons))=true, 20).
 p(per(present_quote(_Merch,_Cons))=false).
 
 % *     OBLIGATION      *
@@ -120,7 +120,7 @@ initiatedAt(suspended(Cons,consumer)=true, T1, T, T2) :-
 	holdsAt(obl(send_EPO(Cons,iServer,GD))=true, T).	
 % ----- a suspension is terminated 10 time-points after initiated, 
 % ----- unless re-initiated in the meantime
-fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 3).
+fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 6).
 p(suspended(_Ag,_Role)=true).
 
 

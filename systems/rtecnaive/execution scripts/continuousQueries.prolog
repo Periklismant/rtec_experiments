@@ -45,7 +45,7 @@ continuousQueries(App, ParamList) :-
     init_log_file(LogFile),
     QueryTime is StartReasoningTime + Step,
     init_output(OutputMode, ResultsFile, WM, Step, QueryTime, OutputThreadID),
-        initGlobals,
+    (skipLogs, ! ; initGlobals),
     % initialise RTEC, i.e., assert the parameters provided in the predicate below, so that they are accessible by any predicate.
     initialiseRecognition(StreamOrderFlag, DynamicGroundingFlag, PreprocessingFlag, ForgetThreshold, DynamicGroundingThreshold, ClockTick),
     % In case that the input is a live stream, sleep until the first query time, which is specified with the <Step> parameter.
@@ -56,7 +56,7 @@ continuousQueries(App, ParamList) :-
     closeInput(InputMode, InputPaths, InputStreams, InputThreadIDs),
     open(LogFile, append, LogFileStream),
     logWindowStats(LogFileStream, RecTimes, InputList, OutputLists),
-        writeAllGlobals(LogFileStream),
+    (skipLogs, ! ; writeAllGlobals(LogFileStream)),
     close(LogFileStream),
     closeOutput(OutputMode, OutputThreadID), !.
 

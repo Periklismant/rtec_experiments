@@ -15,8 +15,8 @@ initiatedAt(F=NewV, T1, T, T2) :-
         % when the duration of F=V may be extended
 	\+ inertiaCheck(F=V),
 	% initiatedAt incarnation for deadline fluents:
-        dInitiatedAt(F=V, Duration, T1, T, T2),
-        	updateVariableTemp(rule_evaluations, 1).
+        dInitiatedAt(F=V, Duration, T1, T, T2).
+        	%updateVariableTemp(rule_evaluations, 1).
 
 %%% dInitiatedAt(+(F=V), +Duration, +T1, -T, +T2) %%%	
         

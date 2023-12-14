@@ -194,6 +194,7 @@ eventRecognition(QueryTime, WM) :-
 	% cachingOrder2/2 is produced in the compilation stage 
 	% by combining cachingOrder/1, indexOf/2 and grounding/1
 	findall(OE, (cachingOrder2(Index,OE), processEntity(Index,OE,InitTime,QueryTime)), _),
+    (skipLogs, ! ; commitVariables(processEntityFlag)),
 	%findall(OE, (cachingOrder2(Index,OE), holdsFor(OE, I), write('Derived Intervals of '), write(OE), write(': '), write(I), nl), _),
 	%findall(OE, (cachingOrder2(Index,OE), startingPoints(Index, OE, SPoints), write('Cached initiation points of '),  write(OE), write(': '), write(SPoints), nl), _),
 	%findall(OE, (cachingOrder2(Index,OE), endingPoints(Index, OE, EPoints), write('Cached termination points of '),  write(OE), write(': '), write(EPoints), nl), _),

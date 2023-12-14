@@ -7,3 +7,12 @@ systems/rtec/execution\ scripts/logs/*.txt
 systems/rtec/examples/feedback_loops/results/*.txt
 systems/jrecfi/scripts/__pycache__/*
 systems/sCASP/logs/*.txt
+systems/rtec/examples/voting/results/*.txt
+systems/rtecnaive/examples/voting/results/*.txt
+systems/rtec/examples/netbillp/results/*.txt
+systems/rtecnaive/examples/netbillp/results/*.txt
+systems/rtec/examples/netbillnop/results/*.txt
+systems/rtecnaive/examples/netbillnop/results/*.txt
+datasets/netbillnop/*.csv
+datasets/netbillp/*.csv
+datasets/voting/*.csv

@@ -37,9 +37,9 @@ Power however is defined to answer queries.
  *********************/
 
 % deadlines on status:
-fi(status(M)=proposed, status(M)=null, 10).
-fi(status(M)=voting, status(M)=voted, 10).
-fi(status(M)=voted, status(M)=null, 10).
+fi(status(M)=proposed, status(M)=null, 20).
+fi(status(M)=voting, status(M)=voted, 20).
+fi(status(M)=voted, status(M)=null, 20).
 
 initially(status(_M)=null).
 initiatedAt(status(M)=proposed, T) :-
@@ -113,7 +113,7 @@ holdsFor(pow(declare(_C,M))=true, I) :-
   PERMISSION
  *************/
 
-fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, 8).
+fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, 16).
 
 initiatedAt(auxPerCloseBallot(M)=true, T) :-
 	happensAt(start(status(M)=voting), T),
@@ -122,12 +122,10 @@ initiatedAt(auxPerCloseBallot(M)=false, T) :-
 	happensAt(start(status(M)=proposed), T),
         updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(close_ballot(_C,M))=true, T) :-
-        happensAt(end(auxPerCloseBallot(M)=true), T),
+    happensAt(end(auxPerCloseBallot(M)=true), T),
 	holdsAt(status(M)=voting, T).
-        %updateVariableTemp(rule_evaluations, 1).
 initiatedAt(per(close_ballot(_C,M))=false, T) :-
 	happensAt(start(status(M)=voted), T).
-        %updateVariableTemp(rule_evaluations, 1).
 
 happensAt(auxMotionOutcomeEvent(M,carried), T) :-
 	happensAt(start(status(M)=voted), T),
@@ -135,7 +133,6 @@ happensAt(auxMotionOutcomeEvent(M,carried), T) :-
     findall(V, holdsAt(voted(V,M)=nay, T), NayList), length(NayList, NL),
     % standing rules: simple majority
     AL>=NL.
-    %updateVariableTemp(rule_evaluations, 1).
 
 /*****************
   OBLIGATION
@@ -152,7 +149,7 @@ initiatedAt(obl(declare(_C,M,carried))=false, T) :-
   SANCTION 
  **********/
 
-fi(sanctioned(C)=true, sanctioned(C)=false, 4).
+fi(sanctioned(C)=true, sanctioned(C)=false, 8).
 
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(close_ballot(C,M), T), 

@@ -1,11 +1,11 @@
 #!/bin/bash 
 
 
-#Applications=("voting" "netbill")
-Applications=("netbillnop")
+#Applications=("voting" "netbillnop" "netbillp")
+Applications=("netbillp")
 Systems=("rtec" "rtecnaive")
 #Systems=("rtecnaive")
-window_sizes=(80)
+window_sizes=(10)
 
 
 for App in ${Applications[@]}; do
@@ -19,7 +19,7 @@ for App in ${Applications[@]}; do
 		for window_size in ${window_sizes[@]}; do
 			echo -e "\t* Window size: ${window_size}"
 			cd ${system_path}/execution\ scripts
-			./run_rtec.sh --app=${App} --window-size=${window_size} --step=80 --input=${voting_dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=80
+			./run_rtec.sh --app=${App} --window-size=${window_size} --step=10 --input=${dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=30
 			cd ../../../scripts
 		done
 	done

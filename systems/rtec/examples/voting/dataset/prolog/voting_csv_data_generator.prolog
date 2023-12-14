@@ -46,13 +46,13 @@ updateSDE(Start, End, WriteFileStream) :-
 	Start<End,
 	%%%%%%%%%%% count the agents occupying various roles %%%%%%%%%%%%%%%%%%
 	findall(Ag, (person(Ag),\+role_of(Ag,chair),\+role_of(Ag,voter)), NoRoleList),
-	length(NoRoleList, NoRoleNo), 
+	%length(NoRoleList, NoRoleNo), 
 	findall(V, role_of(V,voter), VotersList), length(VotersList, VotersNo), 
 	findall(C, role_of(C,chair), ChairsList), length(ChairsList, ChairsNo), 
 	findall(V, (role_of(V,voter),\+role_of(V,chair)), VotersOnlyList),
-	length(VotersOnlyList, VotersOnlyNo), 
+	%length(VotersOnlyList, VotersOnlyNo), 
 	findall(C, (role_of(C,chair),\+role_of(C,voter)), ChairsOnlyList),
-	length(ChairsOnlyList, ChairsOnlyNo), 
+	%length(ChairsOnlyList, ChairsOnlyNo), 
 	findall(VC, (role_of(VC,voter),role_of(VC,chair)), VotersChairsList),
 	length(VotersChairsList, VotersChairsNo),
 	%%%%%%%%%%% count the number of motions %%%%%%%%%%%%%%%%%%
@@ -77,7 +77,7 @@ updateSDE(Start, End, WriteFileStream) :-
 	handleMsg(VotersList, VotersNo, 2.3, MotionsList, MotionsNo, vote, aye, StartPlus4, WriteFileStream),
 	handleMsg(VotersList, VotersNo, 2.4, MotionsList, MotionsNo, vote, nay, StartPlus4, WriteFileStream),
 	%%%%%%%%%%% clock tick %%%%%%%%%%%	
-	StartPlus5 is Start+5,
+	%StartPlus5 is Start+5,
 	%%%%%%%%%%% clock tick %%%%%%%%%%%	
 	StartPlus6 is Start+6,
 	%%%%%%%%%%% voting %%%%%%%%%%%%%%%%%% 

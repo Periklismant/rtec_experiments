@@ -112,23 +112,23 @@ happensAtEv(auxMotionOutcomeEvent(_98,carried),_80) :-
      length(_178,_184),
      _152>=_184.
 
-fi(status(_114)=proposed,status(_114)=null,10):-
+fi(status(_114)=proposed,status(_114)=null,80):-
      grounding(status(_114)=proposed),
      grounding(status(_114)=null).
 
-fi(status(_114)=voting,status(_114)=voted,10):-
+fi(status(_114)=voting,status(_114)=voted,80):-
      grounding(status(_114)=voting),
      grounding(status(_114)=voted).
 
-fi(status(_114)=voted,status(_114)=null,10):-
+fi(status(_114)=voted,status(_114)=null,80):-
      grounding(status(_114)=voted),
      grounding(status(_114)=null).
 
-fi(auxPerCloseBallot(_114)=true,auxPerCloseBallot(_114)=false,8):-
+fi(auxPerCloseBallot(_114)=true,auxPerCloseBallot(_114)=false,64):-
      grounding(auxPerCloseBallot(_114)=true),
      grounding(auxPerCloseBallot(_114)=false).
 
-fi(sanctioned(_114)=true,sanctioned(_114)=false,4):-
+fi(sanctioned(_114)=true,sanctioned(_114)=false,32):-
      grounding(sanctioned(_114)=true),
      grounding(sanctioned(_114)=false).
 

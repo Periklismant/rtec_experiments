@@ -1,16 +1,16 @@
-+396+696+1049+1247+1513+3450+2349+4189+6864+20945
++332+588+866+1021+1198+1697+1132+1343+1775+2938+3092+3166+3426+4975+5293+3110+3184+5642+5816+4862
 
-Recognition Time average (ms)		: 4269.8
-Recognition Time standard deviation (ms): 5865.572722249721
-Recognition Time worst (ms)		: 20945
+Recognition Time average (ms)		: 2772.8
+Recognition Time standard deviation (ms): 1744.384034552025
+Recognition Time worst (ms)		: 5816
 
-Input Entities average			: 209304.8
-Input Entities standard deviation	: 99869.52960417909
+Input Entities average			: 132864.6
+Input Entities standard deviation	: 45193.982911887724
 
-Output Entities (average number of fluent-value pairs)	: 21456.9
-Output Entities (standard deviation)	  		: 4753.420335926542
-Output Entities (average number of intervals)	: 49711.4
-Output Entities (standard deviation)	  	: 23354.589262926464
-Output Entities (average number of timepoints)	: 235856.1
-Output Entities (standard deviation)	 	: 119509.52229211696
-	Number of Deadline initiations: [6749,21454,34970,48345,61749,75016,88210,101668,101653,100401], with Sum: 640215, and Avg: 64021
+Output Entities (average number of fluent-value pairs)	: 11658.1
+Output Entities (standard deviation)	  		: 1941.2911656935958
+Output Entities (average number of intervals)	: 30541.8
+Output Entities (standard deviation)	  	: 10386.847022075564
+Output Entities (average number of timepoints)	: 153574.65
+Output Entities (standard deviation)	 	: 55485.174218231485
+	Number of rule evaluations: [3312,10410,16953,23560,30367,37282,44212,50906,51085,51021,51183,51358,50878,50752,50444,50759,50895,50706,50679,50612], with Sum: 827374, and Avg: 41368, and StDev: 15232.725849302216
