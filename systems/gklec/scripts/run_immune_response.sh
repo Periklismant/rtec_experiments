@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #EndTimes='100 200 400 800'
-EndTimes='100 200 400 800'
+EndTimes='200 400 800 1600'
 
 for EndTime in $EndTimes; do
 	swipl -l ../src/gklec.prolog -q -g "runQueryAllInits(immune_g, ${EndTime}), halt."

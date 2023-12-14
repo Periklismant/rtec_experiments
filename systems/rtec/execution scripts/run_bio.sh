@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Timeline_sizes=(100 200 400 800)
+Timeline_sizes=(1600)
 
 for timeline_size in ${Timeline_sizes[@]}; do
     echo "Timeline size: ${timeline_size}"
