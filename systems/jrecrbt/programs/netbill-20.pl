@@ -1,25 +1,20 @@
-% example goal for performance evaluation.
-% run "start." before and "reset." after running "test(M)."
-% close and re-open tuprolog after running the tests. otherwise, bindings to external java objects will not be re-created
-test(MVIs):-
-	update([happens(presentQuote(1,1,book),1),happens(presentQuote(1,1,book),2),happens(presentQuote(1,2,book),2),happens(acceptQuote(1,1,book),3),happens(acceptQuote(1,1,book),4),happens(acceptQuote(1,2,book),4),happens(presentQuote(1,1,book),5)]),	
-	status(MVIs).
-%15 sec on  xps9560 i7-7th gen
+test:-
+	update([happens(presentQuote(10,10,book),1),happens(presentQuote(0,4,book),1),happens(presentQuote(10,8,book),1),happens(presentQuote(10,14,book),1),happens(presentQuote(0,10,book),1),happens(presentQuote(10,4,book),1),happens(acceptQuote(10,10,book),6),happens(presentQuote(0,8,book),11),happens(presentQuote(0,10,book),11),happens(presentQuote(10,8,book),11),happens(acceptQuote(10,10,book),16),happens(presentQuote(0,14,book),21),happens(presentQuote(10,4,book),21),happens(presentQuote(10,14,book),31),happens(presentQuote(0,14,book),31),happens(presentQuote(10,10,book),31),happens(acceptQuote(10,10,book),36),happens(presentQuote(10,14,book),41),happens(presentQuote(0,8,book),41),happens(presentQuote(10,10,book),41),happens(presentQuote(0,14,book),41),happens(presentQuote(10,4,book),41),happens(acceptQuote(10,10,book),46)]),
+	status.
 
-% a simple domain dependent theory with 1 fluent
-%initiates(ev1,f1,_).
-%terminates(ev2,f1,_).
+merchant(0).
+merchant(10).
+consumer(4).
+consumer(14).
+consumer(10).
+consumer(8).
+goods(book).
+
 initiates(presentQuote(M,C,GD), quote(M,C,GD), _):-
 	merchant(M), consumer(C), goods(GD).
 
 terminates(acceptQuote(M,C,GD), quote(M,C,GD), _):-
 	merchant(M), consumer(C), goods(GD).
-
-merchant(1).
-consumer(1).
-consumer(2).
-goods(book).
-
 :-unknown(_,fail).
 
 lt(A,B):-gt(B,A).
@@ -195,9 +190,9 @@ open_mvi(F,T):-
 	assert(mholds_for(F,[T,inf])).
 
 
-status(MVIs):-
+status:-
         %query the index
-	findall(mholds_for(F,[T1,T2]),mholds_for(F,[T1,T2]),MVIs).
+	findall(mholds_for(F,[T1,T2]),(mholds_for(F,[T1,T2]), write(F), write("["), write(T1), write(","), write(T2), write("]"), nl), _MVIs).
 
 reset:-
 	retractall(happens(_,_)),

@@ -64,7 +64,8 @@ for line in f1:
 	fw.write(line)
 f1.close()
 
-f2=open("../bin/rec_commented.pl", 'r')
+f2=open("../bin/rbt_rec.pl", 'r')
+#f2=open("../bin/rec_commented.pl", 'r')
 for line in f2:
 	fw.write(line)
 f2.close()
