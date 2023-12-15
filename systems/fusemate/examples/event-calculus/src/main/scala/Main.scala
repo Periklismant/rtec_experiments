@@ -53,25 +53,13 @@ object Main {
 
     val maxAgentID = 20
     
-    def get_events(agentsNo: Int, timepointsNo: Int): List[Lit] = {
-      val file_path = "/home/periklis/Desktop/RTEC2_updated/RTEC2/examples/negotiation/experiments/data/csv/"
-      val file_name = file_path + "negotiation-" + agentsNo + "-" + timepointsNo + "-1.csv"
+    def get_events(eventsNo: Int): List[Lit] = {
+      val file_path = "../../../../../../rtec/examples/netbill_fragment/dataset/csv/"
+      val file_name = file_path + "netbill-" + eventsNo + ".csv"
       println(file_name)
       var output =  new ListBuffer[Lit]()
       var merchants = new ListBuffer[Int]()
       var consumers = new ListBuffer[Int]() 
-      /*
-      for (m <- 0 until maxAgentID)
-        if (m%10==0){
-          output += (HoldsAt(1, IsA(merchant(m), merchant)))
-          for (c <- 0 until maxAgentID)
-            if (c%3>0)
-              output += (NEG(HoldsAt(1, quote(merchant(m),consumer(c),goods("book")))))
-          }
-      for (c <- 0 until maxAgentID)
-        if (c%3>0)    
-          output += (HoldsAt(1, IsA(consumer(c), consumer)))
-      */
       output += (IsAAt(1, goods("book"), goods))
       for (line <- Source.fromFile(file_name).getLines()) {
         val lineSpl = line.split('|')
@@ -105,69 +93,6 @@ object Main {
 
     val events: List[Lit] = get_events(50,100) //get_events(8,50) 
 
-// Example event narrative
-/*  
-    val events: List[Lit] = List(
-      // Initial situation, things that remain over time.
-     NEG(HoldsAt(1, quote(merchant(1),consumer(1),goods("book")))),
-    
-    IsAAt(1, merchant(1), merchant), 
-    IsAAt(1, consumer(1), consumer),
-    IsAAt(1, consumer(2), consumer),
-    IsAAt(1, consumer(3), consumer),
-    IsAAt(1, goods("book"), goods),
-    /*
-    HoldsAt(1, IsA(merchant(1), merchant)),
-    HoldsAt(1, IsA(consumer(1), consumer)),
-    HoldsAt(1, IsA(consumer(2), consumer)),
-    HoldsAt(1, IsA(consumer(3), consumer)),
-    HoldsAt(1, IsA(goods("book"), goods)),
-    */
-    Happens(2, presentQuote(merchant(1),consumer(1),goods("book"))),
-    Happens(2, presentQuote(merchant(1),consumer(3),goods("book"))),
-    
-    Happens(4, acceptQuote(consumer(1),merchant(1),goods("book"))),
-    Happens(6, presentQuote(merchant(1),consumer(1),goods("book"))),
-    Happens(10, presentQuote(merchant(1),consumer(1),goods("book"))),
-    Happens(10, presentQuote(merchant(1),consumer(2),goods("book"))),
-    Happens(12, acceptQuote(consumer(3),merchant(1),goods("book"))),
-    Happens(14, acceptQuote(consumer(1),merchant(1),goods("book")))
-  )
-*/
-
-    /*
-       @rules
-    val netbillRules = List(
-
-        Initiates(time, presentQuote(m,c,gd), quote(m,c,gd)) :- (
-          HoldsAt(time, IsA(m, merchant)),
-          HoldsAt(time, IsA(c, consumer)),
-          HoldsAt(time, IsA(gd, goods))
-          //IsAAt(time, m, merchant), IsAAt(time, c, consumer), IsAAt(time, gd, goods)
-        ),
-
-        StronglyTerminates(time, acceptQuote(c,m,gd), quote(m,c,gd)) :- (
-          HoldsAt(time, IsA(m, merchant)),
-          HoldsAt(time, IsA(c, consumer)),
-          HoldsAt(time, IsA(gd, goods)),
-          HoldsAt(time, quote(m,c,gd))
-        ),
-        /*
-        ((Terminated(plus(time, 3), quote(m,c,gd))): @preds("TimePlus3"))  :- (
-          HoldsAt(time, IsA(m, merchant)),
-          HoldsAt(time, IsA(c, consumer)),
-          HoldsAt(time, IsA(gd, goods)),
-          Initiated(time, quote(m,c,gd)),
-          NOT (Happens(plus(time, 1), acceptQuote(c,m,gd))),
-          NOT (Happens(plus(time, 1), acceptQuote(c,m,gd)))
-          //NOT (Terminated(plus(time,1), quote(m,c,gd))),
-          //NOT (Terminated(plus(time,2), quote(m,c,gd)))
-        )
-        */
-
-      )
-      */
-
     @rules
     val netbillRules = List(
 
@@ -194,13 +119,6 @@ object Main {
       )
     
     val models = new IE.Models(netbillRules, events)
-    
-    /*val models = (
-      init ++ events
-    ) saturate {
-        netbillRules
-      }
-    */
 
     for (m <- models) {
       println(s"=====")

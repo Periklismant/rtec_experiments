@@ -50,13 +50,15 @@ p(quote(_M,_C,_GD)=true).
 initiatedAt(contract(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T),
         updateVariableTemp(rule_evaluations, 1),
-	holdsAt(quote(Merch,Cons,GD)=true, T),
+	holdsAt(quote(Merch,Cons,GD)=true, T).
 	% contracts may be established only between (non-suspended) consumers and merchants
-	\+ holdsAt(suspended(Merch,merchant)=true, T),
-	\+ holdsAt(suspended(Cons,consumer)=true, T).
+        % test without cycles
+        %\+ holdsAt(suspended(Merch,merchant)=true, T),
+        %\+ holdsAt(suspended(Cons,consumer)=true, T).
 % ----- a contract is terminated 10 time-points after initiated 
 fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 10).
 
+/*
 % ----- we do not define institutional power for the remaining actions
 
 % *     PERMISSION      *
@@ -123,6 +125,7 @@ initiatedAt(suspended(Cons,consumer)=true, T1, T, T2) :-
 fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 6).
 p(suspended(_Ag,_Role)=true).
 
+*/
 
 % The elements of these domains are derived from the ground arguments of input entitites
 dynamicDomain(person(_)).
@@ -141,10 +144,10 @@ grounding(send_goods(Ag,_,_,_,_)):-
     person(Ag).
 
 % Grounding of output entities:
-grounding(suspended(Ag,Role)=true):-
-    person(Ag),role_of(Ag,Role).
-grounding(suspended(Ag,Role)=false):-
-    person(Ag),role_of(Ag,Role).
+%grounding(suspended(Ag,Role)=true):-
+%person(Ag),role_of(Ag,Role).
+%grounding(suspended(Ag,Role)=false):-
+%person(Ag),role_of(Ag,Role).
 grounding(quote(M,C,GD)=true):- 
     person_pair(M,C), role_of(C, consumer), role_of(M, merchant), \+ M=C, queryGoodsDescription(GD).
 grounding(quote(M,C,GD)=false):- 
@@ -153,19 +156,19 @@ grounding(contract(M,C,GD)=true):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
 grounding(contract(M,C,GD)=false):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
-grounding(pow(accept_quote(C,M,GD))=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M, queryGoodsDescription(GD).
-grounding(per(present_quote(M,C))=false):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
-grounding(per(present_quote(M,C))=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
-grounding(obl(send_EPO(C,iServer,GD))=true):-
-    person(C),role_of(C,consumer), queryGoodsDescription(GD).
-grounding(obl(send_goods(M,iServer,GD))=true):-
-    person(M),role_of(M,merchant), queryGoodsDescription(GD).
-grounding(obl(send_EPO(C,iServer,GD))=false):-
-    person(C),role_of(C,consumer), queryGoodsDescription(GD).
-grounding(obl(send_goods(M,iServer,GD))=false):-
-    person(M),role_of(M,merchant), queryGoodsDescription(GD).
+%grounding(pow(accept_quote(C,M,GD))=true):-
+%person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M, queryGoodsDescription(GD).
+%grounding(per(present_quote(M,C))=false):-
+%person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
+%grounding(per(present_quote(M,C))=true):-
+%person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
+%grounding(obl(send_EPO(C,iServer,GD))=true):-
+%person(C),role_of(C,consumer), queryGoodsDescription(GD).
+%grounding(obl(send_goods(M,iServer,GD))=true):-
+%person(M),role_of(M,merchant), queryGoodsDescription(GD).
+%grounding(obl(send_EPO(C,iServer,GD))=false):-
+%person(C),role_of(C,consumer), queryGoodsDescription(GD).
+%grounding(obl(send_goods(M,iServer,GD))=false):-
+%person(M),role_of(M,merchant), queryGoodsDescription(GD).
 
 
