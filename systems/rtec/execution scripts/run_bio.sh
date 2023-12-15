@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Timeline_sizes=(1600)
+Timeline_sizes=(400 800 1600 3200)
 
 for timeline_size in ${Timeline_sizes[@]}; do
     echo "Timeline size: ${timeline_size}"
@@ -10,7 +10,7 @@ for timeline_size in ${Timeline_sizes[@]}; do
     total_run_time=0
     total_run_time_sq=0
     count=0
-    for H in {0..2} 
+    for H in {0..1} 
     do
         for S in {0..2} 
         do
@@ -29,8 +29,14 @@ for timeline_size in ${Timeline_sizes[@]}; do
     echo "For application: $App with timeline size: $timeline_size, we have:"
     avg=$((total_run_time/count))
     echo "Average reasoning time: $avg"
-    stdev=$(echo "" | awk -v sum=${total_run_time} -v sumsq=${total_run_time_sq} -v count=${count} 'END{print sqrt(sumsq/count - (sum/count)^2)}')
-    #echo "Standard deviation: $stdev"
+    stdev=$(echo "" | awk -v sum=${total_run_time} -v sumsq=${total_run_time_sq} -v count=${count} 'END{print sqrt(sumsq/count - (sum/count)^2)}')      
+    echo "Standard deviation: $stdev"
+done
+
+Timeline_sizes=(300 600 1200 2400)
+
+for timeline_size in ${Timeline_sizes[@]}; do
+    echo "Timeline size: ${timeline_size}"
 
     App="phage"
     echo -e "\tApp: $App"
@@ -63,7 +69,7 @@ for timeline_size in ${Timeline_sizes[@]}; do
     avg=$((total_run_time/count))
     echo "Average reasoning time: $avg"
     stdev=$(echo "" | awk -v sum=${total_run_time} -v sumsq=${total_run_time_sq} -v count=${count} 'END{print sqrt(sumsq/count - (sum/count)^2)}')
-    #echo "Standard deviation: $stdev"
+    echo "Standard deviation: $stdev"
 
 done
 

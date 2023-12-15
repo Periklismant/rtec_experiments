@@ -1,0 +1,590 @@
+
+Window size: 10
+Step: 10
+Start time: 0
+End time: 800
+Input mode: csv
+Stream rate: 1
+Input stream providers: ../examples/feedback_loops/dataset/csv/input.csv
+Compile flag: 
+Executing: ./aux/compile.sh --event-description=../examples/feedback_loops/resources/patterns/feedback_loops_compiled_rules.prolog --dependency-graph --dependency-graph-directory=../examples/feedback_loops/resources/graphs --no-events
+Executing: swipl -l continuousQueries.prolog -g continuousQueries(feedback_loops,[event_description_files=['../examples/feedback_loops/resources/auxiliary/static_info.prolog','../examples/feedback_loops/resources/auxiliary/initial_conditions/inits_immune_2_1.prolog','../examples/feedback_loops/resources/patterns/feedback_loops_compiled_rules.prolog'],window_size=10,step=10,start_time=0,end_time=800,clock_tick=1,input_mode=csv,input_providers=['../examples/feedback_loops/dataset/csv/input.csv'],stream_rate=1,results_directory='../examples/feedback_loops/results']),halt.
+                                                                 
+	8 888888888o. 8888888 8888888888 8 8888888888       ,o888888o.    
+	8 8888    `88.      8 8888       8 8888            8888     `88.  
+	8 8888     `88      8 8888       8 8888         ,8 8888       `8. 
+	8 8888     ,88      8 8888       8 8888         88 8888           
+	8 8888.   ,88'      8 8888       8 888888888888 88 8888           
+	8 888888888P'       8 8888       8 8888         88 8888           
+	8 8888`8b           8 8888       8 8888         88 8888           
+	8 8888 `8b.         8 8888       8 8888         `8 8888       .8' 
+	8 8888   `8b.       8 8888       8 8888            8888     ,88'  
+	8 8888     `88.     8 8888       8 888888888888     `8888888P'   
+	
+Initialising logs...
+Current Window                         	: (0, 10]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 8
+Output Entities (# intervals)		: 8
+Output Entities (# timepoints)		: 58
+=========================================================
+Current Window                         	: (10, 20]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (20, 30]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (30, 40]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (40, 50]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (50, 60]
+Recognition Time (ms)			: 7
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (60, 70]
+Recognition Time (ms)			: 7
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (70, 80]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (80, 90]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (90, 100]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (100, 110]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (110, 120]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (120, 130]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (130, 140]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (140, 150]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (150, 160]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (160, 170]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (170, 180]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (180, 190]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (190, 200]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (200, 210]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (210, 220]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (220, 230]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (230, 240]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (240, 250]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (250, 260]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (260, 270]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (270, 280]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (280, 290]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (290, 300]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (300, 310]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (310, 320]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (320, 330]
+Recognition Time (ms)			: 8
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (330, 340]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (340, 350]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (350, 360]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (360, 370]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (370, 380]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (380, 390]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (390, 400]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (400, 410]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (410, 420]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (420, 430]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (430, 440]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (440, 450]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (450, 460]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (460, 470]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (470, 480]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (480, 490]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (490, 500]
+Recognition Time (ms)			: 9
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (500, 510]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (510, 520]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (520, 530]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (530, 540]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (540, 550]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (550, 560]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (560, 570]
+Recognition Time (ms)			: 10
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (570, 580]
+Recognition Time (ms)			: 14
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (580, 590]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (590, 600]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (600, 610]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (610, 620]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (620, 630]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (630, 640]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (640, 650]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (650, 660]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (660, 670]
+Recognition Time (ms)			: 11
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (670, 680]
+Recognition Time (ms)			: 13
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (680, 690]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (690, 700]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (700, 710]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (710, 720]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (720, 730]
+Recognition Time (ms)			: 13
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (730, 740]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (740, 750]
+Recognition Time (ms)			: 13
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (750, 760]
+Recognition Time (ms)			: 12
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (760, 770]
+Recognition Time (ms)			: 13
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (770, 780]
+Recognition Time (ms)			: 13
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (780, 790]
+Recognition Time (ms)			: 14
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Current Window                         	: (790, 800]
+Recognition Time (ms)			: 14
+Input Entities				: 0
+Output Entities (# fluent-value pairs)	: 6
+Output Entities (# intervals)		: 6
+Output Entities (# timepoints)		: 60
+=========================================================
+Recognition Time average (ms)			: 9.8875
+Input Entities average				: 0
+Output Entities (average # fluent-value pairs)	: 6.025
+Output Entities (average # intervals)		: 6.025
+Output Entities (average # timepoints)		: 59.975
+=========================================================

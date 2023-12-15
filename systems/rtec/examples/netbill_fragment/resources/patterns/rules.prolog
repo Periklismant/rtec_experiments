@@ -7,7 +7,7 @@ terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 % Grounding of input entities:
 grounding(present_quote(M,C,GD,_)):-
 	merchant(M), consumer(C), goods(GD).
-grounding(accept_quote(C,M,_)):-
+grounding(accept_quote(C,M,GD)):-
 	merchant(M), consumer(C), goods(GD).
 
 % Grounding of output entities:

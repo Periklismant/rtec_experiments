@@ -25,7 +25,6 @@ digraph
 	3 [shape=none label=<<table border="0" cellspacing="0">
 		<tr><td port="obl(send_EPO(_, _, _))=false" border="1" color="black">obl(send_EPO(_, _, _))=false</td></tr>
 		<tr><td port="obl(send_goods(_, _, _))=false" border="1" color="black">obl(send_goods(_, _, _))=false</td></tr>
-		<tr><td port="pow(accept_quote(_, _, _))=true" border="1" color="black">pow(accept_quote(_, _, _))=true</td></tr>
 	</table>>
 	]
 
@@ -34,6 +33,4 @@ digraph
 	2:"contract(_, _, _)=false" -> 3:"obl(send_EPO(_, _, _))=false"
 	2:"contract(_, _, _)=false" -> 3:"obl(send_goods(_, _, _))=false"
 	1:"per(present_quote(_, _))=false" -> 2:"suspended(_, _)=true"
-	1:"quote(_, _, _)=true" -> 3:"pow(accept_quote(_, _, _))=true"
-	2:"suspended(_, _)=true" -> 3:"pow(accept_quote(_, _, _))=true"
 }

@@ -1,6 +1,6 @@
 :- dynamic cached/1, initially/1.
 
-:- discontiguous initially/1, happens/2, delay/3, overrides/3, varVal/2, appVars/2.
+:- discontiguous initially/1, happens/2, delay/3, overrides/3, varVal/2, appVars/2, varValInit/2.
 
 boolean_not(0,1).
 boolean_not(1,0).
@@ -23,9 +23,13 @@ appVars(simple_neg, [x, y]).
 
 varVal(x, 0).
 varVal(x, 1).
-
 varVal(y, 0).
 varVal(y, 1).
+
+varValInit(x, 0).
+varValInit(x, 1).
+varValInit(y, 0).
+varValInit(y, 1).
 
 % These are commented out because the initial variable values are asserted by the query helper predicates (see the end of the file).
 %initially(val(x,0)).
@@ -72,10 +76,15 @@ appVars(immune_g, [h, s]).
 varVal(h, 0).
 varVal(h, 1).
 varVal(h, 2).
-
 varVal(s, 0).
 varVal(s, 1).
 varVal(s, 2).
+
+varValInit(h, 0).
+varValInit(h, 1).
+varValInit(s, 0).
+varValInit(s, 1).
+varValInit(s, 2).
 
 %initially(val(h,0)).
 %initially(val(s,0)).
@@ -165,17 +174,26 @@ appVars(phage_g, [cI, cro, cII, n]).
 varVal(cI, 0).
 varVal(cI, 1).
 varVal(cI, 2).
-
 varVal(cro, 0).
 varVal(cro, 1).
 varVal(cro, 2).
 varVal(cro, 3).
-
 varVal(cII, 0).
 varVal(cII, 1).
-
 varVal(n, 0).
 varVal(n, 1).
+
+varValInit(cI, 0).
+varValInit(cI, 1).
+varValInit(cI, 2).
+varValInit(cro, 0).
+varValInit(cro, 1).
+varValInit(cro, 2).
+varValInit(cro, 3).
+varValInit(cII, 0).
+varValInit(cII, 1).
+varValInit(n, 0).
+varValInit(n, 1).
 
 %initially(val(cI,0)).
 %initially(val(cro,0)).
@@ -321,8 +339,11 @@ holds(val(X,V), 0):-
 holds(val(X,V), Tk):-
 	Tk>0,
 	happens(tick,Tk),
+        % nl, write('Checking if '), write(holds(val(X,V), Tk)), write(' holds.'), nl,
 	initiates(Event,val(X,V),[Ti,Tk]),
-	\+ clipped(Event,val(X,V),[Ti,Tk]), 
+        %write(val(X,V)), write(' is initiated at '), write(Ti), nl,
+	\+ clipped(Event,val(X,V),[Ti,Tk]),
+        %write('It is not clipped between these timepoints'), nl,
 	assertz(cached(holds(val(X, V), Tk))).
 
 clipped(Event, val(X,V), [Ti,Tk]):-
@@ -505,7 +526,7 @@ retractInits(App):-
 getVarVals([], []).
 
 getVarVals([Var|RestVars], [Val|RestVals]):-
-	varVal(Var, Val),
+	varValInit(Var, Val),
 	getVarVals(RestVars, RestVals).
 
 valsTuple(App, ValsList):-
@@ -524,7 +545,7 @@ valsToNum(Vals, NumID):-
 	valsToNum0(Vals, 1, 0, NumID).
 
 produceLogFileInits(App, EndTime, InitValsList, LogFile):-
-	atom_concat('../results/gklec/', App, LogFilePrefix0),
+	atom_concat('../results/', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),
@@ -535,7 +556,7 @@ produceLogFileInits(App, EndTime, InitValsList, LogFile):-
 	atom_concat(LogFile0, '.txt', LogFile).
 
 produceLogFile(App, EndTime, LogFile):-
-	atom_concat('../results/gklec/', App, LogFilePrefix0),
+	atom_concat('../results/', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),

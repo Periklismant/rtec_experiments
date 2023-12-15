@@ -54,12 +54,12 @@ include_input = false
 # Execution Parameters 
 window_size = 36000 # 1 day = 86400 seconds
 step = 36000
-start_time = 1443650400 
-end_time = 1448834400
+start_time = 1451606401 
+end_time = 1454284786
 clock_tick = 1
 # Input Specification Parameters
 input_mode = "csv"
-input_providers = ['../examples/maritime/dataset/csv/preprocessed_dataset_RTEC_critical_nd.csv']
+input_providers = ['../examples/maritime/dataset/csv/imis_critical.csv']
 stream_rate = 10000
 # Knowledge Base
 event_description = '../examples/maritime/resources/patterns/rules.prolog'
@@ -71,6 +71,52 @@ results_directory = "../examples/maritime/results"
 compile=true
 dependency_graph_flag = true
 dependency_graph_directory = '../examples/maritime/resources/graphs'
+include_input = false
+
+[maritime_no_fi]
+# Execution Parameters 
+window_size = 36000 # 1 day = 86400 seconds
+step = 36000
+start_time = 1443650400 
+end_time = 1448834400
+clock_tick = 1
+# Input Specification Parameters
+input_mode = "csv"
+input_providers = ['../examples/maritime_no_fi/dataset/csv/brest_critical.csv']
+stream_rate = 10000
+# Knowledge Base
+event_description = '../examples/maritime_no_fi/resources/patterns/rules.prolog'
+background_knowledge = ['../examples/maritime_no_fi/resources/auxiliary/compare.prolog', '../examples/maritime_no_fi/resources/auxiliary/loadStaticData.prolog']
+# Output Specification Parameters
+output_mode = "file"
+results_directory = "../examples/maritime_no_fi/results"
+# Compiler Parameters
+compile=true
+dependency_graph_flag = true
+dependency_graph_directory = '../examples/maritime_no_fi/resources/graphs'
+include_input = false
+
+[maritime_fi_only]
+# Execution Parameters 
+window_size = 36000 # 1 day = 86400 seconds
+step = 36000
+start_time = 1443650400 
+end_time = 1448834400
+clock_tick = 1
+# Input Specification Parameters
+input_mode = "csv"
+input_providers = ['../examples/maritime_fi_only/dataset/csv/brest_critical.csv']
+stream_rate = 10000
+# Knowledge Base
+event_description = '../examples/maritime_fi_only/resources/patterns/rules.prolog'
+background_knowledge = ['../examples/maritime_fi_only/resources/auxiliary/compare.prolog', '../examples/maritime_fi_only/resources/auxiliary/loadStaticData.prolog']
+# Output Specification Parameters
+output_mode = "file"
+results_directory = "../examples/maritime_fi_only/results"
+# Compiler Parameters
+compile=true
+dependency_graph_flag = true
+dependency_graph_directory = '../examples/maritime_fi_only/resources/graphs'
 include_input = false
 
 [voting_fragment]

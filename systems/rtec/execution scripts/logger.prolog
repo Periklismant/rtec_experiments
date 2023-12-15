@@ -21,21 +21,24 @@ list_var([El|Other],Avg,Var):-
 %           TemporalDistance of timepoints,
 %           S,E where S and E are the values of the intersection interval (S,E)
 %Returns :  Total Duration of intervals
-fluents_duration([],_,_,_,0).
-fluents_duration([(_=_,Li)|OtherFluents],TemporalDistance,S,E,Duration):-
-	fluents_duration(OtherFluents,TemporalDistance,S,E,DurationIn),
+fluents_duration(FVPIntervals,TemporalDistance,S,E,Duration):-
+    fluents_duration_auxiliary(FVPIntervals,TemporalDistance,S,E,0,Duration).
+
+fluents_duration_auxiliary([],_,_,_,Duration,Duration).
+fluents_duration_auxiliary([(_=_,Li)|OtherFluents],TemporalDistance,S,E,CurrDuration,Duration):-
 	intersect_all([Li,[(S,E)]],L),
-	interval_list_duration(L,CurDur),
-	CurrentDuration is CurDur/TemporalDistance,
-	Duration is DurationIn + CurrentDuration.
+	interval_list_duration(L,0,MyDuration),
+	MyDurationScaled is MyDuration/TemporalDistance,
+	NextDuration is CurrDuration + MyDurationScaled,
+	fluents_duration_auxiliary(OtherFluents,TemporalDistance,S,E,NextDuration,Duration).
 
 %Input   : Interval List
 %Returns : Duration of intervals without taking into consideration TemporalDistance
-interval_list_duration([],0).
-interval_list_duration([(S,E)|L],T) :- 
-	interval_list_duration(L,S1),
-	D is E-S,
-	T is S1+D.
+interval_list_duration([],Duration,Duration).
+interval_list_duration([(S,E)|L],CurrDuration, Duration) :- 
+    MyDuration is E-S,
+    NextDuration is CurrDuration+MyDuration,
+    interval_list_duration(L, NextDuration, Duration).
 
 % write(+RecognitionTime, +LogFile)
 writeResult(Time, LogFileStream):-

@@ -1,5 +1,5 @@
 #!/bin/bash
-EventNos=(5 10 20 40)
+EventNos=(40)
 
 for event_no in ${EventNos[@]}; do
     echo "Number of events: ${event_no}"

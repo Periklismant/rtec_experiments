@@ -1,0 +1,11 @@
+
+Window size: 10
+Step: 10
+Start time: 0
+End time: 100
+Input mode: csv
+Stream rate: 1
+Input stream providers: ../examples/feedback_loops/dataset/csv/input.csv
+Compile flag: 
+Executing: ./aux/compile.sh --event-description=../examples/feedback_loops/resources/patterns/feedback_loops_compiled_rules.prolog --dependency-graph --dependency-graph-directory=../examples/feedback_loops/resources/graphs --no-events
+Executing: swipl -l continuousQueries.prolog -g continuousQueries(feedback_loops,[event_description_files=['../examples/feedback_loops/resources/auxiliary/static_info.prolog','../examples/feedback_loops/resources/auxiliary/initial_conditions/inits_immune_0_0_0_0.prolog','../examples/feedback_loops/resources/patterns/feedback_loops_compiled_rules.prolog'],window_size=10,step=10,start_time=0,end_time=100,clock_tick=1,input_mode=csv,input_providers=['../examples/feedback_loops/dataset/csv/input.csv'],stream_rate=1,results_directory='../examples/feedback_loops/results']),halt.

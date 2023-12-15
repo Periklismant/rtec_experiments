@@ -5,8 +5,7 @@
 Applications=("netbillp")
 Systems=("rtec" "rtecnaive")
 #Systems=("rtecnaive")
-window_sizes=(10)
-
+window_sizes=(40)
 
 for App in ${Applications[@]}; do
 	echo "%%% Running ${App} experiments %%%"
@@ -19,7 +18,7 @@ for App in ${Applications[@]}; do
 		for window_size in ${window_sizes[@]}; do
 			echo -e "\t* Window size: ${window_size}"
 			cd ${system_path}/execution\ scripts
-			./run_rtec.sh --app=${App} --window-size=${window_size} --step=10 --input=${dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=30
+			./run_rtec.sh --app=${App} --window-size=${window_size} --step=10 --input=${dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=1000
 			cd ../../../scripts
 		done
 	done

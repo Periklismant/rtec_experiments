@@ -3,7 +3,7 @@
 App=$1
 TimelineSize=$2
 
-results_dir=../results/gklec/
+results_dir=../results/
 
 count=0
 number_of_events_sum=0

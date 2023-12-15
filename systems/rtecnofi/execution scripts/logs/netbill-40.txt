@@ -1,0 +1,39 @@
+
+Window size: 50
+Step: 50
+Start time: 0
+End time: 50
+Input mode: csv
+Stream rate: 1
+Input stream providers: ../examples/netbill_fragment/dataset/csv/netbill-40.csv
+Compile flag: true
+Hi
+Executing: ./aux/compile.sh --event-description=../examples/netbill_fragment/resources/patterns/rules.prolog --dependency-graph --dependency-graph-directory=../examples/netbill_fragment/resources/graphs --no-events
+Successful compilation! Compiled event description in: ../examples/netbill_fragment/resources/patterns/compiled_rules.prolog
+Executing: swipl -l continuousQueries.prolog -g continuousQueries(netbill_fragment,[event_description_files=['../examples/netbill_fragment/dataset/auxiliary/netbill-40.prolog','../examples/netbill_fragment/resources/patterns/compiled_rules.prolog'],window_size=50,step=50,start_time=0,end_time=50,clock_tick=1,input_mode=csv,input_providers=['../examples/netbill_fragment/dataset/csv/netbill-40.csv'],stream_rate=1,output_mode=file,results_directory='../examples/netbill_fragment/results']),halt.
+                                                                 
+	8 888888888o. 8888888 8888888888 8 8888888888       ,o888888o.    
+	8 8888    `88.      8 8888       8 8888            8888     `88.  
+	8 8888     `88      8 8888       8 8888         ,8 8888       `8. 
+	8 8888     ,88      8 8888       8 8888         88 8888           
+	8 8888.   ,88'      8 8888       8 888888888888 88 8888           
+	8 888888888P'       8 8888       8 8888         88 8888           
+	8 8888`8b           8 8888       8 8888         88 8888           
+	8 8888 `8b.         8 8888       8 8888         `8 8888       .8' 
+	8 8888   `8b.       8 8888       8 8888            8888     ,88'  
+	8 8888     `88.     8 8888       8 888888888888     `8888888P'   
+	
+Initialising logs...
+Current Window                         	: (0, 50]
+Recognition Time (ms)			: 1
+Input Entities				: 38
+Output Entities (# fluent-value pairs)	: 16
+Output Entities (# intervals)		: 18
+Output Entities (# timepoints)		: 555
+=========================================================
+Recognition Time average (ms)			: 1
+Input Entities average				: 38
+Output Entities (average # fluent-value pairs)	: 16
+Output Entities (average # intervals)		: 18
+Output Entities (average # timepoints)		: 555
+=========================================================

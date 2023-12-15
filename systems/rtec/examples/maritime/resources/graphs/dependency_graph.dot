@@ -1,0 +1,107 @@
+digraph
+{
+	node [shape=record, style=filled, fillcolor=white, fontsize=16.0];
+	rankdir=LR;
+	ranksep="1.2 equally"
+
+	1 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="withinArea(_, _)=true" border="1" color="black">withinArea(_, _)=true</td></tr>
+	</table>>
+	]
+
+	2 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="gap(_)=nearPorts" border="1" color="black">gap(_)=nearPorts</td></tr>
+		<tr><td port="gap(_)=farFromPorts" border="1" color="black">gap(_)=farFromPorts</td></tr>
+		<tr><td port="highSpeedNearCoast(_)=true" border="1" color="black">highSpeedNearCoast(_)=true</td></tr>
+		<tr><td port="trawlingMovement(_)=true" border="1" color="red">trawlingMovement(_)=true</td></tr>
+		<tr><td port="trawlingMovement(_)=false" border="1" color="red">trawlingMovement(_)=false</td></tr>
+	</table>>
+	]
+
+	3 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="stopped(_)=nearPorts" border="1" color="black">stopped(_)=nearPorts</td></tr>
+		<tr><td port="stopped(_)=farFromPorts" border="1" color="black">stopped(_)=farFromPorts</td></tr>
+		<tr><td port="lowSpeed(_)=true" border="1" color="black">lowSpeed(_)=true</td></tr>
+		<tr><td port="changingSpeed(_)=true" border="1" color="black">changingSpeed(_)=true</td></tr>
+		<tr><td port="movingSpeed(_)=below" border="1" color="black">movingSpeed(_)=below</td></tr>
+		<tr><td port="movingSpeed(_)=normal" border="1" color="black">movingSpeed(_)=normal</td></tr>
+		<tr><td port="movingSpeed(_)=above" border="1" color="black">movingSpeed(_)=above</td></tr>
+		<tr><td port="tuggingSpeed(_)=true" border="1" color="black">tuggingSpeed(_)=true</td></tr>
+		<tr><td port="trawlSpeed(_)=true" border="1" color="black">trawlSpeed(_)=true</td></tr>
+		<tr><td port="sarSpeed(_)=true" border="1" color="black">sarSpeed(_)=true</td></tr>
+	</table>>
+	]
+
+	4 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="sarMovement(_)=true" border="1" color="blue">sarMovement(_)=true</td></tr>
+		<tr><td port="sarMovement(_)=false" border="1" color="blue">sarMovement(_)=false</td></tr>
+		<tr><td port="underWay(_)=true" border="1" color="black">underWay(_)=true</td></tr>
+		<tr><td port="anchoredOrMoored(_)=true" border="1" color="black">anchoredOrMoored(_)=true</td></tr>
+		<tr><td port="tugging(_, _)=true" border="1" color="black">tugging(_, _)=true</td></tr>
+		<tr><td port="rendezVous(_, _)=true" border="1" color="black">rendezVous(_, _)=true</td></tr>
+		<tr><td port="trawling(_)=true" border="1" color="black">trawling(_)=true</td></tr>
+		<tr><td port="pilotOps(_, _)=true" border="1" color="black">pilotOps(_, _)=true</td></tr>
+	</table>>
+	]
+
+	5 [shape=none label=<<table border="0" cellspacing="0">
+		<tr><td port="drifting(_)=true" border="1" color="black">drifting(_)=true</td></tr>
+		<tr><td port="inSAR(_)=true" border="1" color="black">inSAR(_)=true</td></tr>
+		<tr><td port="loitering(_)=true" border="1" color="black">loitering(_)=true</td></tr>
+	</table>>
+	]
+
+
+	1:"withinArea(_, _)=true" -> 2:"gap(_)=nearPorts"
+	1:"withinArea(_, _)=true" -> 2:"gap(_)=farFromPorts"
+	1:"withinArea(_, _)=true" -> 3:"stopped(_)=nearPorts"
+	2:"gap(_)=nearPorts" -> 3:"stopped(_)=nearPorts"
+	2:"gap(_)=farFromPorts" -> 3:"stopped(_)=nearPorts"
+	1:"withinArea(_, _)=true" -> 3:"stopped(_)=farFromPorts"
+	2:"gap(_)=nearPorts" -> 3:"stopped(_)=farFromPorts"
+	2:"gap(_)=farFromPorts" -> 3:"stopped(_)=farFromPorts"
+	2:"gap(_)=nearPorts" -> 3:"lowSpeed(_)=true"
+	2:"gap(_)=farFromPorts" -> 3:"lowSpeed(_)=true"
+	2:"gap(_)=nearPorts" -> 3:"changingSpeed(_)=true"
+	2:"gap(_)=farFromPorts" -> 3:"changingSpeed(_)=true"
+	1:"withinArea(_, _)=true" -> 2:"highSpeedNearCoast(_)=true"
+	2:"gap(_)=nearPorts" -> 3:"movingSpeed(_)=below"
+	2:"gap(_)=farFromPorts" -> 3:"movingSpeed(_)=below"
+	2:"gap(_)=nearPorts" -> 3:"movingSpeed(_)=normal"
+	2:"gap(_)=farFromPorts" -> 3:"movingSpeed(_)=normal"
+	2:"gap(_)=nearPorts" -> 3:"movingSpeed(_)=above"
+	2:"gap(_)=farFromPorts" -> 3:"movingSpeed(_)=above"
+	4:"underWay(_)=true" -> 5:"drifting(_)=true"
+	2:"gap(_)=nearPorts" -> 3:"tuggingSpeed(_)=true"
+	2:"gap(_)=farFromPorts" -> 3:"tuggingSpeed(_)=true"
+	1:"withinArea(_, _)=true" -> 3:"trawlSpeed(_)=true"
+	2:"gap(_)=nearPorts" -> 3:"trawlSpeed(_)=true"
+	2:"gap(_)=farFromPorts" -> 3:"trawlSpeed(_)=true"
+	1:"withinArea(_, _)=true" -> 2:"trawlingMovement(_)=true"
+	2:"gap(_)=nearPorts" -> 3:"sarSpeed(_)=true"
+	2:"gap(_)=farFromPorts" -> 3:"sarSpeed(_)=true"
+	3:"changingSpeed(_)=true" -> 4:"sarMovement(_)=true"
+	2:"gap(_)=nearPorts" -> 4:"sarMovement(_)=true"
+	2:"gap(_)=farFromPorts" -> 4:"sarMovement(_)=true"
+	3:"movingSpeed(_)=below" -> 4:"underWay(_)=true"
+	3:"movingSpeed(_)=normal" -> 4:"underWay(_)=true"
+	3:"movingSpeed(_)=above" -> 4:"underWay(_)=true"
+	3:"stopped(_)=farFromPorts" -> 4:"anchoredOrMoored(_)=true"
+	1:"withinArea(_, _)=true" -> 4:"anchoredOrMoored(_)=true"
+	3:"stopped(_)=nearPorts" -> 4:"anchoredOrMoored(_)=true"
+	3:"tuggingSpeed(_)=true" -> 4:"tugging(_, _)=true"
+	3:"lowSpeed(_)=true" -> 4:"rendezVous(_, _)=true"
+	3:"stopped(_)=farFromPorts" -> 4:"rendezVous(_, _)=true"
+	1:"withinArea(_, _)=true" -> 4:"rendezVous(_, _)=true"
+	3:"trawlSpeed(_)=true" -> 4:"trawling(_)=true"
+	2:"trawlingMovement(_)=true" -> 4:"trawling(_)=true"
+	3:"sarSpeed(_)=true" -> 5:"inSAR(_)=true"
+	4:"sarMovement(_)=true" -> 5:"inSAR(_)=true"
+	3:"lowSpeed(_)=true" -> 5:"loitering(_)=true"
+	3:"stopped(_)=farFromPorts" -> 5:"loitering(_)=true"
+	1:"withinArea(_, _)=true" -> 5:"loitering(_)=true"
+	4:"anchoredOrMoored(_)=true" -> 5:"loitering(_)=true"
+	3:"lowSpeed(_)=true" -> 4:"pilotOps(_, _)=true"
+	3:"stopped(_)=farFromPorts" -> 4:"pilotOps(_, _)=true"
+	1:"withinArea(_, _)=true" -> 4:"pilotOps(_, _)=true"
+}

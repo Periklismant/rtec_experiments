@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EndTimes='100 200 400 800'
+EndTimes='150 300 600'
 
 for EndTime in $EndTimes; do
 	swipl -l ../src/gklec.prolog -q -g "runQueryAllInits(phage_g, ${EndTime}), halt."
