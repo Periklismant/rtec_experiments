@@ -22,7 +22,7 @@ list_var([El|Other],Avg,Var):-
 %           S,E where S and E are the values of the intersection interval (S,E)
 %Returns :  Total Duration of intervals
 fluents_duration(FVPIntervals,TemporalDistance,S,E,Duration):-
-    fluents_duration_auxiliary(FVPIntervals,TemporalDistance,S,E,0,Duration).
+    fluents_duration_auxiliary(FVPIntervals,TemporalDistance,S,E,0,Duration), !.
 
 fluents_duration_auxiliary([],_,_,_,Duration,Duration).
 fluents_duration_auxiliary([(_=_,Li)|OtherFluents],TemporalDistance,S,E,CurrDuration,Duration):-

@@ -107,6 +107,7 @@ querying(InputMode, InputStreams, PointerPositions, StatisticsFlag, LogFile, Out
          	 OutputMode=file, printRecognitions(ResultsFile, QueryTime, WM)),
 		% (ii) sleep until the next query time 
 		% after each window, except the first and the last one, sleep for an amount of tie calculated as the step minus the time used for event recognition on the current window.
+                !,
 		sleep_if_live_stream(InputMode, Step, StreamRate, S),
 		querying(InputMode, InputStreams, NewPointerPositions, StatisticsFlag, LogFile, OutputMode, ResultsFile, OutputThreadID, WM, Step, NextQueryTime, StartReasoningTime, EndReasoningTime, [S|InitRecTime], RecTimes, [InL|InitInput], InputList, ([OutFVpairs|InitOutputOutFVpairs],[OutLI|InitOutputOutLI],[OutLD|InitOutputOutLD]), OutputList, SDEBatch, StreamRate)
 	;

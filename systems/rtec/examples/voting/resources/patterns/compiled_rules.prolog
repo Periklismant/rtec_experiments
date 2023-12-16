@@ -112,25 +112,30 @@ happensAtEv(auxMotionOutcomeEvent(_98,carried),_80) :-
      length(_178,_184),
      _152>=_184.
 
-fi(status(_114)=proposed,status(_114)=null,40):-
-     grounding(status(_114)=proposed),
-     grounding(status(_114)=null).
+fi(status(_120)=proposed,status(_120)=null,_82):-
+     status_deadline(_82),
+     grounding(status(_120)=proposed),
+     grounding(status(_120)=null).
 
-fi(status(_114)=voting,status(_114)=voted,40):-
-     grounding(status(_114)=voting),
-     grounding(status(_114)=voted).
+fi(status(_120)=voting,status(_120)=voted,_82):-
+     status_deadline(_82),
+     grounding(status(_120)=voting),
+     grounding(status(_120)=voted).
 
-fi(status(_114)=voted,status(_114)=null,40):-
-     grounding(status(_114)=voted),
-     grounding(status(_114)=null).
+fi(status(_120)=voted,status(_120)=null,_82):-
+     status_deadline(_82),
+     grounding(status(_120)=voted),
+     grounding(status(_120)=null).
 
-fi(auxPerCloseBallot(_114)=true,auxPerCloseBallot(_114)=false,32):-
-     grounding(auxPerCloseBallot(_114)=true),
-     grounding(auxPerCloseBallot(_114)=false).
+fi(auxPerCloseBallot(_120)=true,auxPerCloseBallot(_120)=false,_82):-
+     permission_deadline(_82),
+     grounding(auxPerCloseBallot(_120)=true),
+     grounding(auxPerCloseBallot(_120)=false).
 
-fi(sanctioned(_114)=true,sanctioned(_114)=false,16):-
-     grounding(sanctioned(_114)=true),
-     grounding(sanctioned(_114)=false).
+fi(sanctioned(_120)=true,sanctioned(_120)=false,_82):-
+     sanctioned_deadline(_82),
+     grounding(sanctioned(_120)=true),
+     grounding(sanctioned(_120)=false).
 
 grounding(propose(_446,_448)) :- 
      person(_446),motion(_448).

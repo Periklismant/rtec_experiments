@@ -198,7 +198,7 @@ end_time = 100
 clock_tick = 1
 # Input Specification Parameters
 input_mode = "csv"
-input_providers = ['../../../datasets/netbill/naive_comparison_input.csv']
+input_providers = ['../../../datasets/netbillp/naive_comparison_input.csv']
 stream_rate = 1
 # Knowledge Base
 event_description = '../examples/netbillp/resources/patterns/rules.prolog'
@@ -221,7 +221,7 @@ end_time = 100
 clock_tick = 1
 # Input Specification Parameters
 input_mode = "csv"
-input_providers = ['../../../datasets/netbill/naive_comparison_input.csv']
+input_providers = ['../../../datasets/netbillnop/naive_comparison_input.csv']
 stream_rate = 1
 # Knowledge Base
 event_description = '../examples/netbillnop/resources/patterns/rules.prolog'

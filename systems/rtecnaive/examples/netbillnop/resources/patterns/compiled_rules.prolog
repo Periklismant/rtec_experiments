@@ -15,6 +15,7 @@ terminatedAt(quote(_11382,_11384,_11386)=true, _11406, _11352, _11412) :-
      _11406=<_11352,
      _11352<_11412.
 
+<<<<<<< HEAD
 fi(quote(_11386,_11388,_11390)=true,quote(_11386,_11388,_11390)=false,5):-
      grounding(quote(_11386,_11388,_11390)=true),
      grounding(quote(_11386,_11388,_11390)=false).
@@ -22,6 +23,15 @@ fi(quote(_11386,_11388,_11390)=true,quote(_11386,_11388,_11390)=false,5):-
 fi(contract(_11386,_11388,_11390)=true,contract(_11386,_11388,_11390)=false,6):-
      grounding(contract(_11386,_11388,_11390)=true),
      grounding(contract(_11386,_11388,_11390)=false).
+=======
+fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,5):-
+     grounding(quote(_2010,_2012,_2014)=true),
+     grounding(quote(_2010,_2012,_2014)=false).
+
+fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,6):-
+     grounding(contract(_2010,_2012,_2014)=true),
+     grounding(contract(_2010,_2012,_2014)=false).
+>>>>>>> 8fb2d223f4a78a2d80e15bc37c24e5d4d6084d04
 
 grounding(request_quote(_11654,_11656,_11658)) :- 
      person_pair(_11656,_11654).

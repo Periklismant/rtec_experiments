@@ -37,9 +37,12 @@ Power however is defined to answer queries.
  *********************/
 
 % deadlines on status:
-fi(status(M)=proposed, status(M)=null, 40).
-fi(status(M)=voting, status(M)=voted, 40).
-fi(status(M)=voted, status(M)=null, 40).
+fi(status(M)=proposed, status(M)=null, Dl):-
+    status_deadline(Dl).
+fi(status(M)=voting, status(M)=voted, Dl):-
+    status_deadline(Dl).
+fi(status(M)=voted, status(M)=null, Dl):-
+    status_deadline(Dl).
 
 initially(status(_M)=null).
 initiatedAt(status(M)=proposed, T) :-
@@ -101,7 +104,8 @@ holdsFor(pow(declare(_C,M))=true, I) :-
   PERMISSION
  *************/
 
-fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, 32).
+fi(auxPerCloseBallot(M)=true, auxPerCloseBallot(M)=false, Dl):-
+     permission_deadline(Dl).
 
 initiatedAt(auxPerCloseBallot(M)=true, T) :-
 	happensAt(start(status(M)=voting), T),
@@ -135,7 +139,8 @@ initiatedAt(obl(declare(_C,M,carried))=false, T) :-
   SANCTION 
  **********/
 
-fi(sanctioned(C)=true, sanctioned(C)=false, 16).
+fi(sanctioned(C)=true, sanctioned(C)=false, Dl):-
+     sanctioned_deadline(Dl).
 
 initiatedAt(sanctioned(C)=true, T) :-
 	happensAt(close_ballot(C,M), T), 
