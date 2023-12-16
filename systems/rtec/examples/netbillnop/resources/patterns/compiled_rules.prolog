@@ -1,108 +1,108 @@
 :- dynamic person/1, person_pair/2.
 
-initiatedAt(quote(_2006,_2008,_2010)=true, _2032, _1976, _2038) :-
-     happensAtIE(present_quote(_2006,_2008,_2010,_2020),_1976),
-     _2032=<_1976,
-     _1976<_2038.
+initiatedAt(quote(_11382,_11384,_11386)=true, _11408, _11352, _11414) :-
+     happensAtIE(present_quote(_11382,_11384,_11386,_11396),_11352),
+     _11408=<_11352,
+     _11352<_11414.
 
-initiatedAt(contract(_2006,_2008,_2010)=true, _2068, _1976, _2074) :-
-     happensAtIE(accept_quote(_2008,_2006,_2010),_1976),_2068=<_1976,_1976<_2074,
+initiatedAt(contract(_11382,_11384,_11386)=true, _11444, _11352, _11450) :-
+     happensAtIE(accept_quote(_11384,_11382,_11386),_11352),_11444=<_11352,_11352<_11450,
      updateVariableTemp(rule_evaluations,1),
-     holdsAtProcessedSimpleFluent(_2006,quote(_2006,_2008,_2010)=true,_1976).
+     holdsAtProcessedSimpleFluent(_11382,quote(_11382,_11384,_11386)=true,_11352).
 
-terminatedAt(quote(_2006,_2008,_2010)=true, _2030, _1976, _2036) :-
-     happensAtIE(accept_quote(_2008,_2006,_2010),_1976),
-     _2030=<_1976,
-     _1976<_2036.
+terminatedAt(quote(_11382,_11384,_11386)=true, _11406, _11352, _11412) :-
+     happensAtIE(accept_quote(_11384,_11382,_11386),_11352),
+     _11406=<_11352,
+     _11352<_11412.
 
-fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,15):-
-     grounding(quote(_2010,_2012,_2014)=true),
-     grounding(quote(_2010,_2012,_2014)=false).
+fi(quote(_11386,_11388,_11390)=true,quote(_11386,_11388,_11390)=false,15):-
+     grounding(quote(_11386,_11388,_11390)=true),
+     grounding(quote(_11386,_11388,_11390)=false).
 
-fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,15):-
-     grounding(contract(_2010,_2012,_2014)=true),
-     grounding(contract(_2010,_2012,_2014)=false).
+fi(contract(_11386,_11388,_11390)=true,contract(_11386,_11388,_11390)=false,15):-
+     grounding(contract(_11386,_11388,_11390)=true),
+     grounding(contract(_11386,_11388,_11390)=false).
 
-grounding(request_quote(_2306,_2308,_2310)) :- 
-     person_pair(_2308,_2306).
+grounding(request_quote(_11654,_11656,_11658)) :- 
+     person_pair(_11656,_11654).
 
-grounding(present_quote(_2306,_2308,_2310,_2312)) :- 
-     person_pair(_2306,_2308).
+grounding(present_quote(_11654,_11656,_11658,_11660)) :- 
+     person_pair(_11654,_11656).
 
-grounding(accept_quote(_2306,_2308,_2310)) :- 
-     person_pair(_2308,_2306).
+grounding(accept_quote(_11654,_11656,_11658)) :- 
+     person_pair(_11656,_11654).
 
-grounding(send_EPO(_2306,_2308,_2310,_2312)) :- 
-     person(_2306).
+grounding(send_EPO(_11654,_11656,_11658,_11660)) :- 
+     person(_11654).
 
-grounding(send_goods(_2306,_2308,_2310,_2312,_2314)) :- 
-     person(_2306).
+grounding(send_goods(_11654,_11656,_11658,_11660,_11662)) :- 
+     person(_11654).
 
-grounding(quote(_2312,_2314,_2316)=true) :- 
-     person_pair(_2312,_2314),role_of(_2314,consumer),role_of(_2312,merchant),\+_2312=_2314,queryGoodsDescription(_2316).
+grounding(quote(_11660,_11662,_11664)=true) :- 
+     person_pair(_11660,_11662),role_of(_11662,consumer),role_of(_11660,merchant),\+_11660=_11662,queryGoodsDescription(_11664).
 
-grounding(quote(_2312,_2314,_2316)=false) :- 
-     person_pair(_2312,_2314),role_of(_2314,consumer),role_of(_2312,merchant),\+_2312=_2314,queryGoodsDescription(_2316).
+grounding(quote(_11660,_11662,_11664)=false) :- 
+     person_pair(_11660,_11662),role_of(_11662,consumer),role_of(_11660,merchant),\+_11660=_11662,queryGoodsDescription(_11664).
 
-grounding(contract(_2312,_2314,_2316)=true) :- 
-     person_pair(_2312,_2314),role_of(_2312,merchant),role_of(_2314,consumer),\+_2312=_2314,queryGoodsDescription(_2316).
+grounding(contract(_11660,_11662,_11664)=true) :- 
+     person_pair(_11660,_11662),role_of(_11660,merchant),role_of(_11662,consumer),\+_11660=_11662,queryGoodsDescription(_11664).
 
-grounding(contract(_2312,_2314,_2316)=false) :- 
-     person_pair(_2312,_2314),role_of(_2312,merchant),role_of(_2314,consumer),\+_2312=_2314,queryGoodsDescription(_2316).
+grounding(contract(_11660,_11662,_11664)=false) :- 
+     person_pair(_11660,_11662),role_of(_11660,merchant),role_of(_11662,consumer),\+_11660=_11662,queryGoodsDescription(_11664).
 
-p(quote(_2306,_2308,_2310)=true).
+p(quote(_11654,_11656,_11658)=true).
 
-inputEntity(present_quote(_2030,_2032,_2034,_2036)).
-inputEntity(accept_quote(_2030,_2032,_2034)).
-inputEntity(request_quote(_2030,_2032,_2034)).
-inputEntity(send_EPO(_2030,_2032,_2034,_2036)).
-inputEntity(send_goods(_2030,_2032,_2034,_2036,_2038)).
+inputEntity(present_quote(_11412,_11414,_11416,_11418)).
+inputEntity(accept_quote(_11412,_11414,_11416)).
+inputEntity(request_quote(_11412,_11414,_11416)).
+inputEntity(send_EPO(_11412,_11414,_11416,_11418)).
+inputEntity(send_goods(_11412,_11414,_11416,_11418,_11420)).
 
-outputEntity(quote(_2122,_2124,_2126)=true).
-outputEntity(contract(_2122,_2124,_2126)=true).
-outputEntity(quote(_2122,_2124,_2126)=false).
-outputEntity(contract(_2122,_2124,_2126)=false).
+outputEntity(quote(_11510,_11512,_11514)=true).
+outputEntity(contract(_11510,_11512,_11514)=true).
+outputEntity(quote(_11510,_11512,_11514)=false).
+outputEntity(contract(_11510,_11512,_11514)=false).
 
-event(present_quote(_2196,_2198,_2200,_2202)).
-event(accept_quote(_2196,_2198,_2200)).
-event(request_quote(_2196,_2198,_2200)).
-event(send_EPO(_2196,_2198,_2200,_2202)).
-event(send_goods(_2196,_2198,_2200,_2202,_2204)).
+event(present_quote(_11590,_11592,_11594,_11596)).
+event(accept_quote(_11590,_11592,_11594)).
+event(request_quote(_11590,_11592,_11594)).
+event(send_EPO(_11590,_11592,_11594,_11596)).
+event(send_goods(_11590,_11592,_11594,_11596,_11598)).
 
-simpleFluent(quote(_2288,_2290,_2292)=true).
-simpleFluent(contract(_2288,_2290,_2292)=true).
-simpleFluent(quote(_2288,_2290,_2292)=false).
-simpleFluent(contract(_2288,_2290,_2292)=false).
-
-
-index(present_quote(_2370,_2424,_2426,_2428),_2370).
-index(accept_quote(_2370,_2424,_2426),_2370).
-index(request_quote(_2370,_2424,_2426),_2370).
-index(send_EPO(_2370,_2424,_2426,_2428),_2370).
-index(send_goods(_2370,_2424,_2426,_2428,_2430),_2370).
-index(quote(_2370,_2430,_2432)=true,_2370).
-index(contract(_2370,_2430,_2432)=true,_2370).
-index(quote(_2370,_2430,_2432)=false,_2370).
-index(contract(_2370,_2430,_2432)=false,_2370).
+simpleFluent(quote(_11688,_11690,_11692)=true).
+simpleFluent(contract(_11688,_11690,_11692)=true).
+simpleFluent(quote(_11688,_11690,_11692)=false).
+simpleFluent(contract(_11688,_11690,_11692)=false).
 
 
-cachingOrder2(_2658, quote(_2658,_2660,_2662)=true) :- % level in dependency graph: 1, processing order in component: 1
-     person_pair(_2658,_2660),role_of(_2660,consumer),role_of(_2658,merchant),\+_2658=_2660,queryGoodsDescription(_2662).
+index(present_quote(_11776,_11836,_11838,_11840),_11776).
+index(accept_quote(_11776,_11836,_11838),_11776).
+index(request_quote(_11776,_11836,_11838),_11776).
+index(send_EPO(_11776,_11836,_11838,_11840),_11776).
+index(send_goods(_11776,_11836,_11838,_11840,_11842),_11776).
+index(quote(_11776,_11842,_11844)=true,_11776).
+index(contract(_11776,_11842,_11844)=true,_11776).
+index(quote(_11776,_11842,_11844)=false,_11776).
+index(contract(_11776,_11842,_11844)=false,_11776).
 
-cachingOrder2(_2658, quote(_2658,_2660,_2662)=false) :- % level in dependency graph: 1, processing order in component: 2
-     person_pair(_2658,_2660),role_of(_2660,consumer),role_of(_2658,merchant),\+_2658=_2660,queryGoodsDescription(_2662).
 
-cachingOrder2(_3060, contract(_3060,_3062,_3064)=true) :- % level in dependency graph: 2, processing order in component: 1
-     person_pair(_3060,_3062),role_of(_3060,merchant),role_of(_3062,consumer),\+_3060=_3062,queryGoodsDescription(_3064).
+cachingOrder2(_12082, quote(_12082,_12084,_12086)=true) :- % level in dependency graph: 1, processing order in component: 1
+     person_pair(_12082,_12084),role_of(_12084,consumer),role_of(_12082,merchant),\+_12082=_12084,queryGoodsDescription(_12086).
 
-cachingOrder2(_3060, contract(_3060,_3062,_3064)=false) :- % level in dependency graph: 2, processing order in component: 2
-     person_pair(_3060,_3062),role_of(_3060,merchant),role_of(_3062,consumer),\+_3060=_3062,queryGoodsDescription(_3064).
+cachingOrder2(_12082, quote(_12082,_12084,_12086)=false) :- % level in dependency graph: 1, processing order in component: 2
+     person_pair(_12082,_12084),role_of(_12084,consumer),role_of(_12082,merchant),\+_12082=_12084,queryGoodsDescription(_12086).
 
-collectGrounds([send_EPO(_2278,_2292,_2294,_2296), send_goods(_2278,_2292,_2294,_2296,_2298)],person(_2278)).
+cachingOrder2(_12490, contract(_12490,_12492,_12494)=true) :- % level in dependency graph: 2, processing order in component: 1
+     person_pair(_12490,_12492),role_of(_12490,merchant),role_of(_12492,consumer),\+_12490=_12492,queryGoodsDescription(_12494).
 
-collectGrounds([present_quote(_2266,_2268,_2294,_2296), accept_quote(_2268,_2266,_2294), request_quote(_2268,_2266,_2294)],person_pair(_2266,_2268)).
+cachingOrder2(_12490, contract(_12490,_12492,_12494)=false) :- % level in dependency graph: 2, processing order in component: 2
+     person_pair(_12490,_12492),role_of(_12490,merchant),role_of(_12492,consumer),\+_12490=_12492,queryGoodsDescription(_12494).
 
-dgrounded(quote(_2632,_2634,_2636)=true, person_pair(_2632,_2634)).
-dgrounded(contract(_2544,_2546,_2548)=true, person_pair(_2544,_2546)).
-dgrounded(quote(_2456,_2458,_2460)=false, person_pair(_2456,_2458)).
-dgrounded(contract(_2368,_2370,_2372)=false, person_pair(_2368,_2370)).
+collectGrounds([send_EPO(_11666,_11680,_11682,_11684), send_goods(_11666,_11680,_11682,_11684,_11686)],person(_11666)).
+
+collectGrounds([present_quote(_11654,_11656,_11682,_11684), accept_quote(_11656,_11654,_11682), request_quote(_11656,_11654,_11682)],person_pair(_11654,_11656)).
+
+dgrounded(quote(_12026,_12028,_12030)=true, person_pair(_12026,_12028)).
+dgrounded(contract(_11938,_11940,_11942)=true, person_pair(_11938,_11940)).
+dgrounded(quote(_11850,_11852,_11854)=false, person_pair(_11850,_11852)).
+dgrounded(contract(_11762,_11764,_11766)=false, person_pair(_11762,_11764)).

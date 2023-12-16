@@ -7,33 +7,8 @@ digraph
 	1 [shape=none label=<<table border="0" cellspacing="0">
 		<tr><td port="quote(_, _, _)=true" border="1" color="red">quote(_, _, _)=true</td></tr>
 		<tr><td port="quote(_, _, _)=false" border="1" color="red">quote(_, _, _)=false</td></tr>
-		<tr><td port="per(present_quote(_, _))=false" border="1" color="blue">per(present_quote(_, _))=false</td></tr>
-		<tr><td port="per(present_quote(_, _))=true" border="1" color="blue">per(present_quote(_, _))=true</td></tr>
-	</table>>
-	]
-
-	2 [shape=none label=<<table border="0" cellspacing="0">
-		<tr><td port="obl(send_goods(_, _, _))=true" border="1" color="green4">obl(send_goods(_, _, _))=true</td></tr>
-		<tr><td port="obl(send_EPO(_, _, _))=true" border="1" color="green4">obl(send_EPO(_, _, _))=true</td></tr>
-		<tr><td port="suspended(_, _)=true" border="1" color="green4">suspended(_, _)=true</td></tr>
-		<tr><td port="suspended(_, _)=false" border="1" color="green4">suspended(_, _)=false</td></tr>
-		<tr><td port="contract(_, _, _)=true" border="1" color="green4">contract(_, _, _)=true</td></tr>
-		<tr><td port="contract(_, _, _)=false" border="1" color="green4">contract(_, _, _)=false</td></tr>
-	</table>>
-	]
-
-	3 [shape=none label=<<table border="0" cellspacing="0">
-		<tr><td port="obl(send_EPO(_, _, _))=false" border="1" color="black">obl(send_EPO(_, _, _))=false</td></tr>
-		<tr><td port="obl(send_goods(_, _, _))=false" border="1" color="black">obl(send_goods(_, _, _))=false</td></tr>
-		<tr><td port="pow(accept_quote(_, _, _))=true" border="1" color="black">pow(accept_quote(_, _, _))=true</td></tr>
 	</table>>
 	]
 
 
-	1:"quote(_, _, _)=true" -> 2:"contract(_, _, _)=true"
-	2:"contract(_, _, _)=false" -> 3:"obl(send_EPO(_, _, _))=false"
-	2:"contract(_, _, _)=false" -> 3:"obl(send_goods(_, _, _))=false"
-	1:"per(present_quote(_, _))=false" -> 2:"suspended(_, _)=true"
-	1:"quote(_, _, _)=true" -> 3:"pow(accept_quote(_, _, _))=true"
-	2:"suspended(_, _)=true" -> 3:"pow(accept_quote(_, _, _))=true"
 }
