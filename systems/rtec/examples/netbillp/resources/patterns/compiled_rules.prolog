@@ -64,9 +64,10 @@ holdsForSDFluent(pow(accept_quote(_2010,_2012,_2014))=true,_1976) :-
      holdsForProcessedSimpleFluent(_2012,suspended(_2012,merchant)=true,_2070),
      relative_complement_all(_2034,[_2052,_2070],_1976).
 
-fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,10):-
-     grounding(quote(_2010,_2012,_2014)=true),
-     grounding(quote(_2010,_2012,_2014)=false).
+fi(quote(_2016,_2018,_2020)=true,quote(_2016,_2018,_2020)=false,_1978):-
+     quote_deadline(_1978),
+     grounding(quote(_2016,_2018,_2020)=true),
+     grounding(quote(_2016,_2018,_2020)=false).
 
 fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,10):-
      grounding(contract(_2010,_2012,_2014)=true),

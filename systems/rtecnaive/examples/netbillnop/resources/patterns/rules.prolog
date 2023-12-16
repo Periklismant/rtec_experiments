@@ -41,7 +41,7 @@ initiatedAt(quote(Merch,Cons,GD)=true, T) :-
 terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T).
 % ----- a quote is terminated 5 time-points after initiated
-fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 10).
+fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 5).
 p(quote(_M,_C,_GD)=true).
 
  % *   contract	 *
@@ -56,7 +56,7 @@ initiatedAt(contract(Merch,Cons,GD)=true, T) :-
         %\+ holdsAt(suspended(Merch,merchant)=true, T),
         %\+ holdsAt(suspended(Cons,consumer)=true, T).
 % ----- a contract is terminated 10 time-points after initiated 
-fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 10).
+fi(contract(Merch,Cons,GD)=true, contract(Merch,Cons,GD)=false, 6).
 
 /*
 % ----- we do not define institutional power for the remaining actions

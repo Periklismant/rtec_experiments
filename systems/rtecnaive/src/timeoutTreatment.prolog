@@ -16,6 +16,7 @@ initiatedAt(F=NewV, T1, T, T2) :-
 	\+ inertiaCheck(F=V),
 	% initiatedAt incarnation for deadline fluents:
         dInitiatedAt(F=V, Duration, T1, T, T2).
+        %(skipLogs, ! ; updateVariableTemp(rule_evaluations, 1)).
         	%updateVariableTemp(rule_evaluations, 1).
 
 %%% dInitiatedAt(+(F=V), +Duration, +T1, -T, +T2) %%%	

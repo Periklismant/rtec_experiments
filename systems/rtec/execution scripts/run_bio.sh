@@ -1,5 +1,6 @@
 #!/bin/bash
 
+: '
 Timeline_sizes=(400 800 1600 3200)
 
 for timeline_size in ${Timeline_sizes[@]}; do
@@ -29,9 +30,10 @@ for timeline_size in ${Timeline_sizes[@]}; do
     echo "For application: $App with timeline size: $timeline_size, we have:"
     avg=$((total_run_time/count))
     echo "Average reasoning time: $avg"
-    stdev=$(echo "" | awk -v sum=${total_run_time} -v sumsq=${total_run_time_sq} -v count=${count} 'END{print sqrt(sumsq/count - (sum/count)^2)}')      
     echo "Standard deviation: $stdev"
 done
+'
+    #stdev=$(echo "" | awk -v sum=${total_run_time} -v sumsq=${total_run_time_sq} -v count=${count} 'END{print sqrt(sumsq/count - (sum/count)^2)}')      
 
 Timeline_sizes=(300 600 1200 2400)
 

@@ -43,7 +43,8 @@ terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T), 
         updateVariableTemp(rule_evaluations, 1).
 % ----- a quote is terminated 5 time-points after initiated
-fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 10).
+fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, Dl):-
+    quote_deadline(Dl).
 p(quote(_M,_C,_GD)=true).
 
  % *   contract	 *
@@ -156,30 +157,30 @@ grounding(send_goods(Ag,_,_,_,_)):-
 
 % Grounding of output entities:
 grounding(suspended(Ag,Role)=true):-
-    person(Ag),role_of(Ag,Role).
+person(Ag),role_of(Ag,Role).
 grounding(suspended(Ag,Role)=false):-
-    person(Ag),role_of(Ag,Role).
+person(Ag),role_of(Ag,Role).
 grounding(quote(M,C,GD)=true):- 
     person_pair(M,C), role_of(C, consumer), role_of(M, merchant), \+ M=C, queryGoodsDescription(GD).
 grounding(quote(M,C,GD)=false):- 
     person_pair(M,C), role_of(C, consumer), role_of(M, merchant), \+ M=C, queryGoodsDescription(GD).
 grounding(contract(M,C,GD)=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
 grounding(contract(M,C,GD)=false):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
 grounding(pow(accept_quote(C,M,GD))=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M, queryGoodsDescription(GD).
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M, queryGoodsDescription(GD).
 grounding(per(present_quote(M,C))=false):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
 grounding(per(present_quote(M,C))=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
 grounding(obl(send_EPO(C,iServer,GD))=true):-
-    person(C),role_of(C,consumer), queryGoodsDescription(GD).
+person(C),role_of(C,consumer), queryGoodsDescription(GD).
 grounding(obl(send_goods(M,iServer,GD))=true):-
-    person(M),role_of(M,merchant), queryGoodsDescription(GD).
+person(M),role_of(M,merchant), queryGoodsDescription(GD).
 grounding(obl(send_EPO(C,iServer,GD))=false):-
-    person(C),role_of(C,consumer), queryGoodsDescription(GD).
+person(C),role_of(C,consumer), queryGoodsDescription(GD).
 grounding(obl(send_goods(M,iServer,GD))=false):-
-    person(M),role_of(M,merchant), queryGoodsDescription(GD).
-
+person(M),role_of(M,merchant), queryGoodsDescription(GD).
+%
 

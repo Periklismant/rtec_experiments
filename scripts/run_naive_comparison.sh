@@ -2,10 +2,11 @@
 
 
 #Applications=("voting" "netbillnop" "netbillp")
-Applications=("netbillp")
-Systems=("rtec" "rtecnaive")
+#Applications=("netbillnop" "netbillp")
+Applications=("netbillnop")
+Systems=("rtecnaive")
 #Systems=("rtecnaive")
-window_sizes=(10 20)
+window_sizes=(80)
 
 for App in ${Applications[@]}; do
 	echo "%%% Running ${App} experiments %%%"
@@ -18,7 +19,8 @@ for App in ${Applications[@]}; do
 		for window_size in ${window_sizes[@]}; do
 			echo -e "\t* Window size: ${window_size}"
 			cd ${system_path}/execution\ scripts
-			./run_rtec.sh --app=${App} --window-size=${window_size} --step=${window_size} --input=${dataset} > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt --end-time=1000
+                        end_time=$((${window_size}*10))
+			./run_rtec.sh --app=${App} --window-size=${window_size} --step=10 --input=${dataset} --end-time=${end_time} --background-knowledge=../examples/${App}/dataset/auxiliary/domain_${window_size}.prolog > ../../../logs/naivecomp_${system}_${App}_win${window_size}.txt 
 			cd ../../../scripts
 		done
 	done

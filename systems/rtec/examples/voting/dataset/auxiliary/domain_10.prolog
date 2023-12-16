@@ -38,3 +38,7 @@ motion(10).
 
 queryMotion(M) :-
 	motion(M), Temp is M mod 3, Temp=0.
+
+status_deadline(10).
+permission_deadline(8).
+sanctioned_deadline(4).

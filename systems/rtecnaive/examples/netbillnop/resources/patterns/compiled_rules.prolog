@@ -15,11 +15,11 @@ terminatedAt(quote(_2006,_2008,_2010)=true, _2030, _1976, _2036) :-
      _2030=<_1976,
      _1976<_2036.
 
-fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,10):-
+fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,5):-
      grounding(quote(_2010,_2012,_2014)=true),
      grounding(quote(_2010,_2012,_2014)=false).
 
-fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,10):-
+fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,6):-
      grounding(contract(_2010,_2012,_2014)=true),
      grounding(contract(_2010,_2012,_2014)=false).
 

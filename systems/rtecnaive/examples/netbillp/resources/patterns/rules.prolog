@@ -43,7 +43,8 @@ terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 	happensAt(accept_quote(Cons,Merch,GD), T),
         updateVariableTemp(rule_evaluations, 1).
 % ----- a quote is terminated 5 time-points after initiated
-fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, 10).
+fi(quote(Merch,Cons,GD)=true, quote(Merch,Cons,GD)=false, Dl):-
+    quote_deadline(Dl).
 p(quote(_M,_C,_GD)=true).
 
  % *   contract	 *
@@ -137,7 +138,6 @@ initiatedAt(suspended(Cons,consumer)=true, T1, T, T2) :-
 fi(suspended(Ag,Role)=true, suspended(Ag,Role)=false, 6).
 p(suspended(_Ag,_Role)=true).
 
-
 % The elements of these domains are derived from the ground arguments of input entitites
 dynamicDomain(person(_)).
 dynamicDomain(person_pair(_,_)).
@@ -164,14 +164,14 @@ grounding(quote(M,C,GD)=true):-
 grounding(quote(M,C,GD)=false):- 
     person_pair(M,C), role_of(C, consumer), role_of(M, merchant), \+ M=C, queryGoodsDescription(GD).
 grounding(contract(M,C,GD)=true):-
-    person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
+person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
 grounding(contract(M,C,GD)=false):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ M=C, queryGoodsDescription(GD).
 grounding(pow(accept_quote(C,M,GD))=true):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M, queryGoodsDescription(GD).
 grounding(per(present_quote(M,C))=false):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
-grounding(per(present_quote(M,C))=true):-
+    grounding(per(present_quote(M,C))=true):-
     person_pair(M,C),role_of(M,merchant), role_of(C,consumer), \+ C=M.
 grounding(obl(send_EPO(C,iServer,GD))=true):-
     person(C),role_of(C,consumer), queryGoodsDescription(GD).
@@ -180,6 +180,6 @@ grounding(obl(send_goods(M,iServer,GD))=true):-
 grounding(obl(send_EPO(C,iServer,GD))=false):-
     person(C),role_of(C,consumer), queryGoodsDescription(GD).
 grounding(obl(send_goods(M,iServer,GD))=false):-
-    person(M),role_of(M,merchant), queryGoodsDescription(GD).
+        person(M),role_of(M,merchant), queryGoodsDescription(GD).
 
 
