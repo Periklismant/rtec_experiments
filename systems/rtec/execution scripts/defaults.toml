@@ -248,7 +248,7 @@ input_providers = ['../../../datasets/netbill_fragment/netbill-5.csv']
 stream_rate = 1
 # Knowledge Base
 event_description = '../examples/netbill_fragment/resources/patterns/rules.prolog'
-background_knowledge = ['../examples/netbill_fragment/dataset/auxiliary/netbill-5.prolog']
+background_knowledge = ['../examples/netbill_fragment/dataset/auxiliary/netbill.prolog']
 # Output Specification Parameters
 output_mode = "file"
 results_directory = "../examples/netbill_fragment/results"

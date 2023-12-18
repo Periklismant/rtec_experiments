@@ -6,12 +6,15 @@ terminatedAt(quote(Merch,Cons,GD)=true, T) :-
 
 % Grounding of input entities:
 grounding(present_quote(M,C,GD,_)):-
-	merchant(M), consumer(C), goods(GD).
+	person_pair(M,C), goods(GD).
 grounding(accept_quote(C,M,GD)):-
-	merchant(M), consumer(C), goods(GD).
+	person_pair(M,C), goods(GD).
+
+% The elements of these domains are derived from the ground arguments of input entitites
+dynamicDomain(person_pair(_,_)).
 
 % Grounding of output entities:
 grounding(quote(M,C,GD)=true):- 
-    merchant(M), consumer(C), goods(GD).
+    person_pair(M,C), goods(GD).
 grounding(quote(M,C,GD)=false):- 
-    merchant(M), consumer(C), goods(GD).
+    person_pair(M,C), goods(GD).

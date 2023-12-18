@@ -5,8 +5,5 @@ terminates(_, status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),acti
 	holds_at(status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),active),T),
         Ta is T - 5,
         happens(complete(presentQuote,_ID,Merchant,[Consumer,Goods]), Ta),
-        \+ initiatedBetween(status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))), active), Ta, T).
+        \+ holds_at(status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),active),Ta).
 
-initiatedBetween(status(i(Merchant,constraint(quote(Merchant,Consumer,Goods))),active), Ta, T):-
-    happens(complete(presentQuote,_ID,Merchant,[Consumer,Goods]),Tb),
-    Tb>Ta, Tb<T.

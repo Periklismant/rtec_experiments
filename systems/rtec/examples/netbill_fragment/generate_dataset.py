@@ -2,9 +2,9 @@ from sys import argv
 from random import uniform,choice
 
 events_no_str=argv[1] # > 100
-# 50 agents seems ok 
-agents_no=30 # argv[2]
-timeline_length=100
+# 30 agents seems ok 
+agents_no=10 #30 # argv[2]
+timeline_length=80
 goods="book"
 fw=open('dataset/csv/netbill-'+events_no_str+'.csv', 'w')
 

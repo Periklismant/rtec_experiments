@@ -1,3 +1,5 @@
+:- dynamic person_pair/2.
+
 initiatedAt(quote(_2008,_2010,_2012)=true, _2034, _1978, _2040) :-
      happensAtIE(present_quote(_2008,_2010,_2012,_2022),_1978),
      _2034=<_1978,
@@ -8,17 +10,17 @@ terminatedAt(quote(_2008,_2010,_2012)=true, _2032, _1978, _2038) :-
      _2032=<_1978,
      _1978<_2038.
 
-grounding(present_quote(_2256,_2258,_2260,_2262)) :- 
-     merchant(_2256),consumer(_2258),goods(_2260).
+grounding(present_quote(_2272,_2274,_2276,_2278)) :- 
+     person_pair(_2272,_2274),goods(_2276).
 
-grounding(accept_quote(_2256,_2258,_2260)) :- 
-     merchant(_2258),consumer(_2256),goods(_2260).
+grounding(accept_quote(_2272,_2274,_2276)) :- 
+     person_pair(_2274,_2272),goods(_2276).
 
-grounding(quote(_2262,_2264,_2266)=true) :- 
-     merchant(_2262),consumer(_2264),goods(_2266).
+grounding(quote(_2278,_2280,_2282)=true) :- 
+     person_pair(_2278,_2280),goods(_2282).
 
-grounding(quote(_2262,_2264,_2266)=false) :- 
-     merchant(_2262),consumer(_2264),goods(_2266).
+grounding(quote(_2278,_2280,_2282)=false) :- 
+     person_pair(_2278,_2280),goods(_2282).
 
 inputEntity(present_quote(_2032,_2034,_2036,_2038)).
 inputEntity(accept_quote(_2032,_2034,_2036)).
@@ -40,5 +42,8 @@ index(quote(_2312,_2372,_2374)=false,_2312).
 
 
 cachingOrder2(_2570, quote(_2570,_2572,_2574)=true) :- % level in dependency graph: 1, processing order in component: 1
-     merchant(_2570),consumer(_2572),goods(_2574).
+     person_pair(_2570,_2572),goods(_2574).
 
+collectGrounds([present_quote(_2226,_2228,_2244,_2246), accept_quote(_2228,_2226,_2244), quote(_2226,_2228,_2250)=false],person_pair(_2226,_2228)).
+
+dgrounded(quote(_2318,_2320,_2322)=true, person_pair(_2318,_2320)).
