@@ -433,8 +433,8 @@ runQueryForAllInitCombinations([], _, _, _).
 
 runQueryForAllInitCombinations([InitValsList|RestInitValsLists], App, EndTime, TimesFileStream):-
 	assertInits(App, InitValsList),
-        write('\tInitial values:'), nl, write('\t\t'),
-	findall(_, (initially(val(F,V)), write(F), write('='), write(V)),_), 
+        write('\t\tInitial values:'),
+	findall(_, (initially(val(F,V)), write(' '), write(F), write('='), write(V)),_), 
         nl,
 	produceLogFileInits(App, EndTime, InitValsList, LogFile),
         %write('Logfile: '), write(LogFile), nl,
@@ -442,7 +442,7 @@ runQueryForAllInitCombinations([InitValsList|RestInitValsLists], App, EndTime, T
 	query(App, EndTime, LogFile),
 	getCPUtime(Tend),
 	Tdiff is Tend - Tstart,
-        write('\tReasoning time: '), write(Tdiff), write('ms'), nl,
+        write('\t\tReasoning time: '), write(Tdiff), write('ms'), nl,
 	write(TimesFileStream, Tdiff), nl(TimesFileStream),
 	retractInits(App),
 	retractAllCached,
