@@ -1,4 +1,7 @@
-[0m[[0m[31merror[0m] [0m[0m/home/periklis/Desktop/fusemate/examples/event-calculus/src/main/scala/Main.scala:170:5: ')' expected but '@' found.[0m
-[0m[[0m[31merror[0m] [0m[0m    @rules[0m
-[0m[[0m[31merror[0m] [0m[0m    ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/examples/event-calculus/src/main/scala/Main.scala:1:36: '{' expected but 'import' found.[0m
+[0m[[0m[31merror[0m] [0m[0mpackage fm6.examples.eventCalculus import fm6._ import java.time.{OffsetDateTime, ZoneId} import java.nio.file._ import fm6.util.Logging._ import fm6.Extension import scala.io.Source import scala.collection.mutable.ListBuffer /*[0m
+[0m[[0m[31merror[0m] [0m[0m                                   ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/examples/event-calculus/src/main/scala/Main.scala:130:2: '}' expected but eof found.[0m
+[0m[[0m[31merror[0m] [0m[0m}[0m
+[0m[[0m[31merror[0m] [0m[0m ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m

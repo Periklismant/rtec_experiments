@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: plugin
+Specification-Version: 0.1.0-SNAPSHOT
+Specification-Vendor: plugin
+Implementation-Title: plugin
+Implementation-Version: 0.1.0-SNAPSHOT
+Implementation-Vendor: plugin
+Implementation-Vendor-Id: plugin
+

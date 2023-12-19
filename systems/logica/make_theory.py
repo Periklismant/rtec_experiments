@@ -5,7 +5,7 @@ agentsNo=argv[2]
 timepointsNo=argv[3]
 
 theoryFile=application+'.l'
-logicaFile=application+'-'+agentsNo+'-'+timepointsNo+'.l'
+logicaFile=application+'-'+agentsNo+'.l'
 
 f=open(theoryFile, 'r')
 fw=open(logicaFile, 'w')
@@ -18,9 +18,9 @@ fw.write('\n')
 fw.write("isTimepoint(t) :- t in Range(" + timepointsNo + ");\n\n")
 
 if application=="netbill":
-	datasetFile="/home/periklis/Desktop/RTEC2_updated/RTEC2/examples/negotiation/experiments/data/csv/negotiation-"+agentsNo+"-"+timepointsNo+"-1.csv"
+	datasetFile="../rtec/examples/netbill_fragment/dataset/csv/netbill-"+agentsNo+".csv"
 elif application=="voting":
-	datasetFile="/home/periklis/Desktop/RTEC2_updated/RTEC2/examples/voting/experiments/data/csv/voting-"+agentsNo+"-"+timepointsNo+"-1.csv"
+	datasetFile="../rtec/examples/voting_fragment/dataset/csv/voting-"+agentsNo+".csv"
 
 f2=open(datasetFile, 'r')
 for line in f2:

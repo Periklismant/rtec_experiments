@@ -18,11 +18,11 @@
 [0m[[0m[0mdebug[0m] [0m[0m	external source: Set()[0m
 [0m[[0m[0mdebug[0m] [0m[0mall 1 sources are invalidated[0m
 [0m[[0m[0mdebug[0m] [0m[0mInitial set of included nodes: fm6.examples.eventCalculus.Main.IE, fm6.examples.eventCalculus.Main[0m
-[0m[[0m[0mdebug[0m] [0m[0mRecompiling all sources: number of invalidated sources > 50.0% of all sources[0m
+[0m[[0m[0mdebug[0m] [0m[0mRecompiling all sources: number of invalidated sources > 50.0 percent of all sources[0m
 [0m[[0m[0mdebug[0m] [0m[0mcompilation cycle 1[0m
-[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/periklis/Desktop/systems-for-comparison/myfusemate/fusemate-master@1691fb41461/examples/event-calculus/target/scala-2.13/classes ...[0m
-[0m[[0m[0mdebug[0m] [0m[0mGetting org.scala-sbt:compiler-bridge_2.13:1.6.0:compile for Scala 2.13.3[0m
-[0m[[0m[0mdebug[0m] [0m[0m[zinc] Running cached compiler 36d0ca0a for Scala compiler version 2.13.3[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/periklis/rtec/tkde_experiments/systems/fusemate/examples/event-calculus/target/scala-2.13/classes ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mGetting org.scala-sbt:compiler-bridge_2.13:1.9.5:compile for Scala 2.13.3[0m
+[0m[[0m[0mdebug[0m] [0m[0m[zinc] Running cached compiler 23736aac for Scala compiler version 2.13.3[0m
 [0m[[0m[0mdebug[0m] [0m[0m[zinc] The Scala compiler is invoked with:[0m
 [0m[[0m[0mdebug[0m] [0m[0m	-deprecation[0m
 [0m[[0m[0mdebug[0m] [0m[0m	-language:postfixOps[0m
@@ -32,6 +32,6 @@
 [0m[[0m[0mdebug[0m] [0m[0m	-bootclasspath[0m
 [0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.3/scala-library-2.13.3.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	-classpath[0m
-[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/Desktop/systems-for-comparison/myfusemate/fusemate-master@1691fb41461/examples/event-calculus/target/scala-2.13/classes:/home/periklis/Desktop/systems-for-comparison/myfusemate/fusemate-master@1691fb41461/plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar:/home/periklis/Desktop/systems-for-comparison/myfusemate/fusemate-master@1691fb41461/target/scala-2.13/classes:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.3/scala-reflect-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.3/scala-compiler-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline/3.15.0/jline-3.15.0.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.3.1/jna-5.3.1.jar[0m
-[0m[[0m[0mdebug[0m] [0m[0mScala compilation took 5.647479602 s[0m
+[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/rtec/tkde_experiments/systems/fusemate/examples/event-calculus/target/scala-2.13/classes:/home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar:/home/periklis/rtec/tkde_experiments/systems/fusemate/target/scala-2.13/classes:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.3/scala-reflect-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.3/scala-compiler-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline/3.15.0/jline-3.15.0.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.3.1/jna-5.3.1.jar[0m
+[0m[[0m[0mdebug[0m] [0m[0mScala compilation took 4.373115976 s[0m
 [0m[[0m[0mdebug[0m] [0m[0mdone compiling[0m

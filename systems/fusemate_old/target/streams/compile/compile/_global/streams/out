@@ -1,0 +1,80 @@
+[0m[[0m[33mwarn[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/extensions/dl/ALCIF.scala:192:21: non-variable type argument fm6.extensions.dl.Sig.Concept in type pattern List[fm6.extensions.dl.Sig.Concept] (the underlying of List[fm6.extensions.dl.Sig.Concept]) is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m        COLLECT(cs: List[Concept], c STH DLIsA(x, c, time: @gnd))[0m
+[0m[[0m[33mwarn[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:26:7: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  val index = collection.mutable.AnyRefMap.empty[String, TimeIndexedSet[Time, TemporalAmount, Lit]] // For accessing the literals by predicate name[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:26:58: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  val index = collection.mutable.AnyRefMap.empty[String, TimeIndexedSet[Time, TemporalAmount, Lit]] // For accessing the literals by predicate name[0m
+[0m[[0m[31merror[0m] [0m[0m                                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:45:35: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m        index += (l.atom.predName -> TimeIndexedSet(l))[0m
+[0m[[0m[31merror[0m] [0m[0m                                  ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:62:40: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m          for (t <- index.values map { _.latestTime }) if (t > latestTime) latestTime = t[0m
+[0m[[0m[31merror[0m] [0m[0m                                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:68:39: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def iterator = index.valuesIterator.flatten[0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:70:7: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def forPred(s: String) = index.getOrElse(s, TimeIndexedSet.empty)[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/Interpretation.scala:70:34: type arguments [Time,TemporalAmount,Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def forPred(s: String) = index.getOrElse(s, TimeIndexedSet.empty)[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/RuleFramework.scala:260:25: type arguments [Time,TemporalAmount,RuleFramework.this.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m                    val usableForP = usable.forPred(p)[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:269:11: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m      val edb = TimeIndexedSet.empty[Time, TemporalAmount, Lit] // The edb this path is built for[0m
+[0m[[0m[31merror[0m] [0m[0m          ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:284:11: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.Or] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m      val openHeadsLater = TimeIndexedSet.empty[Time, TemporalAmount, Or] // The ordinary heads, disjunctive or definite, with a time stamp later than time[0m
+[0m[[0m[31merror[0m] [0m[0m          ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:320:13: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m        val edbClone = edb.clone() // no need to close as edb is immutable[0m
+[0m[[0m[31merror[0m] [0m[0m            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:326:13: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.Or] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m        val openHeadsLaterClone = openHeadsLater.clone()[0m
+[0m[[0m[31merror[0m] [0m[0m            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:332:24: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m          override val edb = edbClone[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:338:24: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.Or] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m          override val openHeadsLater = openHeadsLaterClone[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:642:21: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m                val newEDB = p.edb.clone()[0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:643:37: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m                for (mod <- restart.mods) {[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:660:57: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m                      val q = new Path() { override val edb = newEDB }[0m
+[0m[[0m[31merror[0m] [0m[0m                                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:699:28: type arguments [T,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m                      for (interp <- p.model.index.values) q.model ++= interp.valuesUntilIterator(nextTime)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:770:9: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m    val unsatEDBs = MSet.empty[TimeIndexedSet[Time, TemporalAmount, Lit]][0m
+[0m[[0m[31merror[0m] [0m[0m        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TableauFramework.scala:770:32: type arguments [TableauFramework.this.Time,TemporalAmount,TableauFramework.this.ruleFramework.signature.Lit] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m    val unsatEDBs = MSet.empty[TimeIndexedSet[Time, TemporalAmount, Lit]][0m
+[0m[[0m[31merror[0m] [0m[0m                               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TimeIndexedSet.scala:174:7: type arguments [Time,TemporalAmount,Value] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def empty[Time, TemporalAmount, Value <: HasTime[Time]](implicit signature: Signature[Time, TemporalAmount]) = new TimeIndexedSet[Time, TemporalAmount, Value][0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TimeIndexedSet.scala:174:118: type arguments [Time,TemporalAmount,Value] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def empty[Time, TemporalAmount, Value <: HasTime[Time]](implicit signature: Signature[Time, TemporalAmount]) = new TimeIndexedSet[Time, TemporalAmount, Value][0m
+[0m[[0m[31merror[0m] [0m[0m                                                                                                                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TimeIndexedSet.scala:175:7: type arguments [Time,TemporalAmount,Value] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m  def apply[Time, TemporalAmount, Value <: HasTime[Time]](values: Value*)(implicit signature: Signature[Time, TemporalAmount]) = {[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TimeIndexedSet.scala:176:9: type arguments [Time,TemporalAmount,Value] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m    val res = new TimeIndexedSet[Time, TemporalAmount, Value]()(signature)[0m
+[0m[[0m[31merror[0m] [0m[0m        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/src/main/scala/TimeIndexedSet.scala:176:19: type arguments [Time,TemporalAmount,Value] do not conform to class TimeIndexedSet's type parameter bounds [Time,TemporalAmount,Value <: fm6.HasTime[Time]][0m
+[0m[[0m[31merror[0m] [0m[0m    val res = new TimeIndexedSet[Time, TemporalAmount, Value]()(signature)[0m
+[0m[[0m[31merror[0m] [0m[0m                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
+[0m[[0m[31merror[0m] [0m[0m25 errors found[0m

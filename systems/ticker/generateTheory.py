@@ -3,9 +3,10 @@ from sys import argv
 agentsNo=argv[1]
 timepointsNo=argv[2]
 
-netbillTheory="netbillTheory.lars"
+#netbillTheory="netbillTheory.lars"
+netbillTheory="netbillTheoryInitTerm.lars"
 f=open(netbillTheory, 'r')
-outputFile="netbill-"+agentsNo+"-"+timepointsNo+".lars"
+outputFile="netbill-"+agentsNo+".lars"
 fw=open(outputFile, 'w')
 
 for line in f:
@@ -14,7 +15,7 @@ for line in f:
 f.close()
 fw.write('\n')
 
-datasetFile="/home/periklis/Desktop/RTEC2_updated/RTEC2/examples/negotiation/experiments/data/csv/negotiation-"+agentsNo+"-"+timepointsNo+"-1.csv"
+datasetFile="../rtec/examples/netbill_fragment/dataset/csv/netbill-"+agentsNo+".csv"
 
 for t in range(0, int(timepointsNo)):
 	fw.write("timepoint("+str(t)+").\n")

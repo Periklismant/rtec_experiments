@@ -1,16 +1,16 @@
-+0
++2
 
-Recognition Time average (ms)		: 0
+Recognition Time average (ms)		: 2
 Recognition Time standard deviation (ms): 0.0
-Recognition Time worst (ms)		: 0
+Recognition Time worst (ms)		: 2
 
-Input Entities average			: 40
+Input Entities average			: 60
 Input Entities standard deviation	: 0.0
 
-Output Entities (average number of fluent-value pairs)	: 10
+Output Entities (average number of fluent-value pairs)	: 1
 Output Entities (standard deviation)	  		: 0.0
-Output Entities (average number of intervals)	: 28
+Output Entities (average number of intervals)	: 6
 Output Entities (standard deviation)	  	: 0.0
-Output Entities (average number of timepoints)	: 105
+Output Entities (average number of timepoints)	: 23
 Output Entities (standard deviation)	 	: 0.0
-	Number of rule evaluations: [], with Sum: 40, and Avg: 
+	Number of rule evaluations: [0], with Sum: 0, and Avg: 0, and StDev: 0.0

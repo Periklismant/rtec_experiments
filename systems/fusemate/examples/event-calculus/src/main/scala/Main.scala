@@ -54,7 +54,7 @@ object Main {
     val maxAgentID = 20
     
     def get_events(eventsNo: Int): List[Lit] = {
-      val file_path = "../../../../../../rtec/examples/netbill_fragment/dataset/csv/"
+      val file_path = "../../../rtec/examples/netbill_fragment/dataset/csv/"
       val file_name = file_path + "netbill-" + eventsNo + ".csv"
       println(file_name)
       var output =  new ListBuffer[Lit]()
@@ -62,14 +62,17 @@ object Main {
       var consumers = new ListBuffer[Int]() 
       output += (IsAAt(1, goods("book"), goods))
       for (line <- Source.fromFile(file_name).getLines()) {
+        println(line)
         val lineSpl = line.split('|')
         val event_name = lineSpl(0)
+        println(event_name)
         val timepoint = lineSpl(1).toInt
+        println(timepoint)
         if (event_name == "present_quote" || event_name == "accept_quote") {
           val m = lineSpl(3).toInt
           val c = lineSpl(4).toInt
           val g = lineSpl(5)
-          if (m%10==0 && c%3>0){
+          //if (m%10==0 && c%3>0){
             if (event_name == "present_quote")
               output += (Happens(timepoint, presentQuote(merchant(m),consumer(c),goods(g))))
             if (event_name == "accept_quote")
@@ -79,7 +82,7 @@ object Main {
             if (!merchants.contains(m)){
               output += (IsAAt(1, merchant(m), merchant))
               merchants += m
-            }
+           //}
             if (!consumers.contains(c)){
               output += (IsAAt(1, consumer(c), consumer))
               consumers += c
@@ -91,7 +94,8 @@ object Main {
       output.toList
     }
 
-    val events: List[Lit] = get_events(50,100) //get_events(8,50) 
+    val events: List[Lit] = get_events(80) //get_events(8,50) 
+    println(events)
 
     @rules
     val netbillRules = List(

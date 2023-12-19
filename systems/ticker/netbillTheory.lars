@@ -1,8 +1,8 @@
 %% Helper predicates which check conditions (iii) and (iv). See below.
 
-initBetween(Merchant,Consumer,TimeStamp,TimeStamp2) :- merchant(Merchant), consumer(Consumer), timepoint(TimeStamp),timepoint(TimeStamp2),timepoint(TimeStamp3),presentQuote(Merchant,Consumer,TimeStamp3) [10000 sec],lt(TimeStamp,TimeStamp3),lt(TimeStamp3,TimeStamp2).
+initBetween(Merchant,Consumer,TimeStamp,TimeStamp2) :- merchant(Merchant), consumer(Consumer), timepoint(TimeStamp),timepoint(TimeStamp2),timepoint(TimeStamp3),presentQuote(Merchant,Consumer,TimeStamp3) [100000 sec],lt(TimeStamp,TimeStamp3),lt(TimeStamp3,TimeStamp2).
 
-brokenBetween(Merchant,Consumer,TimeStamp,TimeStamp2) :-  merchant(Merchant), consumer(Consumer), timepoint(TimeStamp),timepoint(TimeStamp2),timepoint(TimeStamp3),acceptQuote(Consumer,Merchant,TimeStamp3) [10000 sec],lt(TimeStamp,TimeStamp3),lt(TimeStamp3,TimeStamp2).
+brokenBetween(Merchant,Consumer,TimeStamp,TimeStamp2) :-  merchant(Merchant), consumer(Consumer), timepoint(TimeStamp),timepoint(TimeStamp2),timepoint(TimeStamp3),acceptQuote(Consumer,Merchant,TimeStamp3) [100000 sec],lt(TimeStamp,TimeStamp3),lt(TimeStamp3,TimeStamp2).
 
 priorInitQuote(Merchant,Consumer,TimeStamp) :-  merchant(Merchant), consumer(Consumer), timepoint(TimeStamp),timepoint(TimeStamp2),initQuote(Merchant,Consumer,TimeStamp2),lt(TimeStamp2,TimeStamp).
 
@@ -14,9 +14,9 @@ isTerminationPoint(Merchant,Consumer,TimeStamp) :- merchant(Merchant), consumer(
 
 %% Initiation and termination conditions for quote. 
 
-initQuote(Merchant,Consumer,TimeStamp) :- timepoint(TimeStamp), merchant(Merchant), consumer(Consumer), presentQuote(Merchant,Consumer,TimeStamp) [10000 sec].
+initQuote(Merchant,Consumer,TimeStamp) :- timepoint(TimeStamp), merchant(Merchant), consumer(Consumer), presentQuote(Merchant,Consumer,TimeStamp) [100000 sec].
 
-termQuote(Merchant,Consumer,TimeStamp) :- timepoint(TimeStamp), merchant(Merchant), consumer(Consumer), acceptQuote(Consumer,Merchant,TimeStamp) [10000 sec].
+termQuote(Merchant,Consumer,TimeStamp) :- timepoint(TimeStamp), merchant(Merchant), consumer(Consumer), acceptQuote(Consumer,Merchant,TimeStamp) [100000 sec].
 
 %% TimeStamp is the initiation point and TimeStamp2 is the termination point of quote.
 %% The following rule makes sure that:

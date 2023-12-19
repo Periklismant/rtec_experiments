@@ -1,0 +1,4 @@
+429ms (t=429): Set(initQuote(10,10,2))
+3717ms (t=3717): Set(termQuote(10,10,4), initQuote(10,10,2))
+0ms (t=0): Set(initQuote(10,10,2))
+200ms (t=2): Set(termQuote(10,10,4), initQuote(10,10,2), quote(10,10,2,4))
