@@ -1,1 +1,0 @@
-acceptQuote(10,10,46)

@@ -4,7 +4,7 @@ agentsNo=argv[1]
 timepointsNo=argv[2]
 
 #netbillTheory="netbillTheory.lars"
-netbillTheory="netbillTheoryInitTerm.lars"
+netbillTheory="event_description/netbillTheoryInitTerm.lars"
 f=open(netbillTheory, 'r')
 outputFile="netbill-"+agentsNo+".lars"
 fw=open(outputFile, 'w')
@@ -24,7 +24,7 @@ merchants=set()
 consumers=set()
 
 f2=open(datasetFile, 'r')
-fw2=open("eventNarrative.txt", 'w')
+fw2=open("input/eventNarrative.txt", 'w')
 for line in f2:
 	lineSpl=line.split("|")
 	eventName=lineSpl[0]

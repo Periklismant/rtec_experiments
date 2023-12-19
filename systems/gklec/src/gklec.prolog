@@ -339,11 +339,8 @@ holds(val(X,V), 0):-
 holds(val(X,V), Tk):-
 	Tk>0,
 	happens(tick,Tk),
-        % nl, write('Checking if '), write(holds(val(X,V), Tk)), write(' holds.'), nl,
 	initiates(Event,val(X,V),[Ti,Tk]),
-        %write(val(X,V)), write(' is initiated at '), write(Ti), nl,
 	\+ clipped(Event,val(X,V),[Ti,Tk]),
-        %write('It is not clipped between these timepoints'), nl,
 	assertz(cached(holds(val(X, V), Tk))).
 
 clipped(Event, val(X,V), [Ti,Tk]):-
@@ -435,16 +432,17 @@ getCPUtime(T):-
 runQueryForAllInitCombinations([], _, _, _).
 
 runQueryForAllInitCombinations([InitValsList|RestInitValsLists], App, EndTime, TimesFileStream):-
-	write('Application: '), write(App), nl,
 	assertInits(App, InitValsList),
-	findall(_, (initially(val(F,V)), write('Initial value of '), write(F), write(' is '), write(V), nl),_),
+        write('\tInitial values:'), nl, write('\t\t'),
+	findall(_, (initially(val(F,V)), write(F), write('='), write(V)),_), 
+        nl,
 	produceLogFileInits(App, EndTime, InitValsList, LogFile),
-	write('Logfile: '), write(LogFile), nl,
+        %write('Logfile: '), write(LogFile), nl,
 	getCPUtime(Tstart),
 	query(App, EndTime, LogFile),
 	getCPUtime(Tend),
 	Tdiff is Tend - Tstart,
-        write('Execution time: '), write(Tdiff), write('ms'), nl,
+        write('\tReasoning time: '), write(Tdiff), write('ms'), nl,
 	write(TimesFileStream, Tdiff), nl(TimesFileStream),
 	retractInits(App),
 	retractAllCached,
@@ -563,8 +561,8 @@ produceLogFile(App, EndTime, LogFile):-
 	atom_concat(LogFilePrefix2, '.txt', LogFile).
 
 produceTimesFile(App, EndTime, TimesFile):-
-	%atom_concat('gklec_results/', App, TimesFilePrefix0),
-	atom_concat(App, '-', TimesFilePrefix1),
+	atom_concat('../logs/', App, TimesFilePrefix0),
+	atom_concat(TimesFilePrefix0, '-', TimesFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(TimesFilePrefix1, EndTimeStr, TimesFilePrefix2),
 	atom_concat(TimesFilePrefix2, '-times.txt', TimesFile).

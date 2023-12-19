@@ -1,0 +1,2 @@
+presentQuote(10,10,2)
+acceptQuote(10,10,4)

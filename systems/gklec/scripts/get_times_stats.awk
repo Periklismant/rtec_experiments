@@ -1,4 +1,6 @@
 #!/bin/awk -f
+# The input is a log file containing execution times.
+# Such files are generated in ../logs/ after each execution.
 
 BEGIN{sum=0; sumsq=0; count=0}
 {
