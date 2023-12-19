@@ -19,7 +19,7 @@ for timeline_size in ${Timeline_sizes[@]}; do
         do
             echo -e "\t\tInitial values: h=$H s=$S"
             start_time=`date +%s.%N`
-            ./run_rtec.sh --app=feedback_loops --background-knowledge=../examples/feedback_loops/resources/auxiliary/static_info.prolog --background-knowledge=../examples/feedback_loops/resources/auxiliary/initial_conditions/inits_${App}_${H}_${S}.prolog --end-time=${timeline_size} > logs/logs_${App}_${H}_${S}.txt
+            ./run_rtec.sh --app=feedback_loops --background-knowledge=../examples/feedback_loops/resources/auxiliary/static_info.prolog --background-knowledge=../examples/feedback_loops/resources/auxiliary/initial_conditions/inits_${App}_${H}_${S}.prolog --end-time=${timeline_size} > ../../../logs/rtec/log_${App}_${H}_${S}.txt
             end_time=`date +%s.%N`
             run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
             run_time=${run_time_float%.*}

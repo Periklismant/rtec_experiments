@@ -543,7 +543,7 @@ valsToNum(Vals, NumID):-
 	valsToNum0(Vals, 1, 0, NumID).
 
 produceLogFileInits(App, EndTime, InitValsList, LogFile):-
-	atom_concat('../results/', App, LogFilePrefix0),
+	atom_concat('../../../logs/gklec/results-', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),
@@ -554,17 +554,17 @@ produceLogFileInits(App, EndTime, InitValsList, LogFile):-
 	atom_concat(LogFile0, '.txt', LogFile).
 
 produceLogFile(App, EndTime, LogFile):-
-	atom_concat('../results/', App, LogFilePrefix0),
+	atom_concat('../../../logs/gklec/results-', App, LogFilePrefix0),
 	atom_concat(LogFilePrefix0, '-', LogFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(LogFilePrefix1, EndTimeStr, LogFilePrefix2),
 	atom_concat(LogFilePrefix2, '.txt', LogFile).
 
 produceTimesFile(App, EndTime, TimesFile):-
-	atom_concat('../logs/', App, TimesFilePrefix0),
+	atom_concat('../../../logs/gklec/times-', App, TimesFilePrefix0),
 	atom_concat(TimesFilePrefix0, '-', TimesFilePrefix1),
 	atom_number(EndTimeStr, EndTime),
 	atom_concat(TimesFilePrefix1, EndTimeStr, TimesFilePrefix2),
-	atom_concat(TimesFilePrefix2, '-times.txt', TimesFile).
+	atom_concat(TimesFilePrefix2, '.txt', TimesFile).
 
 
