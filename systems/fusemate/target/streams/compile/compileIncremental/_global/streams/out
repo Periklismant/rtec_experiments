@@ -1,6 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0m[zinc] IncrementalCompile -----------[0m
-[0m[[0m[0mdebug[0m] [0m[0mIncrementalCompile.incrementalCompile[0m
-[0m[[0m[0mdebug[0m] [0m[0mprevious = Stamps for: 332 products, 16 sources, 1 libraries[0m
-[0m[[0m[0mdebug[0m] [0m[0mcurrent source = Set(${BASE}/src/main/scala/Config.scala, ${BASE}/src/main/scala/util/SpaceTime.scala, ${BASE}/src/main/scala/util/LayeredSet.scala, ${BASE}/src/main/scala/Signature.scala, ${BASE}/src/main/scala/TableauFramework.scala, ${BASE}/src/main/scala/util/Graph.scala, ${BASE}/src/main/scala/package.scala, ${BASE}/src/main/scala/Interpretation.scala, ${BASE}/src/main/scala/util/package.scala, ${BASE}/src/main/scala/extensions/dl/ALCIF.scala, ${BASE}/src/main/scala/InferenceEngine.scala, ${BASE}/src/main/scala/extensions/dl/DLIE.scala, ${BASE}/src/main/scala/util/Logging.scala, ${BASE}/src/main/scala/extensions/dl/Sig.scala, ${BASE}/src/main/scala/RuleFramework.scala, ${BASE}/src/main/scala/TimeIndexedSet.scala)[0m
-[0m[[0m[0mdebug[0m] [0m[0m> initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(),API Changes: Set())[0m
-[0m[[0m[0mdebug[0m] [0m[0mNo changes[0m

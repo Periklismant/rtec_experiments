@@ -20,3 +20,8 @@ systems/rtec/examples/maritime_no_fi/dataset/csv/*.csv
 systems/rtecnofi/examples/maritime_no_fi/dataset/csv/*.csv
 systems/rtec/examples/maritime/results/*.txt
 systems/rtec/examples/*/results/*.txt
+systems/fusemate/examples/event-calculus/target/*
+systems/fusemate/repl/target/*
+systems/fusemate/project/target/*
+systems/fusemate/target/*
+
