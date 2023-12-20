@@ -6,6 +6,8 @@ sudo apt-add-repository ppa:swi-prolog/stable
 sudo apt-get update
 sudo apt-get install swi-prolog
 
+#git
+
 #sCASP
 # install ciao Prolog
 git clone https://github.com/ciao-lang/ciao

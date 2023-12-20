@@ -237,10 +237,9 @@ class TableauFramework[T, TemporalAmount](val ruleFramework: RuleFramework[T, Te
       for ((stratum, i) <- (strata.zipWithIndex))
         for (predName <- stratum) sindex(predName) = i
 
-      if (Config.showStratification) println("Strata, topologically sorted, from low to high: " + (strata map { _.mkString("{", ", ", "}") }).mkString(" → "))
-    } else {
-      // if (Config.showStratification) println("Stratification is off")
-    }
+      //if (Config.showStratification) println("Strata, topologically sorted, from low to high: " + (strata map { _.mkString("{", ", ", "}") }).mkString(" → "))
+    } //else {
+      // if (Config.showStratification) println("Stratification is off") }
 
 
       // def index(s: String): Int = if (enabled) sindex(s) else 0
@@ -597,10 +596,10 @@ class TableauFramework[T, TemporalAmount](val ruleFramework: RuleFramework[T, Te
                 if (Config.verbosePreds.nonEmpty) {
                   // print all literals for current time as specified in Config.verbosePreds
                   for (l <- (p.closedLits) filter { l => Config.verbosePreds exists { _ matches l.atom.predName } }) {
-                    loglnt(timeFormatter(t), l)
+                    //loglnt(timeFormatter(t), l)
                   }
                 }
-                loglnt(timeFormatter(t), s"[$s]")
+                //loglnt(timeFormatter(t), s"[$s]")
                 lastVerbPath = p
                 lastVerbPathTime = t
                 lastVerbNrLaterEDB = s

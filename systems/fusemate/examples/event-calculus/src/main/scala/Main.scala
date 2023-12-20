@@ -7,6 +7,7 @@ import fm6.util.Logging._
 import fm6.Extension
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
+import java.io._
 
 /*
  * Event Calculus demo
@@ -66,18 +67,14 @@ object Main {
     def get_events(eventsNo: Int): List[Lit] = {
       val file_path = "../../../rtec/examples/netbill_fragment/dataset/csv/"
       val file_name = file_path + "netbill-" + eventsNo + ".csv"
-      println(file_name)
       var output =  new ListBuffer[Lit]()
       var merchants = new ListBuffer[Int]()
       var consumers = new ListBuffer[Int]() 
       output += (IsAAt(1, goods("book"), goods))
       for (line <- Source.fromFile(file_name).getLines()) {
-        println(line)
         val lineSpl = line.split('|')
         val event_name = lineSpl(0)
-        println(event_name)
         val timepoint = lineSpl(1).toInt
-        println(timepoint)
         if (event_name == "present_quote" || event_name == "accept_quote") {
           val m = lineSpl(3).toInt
           val c = lineSpl(4).toInt
@@ -105,7 +102,6 @@ object Main {
     }
 
     val events: List[Lit] = get_events(eventsNo) 
-    println(events)
 
     @rules
     val netbillRules = List(
@@ -133,22 +129,26 @@ object Main {
       )
     
     val models = new IE.Models(netbillRules, events)
+    val writer = new PrintWriter(new File("../../../../logs/fusemate/netbill_eventsNo"+eventsNo+".txt"))  //specify the file path
 
     for (m <- models) {
-      println(s"=====")
-      println(s"Model")
-      println(s"=====")
+      writer.write(s"=====")
+      writer.write(s"Model")
+      writer.write(s"=====")
 
-      for (l <- m.toList sortBy { _.time })
+      for (l <- m.toList sortBy { _.time }){
         l match {
-          case l @ POS(Happens(_, _)) => logln(l)
-          case l @ POS(HoldsAt(_, _)) => logln(l)
-          case l @ NEG(HoldsAt(_, _)) => logln(l)
-          case l @ POS(Initiated(_, _)) => logln(l)
-          case l @ POS(Terminated(_, _)) => logln(l)
-          case l @ POS(StronglyTerminated(_, _)) => logln(l)
+          case l @ POS(Happens(_, _)) => writer.write(l.toString)
+          case l @ POS(HoldsAt(_, _)) => writer.write(l.toString)
+          case l @ NEG(HoldsAt(_, _)) => writer.write(l.toString)
+          case l @ POS(Initiated(_, _)) => writer.write(l.toString)
+          case l @ POS(Terminated(_, _)) => writer.write(l.toString)
+          case l @ POS(StronglyTerminated(_, _)) => writer.write(l.toString)
           case _ => ()
         }
+        writer.write(s"\n")
+      }
     }
+    writer.close()
   }
 }
