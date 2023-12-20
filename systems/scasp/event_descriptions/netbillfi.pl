@@ -1,7 +1,7 @@
 % Basic Event Calculus
 
 %% Include the BASIC EVENT CALCULUS THEORY
-#include '../src/bec.incl'.
+#include 'src/bec.incl'.
 
 %% Grounding of Entities %% 
 goods(book).
