@@ -53,8 +53,6 @@ lazy val repl = (project in file("repl"))
     mainClass in assembly := Some("scala.tools.nsc.MainGenericRunner"),
   )
 
-
-
 // Use sbt assembly to make target/scala-2.13/fusemate-util-0.1.jar for inclusion in external projects
 lazy val util = (project in file("util"))
   .settings(
@@ -62,30 +60,6 @@ lazy val util = (project in file("util"))
     // assemblyMergeStrategy in assembly := { case x => MergeStrategy.rename }, // Makes assembly terribly slow!
     assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
     assemblyJarName in assembly := s"fusemate-util-${version.value}.jar"
-  )
-
-
-lazy val ijcar = (project in file("examples/IJCAR-2020"))
-  .dependsOn(root)
-  .dependsOn(util)
-  .dependsOn(plugin)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.0",
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.ijcar.Main"),
-    // The stage task forces a javadoc.jar build, which could slow down stage tasks performance. In order to deactivate this behaviour, add this to your build.sbt
-    mappings in (Compile, packageDoc) := Seq(),
-  )
-
-lazy val scratch = (project in file("examples/scratch"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.scratch.Main"),
-    mappings in (Compile, packageDoc) := Seq(),
   )
 
 lazy val eventCalculus = (project in file("examples/event-calculus"))
@@ -98,74 +72,7 @@ lazy val eventCalculus = (project in file("examples/event-calculus"))
     mappings in (Compile, packageDoc) := Seq(),
   )
 
-
-lazy val socrates = (project in file("examples/socrates"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.socrates.Main"),
-    mappings in (Compile, packageDoc) := Seq(),
-  )
-
-lazy val taxi = (project in file("examples/taxi"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    libraryDependencies +=  "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.taxi.Main"),
-    mappings in (Compile, packageDoc) := Seq(),
-    // assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
-    // assemblyJarName in assembly := s"taxi.jar"
-  )
-
-lazy val beef = (project in file("examples/beef"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
-    libraryDependencies += "org.scalaj" %% "scalaj-http" % "2.4.2",
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.1",
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.beef.Main"),
-    mappings in (Compile, packageDoc) := Seq()
-  )
-
-lazy val descriptionLogic = (project in file("examples/description-logic"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.descriptionLogic.Main"),
-    mappings in (Compile, packageDoc) := Seq()
-  )
-
-lazy val frocos = (project in file("examples/FroCoS-2021"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.frocos.Main"),
-    mappings in (Compile, packageDoc) := Seq()
-  )
-
-lazy val cade = (project in file("examples/CADE-28"))
-  .dependsOn(plugin)
-  .dependsOn(root)
-  .enablePlugins(JavaAppPackaging)
-  .settings(
-    scalacOptions += "-Xplugin:plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT.jar",
-    mainClass in Compile := Some("fm6.examples.cade.Main"),
-    mappings in (Compile, packageDoc) := Seq()
-  )
-
 lazy val all = project
-  .aggregate(plugin, root, repl, util, eventCalculus, descriptionLogic, ijcar, frocos, cade, scratch, taxi, beef, socrates)
+  .aggregate(plugin, root, repl, util, eventCalculus)
 
 

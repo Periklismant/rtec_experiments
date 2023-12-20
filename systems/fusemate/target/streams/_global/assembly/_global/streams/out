@@ -24,4 +24,4 @@
 [0m[[0m[0mdebug[0m] [0m[0mMerging 'META-INF/maven/org.jline/jline/pom.properties' with strategy 'discard'[0m
 [0m[[0m[0mdebug[0m] [0m[0mMerging 'META-INF/maven/org.jline/jline/pom.xml' with strategy 'discard'[0m
 [0m[[0m[0minfo[0m] [0m[0mStrategy 'discard' was applied to 19 files (Run the task at debug level to see details)[0m
-[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /home/periklis/rtec/tkde_experiments/systems/fusemate/target/scala-2.13/fusemate-0.1.jar[0m
+[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /home/periman/demokritos/rtec/tkde_experiments/systems/fusemate/target/scala-2.13/fusemate-0.1.jar[0m

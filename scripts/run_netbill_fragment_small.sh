@@ -8,7 +8,7 @@ EventNos=(10 20 40 80)
 echo "Reasoning with RTEC on a fragment of NetBill."
 cd ../systems/rtec/execution\ scripts
 for event_no in ${EventNos[@]}; do
-    echo "Number of events: ${event_no}"
+    echo -e "\tNumber of events: ${event_no}"
         start_time=`date +%s.%N`
         ./run_rtec.sh --app=netbill_fragment --window-size=50 --step=50 --end-time=50 --input=../examples/netbill_fragment/dataset/csv/netbill-${event_no}.csv > logs/netbill-${event_no}.txt
         end_time=`date +%s.%N`
@@ -22,7 +22,7 @@ cd ../../../scripts
 echo "Reasoning with sCASP on a fragment of voting."
 cd ../systems/scasp
 for event_no in ${EventNos[@]}; do
-    echo "Number of events: ${event_no}"
+    echo -e "\tNumber of events: ${event_no}"
     echo "?- holdsAt(quote(M,C,book), T)." > query.pl
     echo "#include 'input/netbill-${event_no}.pl'." > event_description.pl
     cat event_descriptions/netbill.pl >> event_description.pl

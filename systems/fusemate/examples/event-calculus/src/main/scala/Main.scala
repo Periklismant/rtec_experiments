@@ -29,6 +29,18 @@ object Main {
   // The Event Calculus axioms are defined in fm6/src/main/scala/InferenceEngine.scala 
 
   def main(args: Array[String]): Unit = {
+    println("Reasoning with Fusemate on a fragment of NetBill.") 
+
+    val eventsNos = Array(10, 20, 40, 80)
+    for (eventsNo <- eventsNos){
+      println("\tNumber of events: "+eventsNo)
+      val startTime = System.currentTimeMillis()
+      run_netbill(eventsNo)
+      val duration = System.currentTimeMillis() - startTime
+      println("\tReasoning time: "+duration+"ms")
+    }
+  }
+  def run_netbill(eventsNo: Int): Unit = {
 
     fm6.Config.stratification = true
     fm6.Config.verbose = true
@@ -51,8 +63,6 @@ object Main {
 
     case class quote(m: Individual, c: Individual, gd: Individual) extends Fluent
 
-    val maxAgentID = 20
-    
     def get_events(eventsNo: Int): List[Lit] = {
       val file_path = "../../../rtec/examples/netbill_fragment/dataset/csv/"
       val file_name = file_path + "netbill-" + eventsNo + ".csv"
@@ -94,7 +104,7 @@ object Main {
       output.toList
     }
 
-    val events: List[Lit] = get_events(80) //get_events(8,50) 
+    val events: List[Lit] = get_events(eventsNo) 
     println(events)
 
     @rules

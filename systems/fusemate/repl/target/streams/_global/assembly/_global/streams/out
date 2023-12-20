@@ -29,4 +29,4 @@
 [0m[[0m[0mdebug[0m] [0m[0mMerging 'rootdoc.txt' with strategy 'concat'[0m
 [0m[[0m[0minfo[0m] [0m[0mStrategy 'concat' was applied to a file (Run the task at debug level to see details)[0m
 [0m[[0m[0minfo[0m] [0m[0mStrategy 'discard' was applied to 19 files (Run the task at debug level to see details)[0m
-[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /home/periklis/rtec/tkde_experiments/systems/fusemate/repl/target/scala-2.13/fusemate-repl-0.1.0-SNAPSHOT.jar[0m
+[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /home/periman/demokritos/rtec/tkde_experiments/systems/fusemate/repl/target/scala-2.13/fusemate-repl-0.1.0-SNAPSHOT.jar[0m

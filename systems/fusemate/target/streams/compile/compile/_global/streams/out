@@ -1,4 +1,4 @@
-[0m[[0m[33mwarn[0m] [0m[0m/home/periklis/desktop/fusemate/src/main/scala/extensions/dl/ALCIF.scala:192:21: non-variable type argument fm6.extensions.dl.Sig.Concept in type pattern List[fm6.extensions.dl.Sig.Concept] (the underlying of List[fm6.extensions.dl.Sig.Concept]) is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m/home/periman/demokritos/rtec/tkde_experiments/systems/fusemate/src/main/scala/extensions/dl/ALCIF.scala:192:21: non-variable type argument fm6.extensions.dl.Sig.Concept in type pattern List[fm6.extensions.dl.Sig.Concept] (the underlying of List[fm6.extensions.dl.Sig.Concept]) is unchecked since it is eliminated by erasure[0m
 [0m[[0m[33mwarn[0m] [0m[0m        COLLECT(cs: List[Concept], c STH DLIsA(x, c, time: @gnd))[0m
 [0m[[0m[33mwarn[0m] [0m[0m                    ^[0m
 [0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
