@@ -1,0 +1,7 @@
+0ms (t=0): Set(initQuote(10,10,1))
+0ms (t=0): Set(termQuote(10,10,6), initQuote(10,10,1))
+0ms (t=0): Set(termQuote(10,10,6), termQuote(10,10,16), initQuote(10,10,1))
+0ms (t=0): Set(initQuote(10,10,31), termQuote(10,10,6), termQuote(10,10,16), initQuote(10,10,1))
+0ms (t=0): Set(initQuote(10,10,31), termQuote(10,10,6), termQuote(10,10,16), initQuote(10,10,1), termQuote(10,10,36))
+0ms (t=0): Set(initQuote(10,10,31), termQuote(10,10,6), initQuote(10,10,41), termQuote(10,10,16), initQuote(10,10,1), termQuote(10,10,36))
+0ms (t=0): Set(initQuote(10,10,31), termQuote(10,10,6), termQuote(10,10,46), initQuote(10,10,41), termQuote(10,10,16), initQuote(10,10,1), termQuote(10,10,36))

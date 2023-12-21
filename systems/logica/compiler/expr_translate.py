@@ -39,6 +39,7 @@ class QL(object):
       'ToUInt64': 'CAST(%s AS UINT64)',
       'ToString': 'CAST(%s AS STRING)',
       # Aggregation.
+      '1': 'MIN(%s)',  # Should be ANY_VALUE, but using MIN, so it works everywhere.
       'Aggr': '%s',  # Placeholder to use formulas for aggregation.
       'Agg+': 'SUM(%s)',
       'Agg++': 'ARRAY_CONCAT_AGG(%s)',
@@ -56,9 +57,6 @@ class QL(object):
       'DateAddDay': 'DATE_ADD({0}, INTERVAL {1} DAY)',
       'DateDiffDay': 'DATE_DIFF({0}, {1}, DAY)',
       'Element': '{0}[OFFSET({1})]',
-      'Enumerate': ('ARRAY(SELECT STRUCT('
-                    'ROW_NUMBER() OVER () AS n, x AS element) '
-                    'FROM UNNEST(%s) as x)'),
       'IsNull': '(%s IS NULL)',
       'Join': 'ARRAY_TO_STRING(%s)',
       'Like': '({0} LIKE {1})',
@@ -90,12 +88,14 @@ class QL(object):
       '!=': '%s != %s',
       '++': 'CONCAT(%s, %s)',
       'in': '%s IN UNNEST(%s)',
+      'is': '%s IS %s',
+      'is not': '%s IS NOT %s',
       '||': '%s OR %s',
       '&&': '%s AND %s',
       '%': 'MOD(%s, %s)'
   }
-  BULK_FUNCTIONS = {}
-  BULK_FUNCTIONS_ARITY_RANGE = {}
+  BULK_FUNCTIONS = None
+  BULK_FUNCTIONS_ARITY_RANGE = None
 
   # When adding any analytic functions please check that ConvertAnalytic
   # function handles them correctly.
@@ -164,7 +164,7 @@ class QL(object):
           del d[k]
     for d in [self.built_in_infix_operators,
               self.built_in_functions]:
-      CleanDictionary(self.built_in_infix_operators)
+      CleanDictionary(d)
 
   @classmethod
   def BasisFunctions(cls):
@@ -186,18 +186,22 @@ class QL(object):
     reader = processed_functions.GetCsv()
     header = next(reader)
 
+    bulk_functions = {}
+    bulk_functions_arity_range = {}
     for row in reader:
       row = dict(list(zip(header, row)))
       if row['function'][0] == '$':
         # TODO: Process operators.
         continue
       function_name = CamelCase(row['function'])
-      cls.BULK_FUNCTIONS[function_name] = (
+      bulk_functions[function_name] = (
           '%s(%s)' % (row['sql_function'], '%s'))
-      cls.BULK_FUNCTIONS_ARITY_RANGE[function_name] = (
+      bulk_functions_arity_range[function_name] = (
           int(row['min_args']),
           float('inf')
           if row['has_repeated_args'] == '1' else int(row['max_args']))
+    cls.BULK_FUNCTIONS = bulk_functions
+    cls.BULK_FUNCTIONS_ARITY_RANGE = bulk_functions_arity_range
 
   def BuiltInFunctionArityRange(self, f):
     """Returns arity of the built-in function."""
@@ -233,10 +237,10 @@ class QL(object):
   def Infix(self, op, args):
     return op % (args['left'], args['right'])
 
-  def Subscript(self, record, subscript):
+  def Subscript(self, record, subscript, record_is_table):
     if isinstance(subscript, int):
       subscript = 'col%d' % subscript
-    return self.dialect.Subscript(record, subscript)
+    return self.dialect.Subscript(record, subscript, record_is_table)
 
   def IntLiteral(self, literal):
     return str(literal['number'])
@@ -252,8 +256,13 @@ class QL(object):
     return ', '.join([self.ConvertToSql(e)
                       for e in literal['element']])
 
-  def ListLiteral(self, literal):
-    return self.dialect.ArrayPhrase() % self.ListLiteralInternals(literal)
+  def ListLiteral(self, literal, element_type_name):
+    suffix = ('::' + element_type_name + '[]'
+              if self.dialect.Name() == 'PostgreSQL'
+              else '')
+    return (
+      self.dialect.ArrayPhrase() %
+      self.ListLiteralInternals(literal)) + suffix
 
   def BoolLiteral(self, literal):
     return literal['the_bool']
@@ -265,9 +274,35 @@ class QL(object):
   def PredicateLiteral(self, literal):
     if self.convert_to_json:
       return '{"predicate_name": "%s"}' % (literal['predicate_name'])
-    return 'STRUCT("%s" AS predicate_name)' % literal['predicate_name']
+    return self.dialect.PredicateLiteral(literal['predicate_name'])
 
-  def Variable(self, variable):
+  def VariableMaybeTableSQLite(self, variable, expression_type):
+    def MakeSubscript(subscripted_variable, subscripted_field):
+      return {'expression': 
+              {'subscript': {'record': {'variable': 
+                                        {'var_name': subscripted_variable, 
+                                         'dont_expand': True}},
+                             'subscript': {
+                               'literal': {'the_symbol': {
+                                 'symbol': subscripted_field}}}}}}
+    expr = self.vocabulary[variable['var_name']]
+    if '.' not in expr and 'dont_expand' not in variable:
+
+      if not isinstance(expression_type, dict):
+        raise self.exception_maker(
+          'Could not create record ' + color.Warn(expr) + 
+          '. Type inference is ' +
+          'required to convert table rows to records in SQLite.')
+      return self.ConvertToSql({'record': {'field_value': [
+        {'field': k,
+          'value': MakeSubscript(variable['var_name'], k)}
+        for k in sorted(expression_type, key=StrIntKey)
+      ]}})
+    return expr    
+
+  def Variable(self, variable, expression_type):
+    if self.dialect.Name() == 'SqLite':
+      return self.VariableMaybeTableSQLite(variable, expression_type)
     if variable['var_name'] in self.vocabulary:
       return self.vocabulary[variable['var_name']]
     else:
@@ -292,7 +327,7 @@ class QL(object):
           value=self.ConvertToSql(f_v['value']['expression'])))
     return '{%s}' % ', '.join(json_field_values)
 
-  def Record(self, record):
+  def Record(self, record, record_type=None):
     if self.convert_to_json:
       return self.RecordAsJson(record)
     # TODO: Move this to dialects.py.
@@ -308,6 +343,13 @@ class QL(object):
         for f_v in record['field_value'])
     if self.dialect.Name() == 'Trino':
       return '(SELECT %s)' % arguments_str
+    if self.dialect.Name() == 'PostgreSQL':
+      assert record_type, json.dumps(record, indent=' ')
+      args = ', '.join(
+        self.ConvertToSql(f_v['value']['expression'])
+        for f_v in sorted(record['field_value'],
+                          key=lambda x: StrIntKey(x['field'])))
+      return 'ROW(%s)::%s' % (args, record_type)
     return 'STRUCT(%s)' % arguments_str
 
   def GenericSqlExpression(self, record):
@@ -381,11 +423,11 @@ class QL(object):
 
   def SubIfStruct(self, implication, subscript):
     """Optimizing SQL for subscript of an 'if' statement.
-    
+
     Args:
       implication: Implication syntax tree.
       subscript: Subscript string.
-      
+
     Returns:
       optimized SQL if all consequences are syntactic records, or None
       otherwise.
@@ -416,12 +458,29 @@ class QL(object):
         'implication': {'if_then': new_if_thens, 'otherwise': new_otherwise}}
     return self.ConvertToSql(new_expr)
 
+  def ConvertToSqlForGroupBy(self, expression):
+    if 'literal' in expression and 'the_string' in expression['literal']:
+      # To calm down PSQL:
+      return f"({self.ConvertToSql(expression)} || '')"
+    return self.ConvertToSql(expression)
+
+  def ExpressionIsTable(self, expression):
+    return (
+      'variable' in expression and
+      'dont_expand' in expression['variable'] and
+      self.VariableIsTable(expression['variable']['var_name']))
+  
+  def VariableIsTable(self, variable_name):
+    return '.' not in self.vocabulary[variable_name]
+
   def ConvertToSql(self, expression):
     """Converting Logica expression into SQL."""
     # print('EXPR:', expression)
     # Variables.
     if 'variable' in expression:
-      return self.Variable(expression['variable'])
+      the_type = expression.get('type', {}).get('the_type', 'Any')
+      return self.Variable(expression['variable'],
+                           the_type)
 
     # Literals.
     if 'literal' in expression:
@@ -431,7 +490,14 @@ class QL(object):
       if 'the_string' in literal:
         return self.StrLiteral(literal['the_string'])
       if 'the_list' in literal:
-        return self.ListLiteral(literal['the_list'])
+        the_list = literal['the_list']
+        element_type = expression.get('type', {}).get('element_type_name', None)
+        if self.dialect.Name() == 'PostgreSQL' and element_type is None:
+          raise self.exception_maker(color.Format(
+              'Array needs type in PostgreSQL: '
+              '{warning}{the_list}{end}.', dict(
+                  the_list=expression['expression_heritage'])))  
+        return self.ListLiteral(the_list, element_type)
       if 'the_bool' in literal:
         return self.BoolLiteral(literal['the_bool'])
       if 'the_null' in literal:
@@ -538,11 +604,23 @@ class QL(object):
           return simplified_sub
       # Couldn't optimize, just return the '.' expression.
       record = self.ConvertToSql(sub['record'])
-      return self.Subscript(record, subscript)
+      return self.Subscript(record, subscript, self.ExpressionIsTable(sub['record']))
 
     if 'record' in expression:
       record = expression['record']
-      return self.Record(record)
+      record_type = expression.get('type', {}).get('type_name', None)
+      if self.dialect.Name() == 'PostgreSQL' and record_type is None:
+        rendered_type = expression.get('type', {}).get('rendered_type', None)
+        raise self.exception_maker(color.Format(
+            'Record needs type in PostgreSQL: '
+            '{warning}{record}{end} was inferred only '
+            'an incomplete type {warning}{type}{end}.', dict(
+                record=expression['expression_heritage'],
+                type=rendered_type)))
+    
+      return self.Record(
+        record,
+        record_type=record_type)
 
     if 'combine' in expression:
       return '(%s)' % (
@@ -563,3 +641,10 @@ class QL(object):
     assert False, (
         'Logica bug: expression %s failed to compile for unknown reason.' %
         str(expression))
+
+def StrIntKey(k):
+  if isinstance(k, str):
+    return k
+  if isinstance(k, int):
+    return '%03d' % k
+  assert False, 'x:%s' % str(k)  

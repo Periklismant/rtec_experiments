@@ -1,1 +1,22 @@
-[0m[[0m[0mdebug[0m] [0m[0mUptodate: /home/periman/demokritos/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/api[0m
+[0m[[0m[0minfo[0m] [0m[0mMain Scala API documentation to /home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/api...[0m
+[0m[[0m[0mdebug[0m] [0m[0mGetting org.scala-sbt:compiler-bridge_2.13:1.9.5:compile for Scala 2.13.3[0m
+[0m[[0m[0mdebug[0m] [0m[0mCalling Scaladoc with arguments:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-d[0m
+[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/api[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-deprecation[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-language:postfixOps[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-feature[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-language:implicitConversions[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-bootclasspath[0m
+[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.3/scala-library-2.13.3.jar[0m
+[0m[[0m[0mdebug[0m] [0m[0m	-classpath[0m
+[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.3/scala-reflect-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.3/scala-compiler-2.13.3.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline/3.15.0/jline-3.15.0.jar:/home/periklis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.3.1/jna-5.3.1.jar[0m
+[0m[[0m[0mdebug[0m] [0m[0m	/home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/src/main/scala/Fusemate.scala[0m
+[0m[[0m[33mwarn[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/src/main/scala/Fusemate.scala:66:9: Tag '@result' is not recognised[0m
+[0m[[0m[33mwarn[0m] [0m[0m        /** Normalizes a rule given by its head lits and body lits comprised of untimed IsA and and HasA[0m
+[0m[[0m[33mwarn[0m] [0m[0m        ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/src/main/scala/Fusemate.scala:134:9: Tag '@returns' is not recognised[0m
+[0m[[0m[33mwarn[0m] [0m[0m        /** Converts a cgi (concept :- concept1, ..., conceptn) into a rule. The head concept can be 'FAIL'.[0m
+[0m[[0m[33mwarn[0m] [0m[0m        ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m
+[0m[[0m[0minfo[0m] [0m[0mMain Scala API documentation successful.[0m

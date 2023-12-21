@@ -34,6 +34,7 @@ if '.' not in __package__:
   from compiler import functors
   from compiler import rule_translate
   from parser_py import parse
+  from type_inference.research import infer
 else:
   from ..common import color
   from ..compiler import dialects
@@ -41,6 +42,7 @@ else:
   from ..compiler import functors
   from ..compiler import rule_translate
   from ..parser_py import parse
+  from ..type_inference.research import infer
 
 PredicateInfo = collections.namedtuple('PredicateInfo',
                                        ['embeddable'])
@@ -135,6 +137,11 @@ class Annotations(object):
   def __init__(self, rules, user_flags):
     # Extracting DefineFlags first, so that we can use flags in @Ground
     # annotations.
+    if 'logica_default_engine' in user_flags:
+      self.default_engine = user_flags['logica_default_engine']
+    else:
+      self.default_engine = 'bigquery'
+
     self.annotations = self.ExtractAnnotations(
         rules, restrict_to=['@DefineFlag', '@ResetFlagValue'])
     self.user_flags = user_flags
@@ -154,7 +161,7 @@ class Annotations(object):
       preamble += (
           '-- Initializing PostgreSQL environment.\n'
           'set client_min_messages to warning;\n'
-          'create schema if not exists logica_test;\n\n')
+          'create schema if not exists logica_home;\n\n')
     return preamble
 
   def BuildFlagValues(self):
@@ -165,12 +172,14 @@ class Annotations(object):
     programmatic_flag_values = {}
     for flag, a in self.annotations['@ResetFlagValue'].items():
       programmatic_flag_values[flag] = a.get('1', '${%s}' % flag)
+    system_flags = set(['logica_default_engine'])
+    allowed_flags_set = set(default_values) | system_flags
 
-    if not set(self.user_flags) <= set(default_values):
+    if not set(self.user_flags) <= allowed_flags_set:
       raise rule_translate.RuleCompileException(
           'Undefined flags used: %s' % list(
-              set(self.user_flags) - set(default_values)),
-          str(set(self.user_flags) - set(default_values)))
+              set(self.user_flags) - allowed_flags_set),
+          str(set(self.user_flags) - allowed_flags_set))
     flag_values = default_values
     flag_values.update(**programmatic_flag_values)
     flag_values.update(**self.user_flags)
@@ -192,7 +201,6 @@ class Annotations(object):
     result = {}
     for k, v in self.annotations['@AttachDatabase'].items():
       if '1' not in v:
-        print('>>', v)
         AnnotationError('@AttachDatabase must have a single argument.',
                         v)
       result[k] = v['1']
@@ -245,14 +253,34 @@ class Annotations(object):
     return FieldValuesAsList(self.annotations['@OrderBy'][predicate_name])
 
   def Dataset(self):
-    return self.ExtractSingleton('@Dataset', 'logica_test')
+    default_dataset = 'logica_test'
+    # This change is intended for all engines in the future.
+    if self.Engine() == 'psql':
+      default_dataset = 'logica_home'
+    return self.ExtractSingleton('@Dataset', default_dataset)
 
   def Engine(self):
-    engine = self.ExtractSingleton('@Engine', 'bigquery')
+    engine = self.ExtractSingleton('@Engine', self.default_engine)
     if engine not in dialects.DIALECTS:
       AnnotationError('Unrecognized engine: %s' % engine,
                       self.annotations['@Engine'][engine])
     return engine
+ 
+  def ShouldTypecheck(self):
+    engine = self.Engine()
+
+    if '@Engine' not in self.annotations:
+      return engine == 'psql'
+    if len(self.annotations['@Engine'].values()) == 0:
+      return  engine == 'psql'
+    
+    engine_annotation = list(self.annotations['@Engine'].values())[0]
+    if 'type_checking' not in engine_annotation:
+      if engine == 'psql':
+        return True
+      else:
+        return False
+    return engine_annotation['type_checking']
 
   def ExtractSingleton(self, annotation_name, default_value):
     if not self.annotations[annotation_name]:
@@ -394,6 +422,17 @@ class Annotations(object):
         ql.convert_to_json = True
 
         annotation = rule['head']['predicate_name']
+        # Checking for aggregations.
+        aggregated_fields = [
+          fv['field']
+          for fv in rule['head']['record']['field_value']
+          if 'aggregation' in fv['value']]
+        if aggregated_fields:
+          raise rule_translate.RuleCompileException(
+                'Annotation may not use aggregation, but field '
+                '%s is aggregated.' % (
+                    color.Warn(aggregated_fields[0])),
+                rule_text)
         field_values_json_str = ql.ConvertToSql(
             {'record': rule['head']['record']})
         try:
@@ -487,17 +526,39 @@ class LogicaProgram(object):
       predicate_name = rule['head']['predicate_name']
       self.defined_predicates.add(predicate_name)
       self.rules.append((predicate_name, rule))
+    self.CheckDistinctConsistency()
     # We need to recompute annotations, because 'Make' created more rules and
     # annotations.
     self.annotations = Annotations(extended_rules, self.user_flags)
+
+    # Infering types if requested.
+    self.typing_preamble = ''
+    self.required_type_definitions = {}
+    self.predicate_signatures = {}
+    self.typing_engine = None
+    if self.annotations.ShouldTypecheck():
+      self.typing_preamble = self.RunTypechecker()
+
     # Build udfs, populating custom_udfs and custom_udf_definitions.
     self.BuildUdfs()
     # Function compilation may have added irrelevant defines:
     self.execution = None
 
-    if False:
-      self.RunTypechecker()
-
+  def CheckDistinctConsistency(self):
+    is_distinct = {}
+    for p, r in self.rules:
+      distinct_before = is_distinct.get(p, None)
+      distinct_here = 'distinct_denoted' in r
+      if distinct_before is None:
+        is_distinct[p] = distinct_here
+      else:
+        if distinct_before != distinct_here:
+          raise rule_translate.RuleCompileException(
+              color.Format(
+                  'Either all rules of a predicate must be distinct denoted '
+                  'or none. Predicate {warning}{p}{end} violates it.',
+                  dict(p=p)), r['full_text'])
+  
   def UnfoldRecursion(self, rules):
     annotations = Annotations(rules, {})
     f = functors.Functors(rules)
@@ -530,7 +591,15 @@ class LogicaProgram(object):
     Raises:
       TypeInferenceError if there are any type errors.
     """
-    inference.CheckTypes(self.rules)
+    rules = [r for _, r in self.rules]
+    typing_engine = infer.TypesInferenceEngine(rules)
+    typing_engine.InferTypes()
+    self.typing_engine = typing_engine
+    type_error_checker = infer.TypeErrorChecker(rules)
+    type_error_checker.CheckForError(mode='raise')
+    self.predicate_signatures = typing_engine.predicate_signature
+    self.required_type_definitions.update(typing_engine.collector.definitions)
+    return typing_engine.typing_preamble
 
   def RunMakes(self, rules):
     """Runs @Make instructions."""
@@ -578,14 +647,12 @@ class LogicaProgram(object):
     if len(rules) == 1:
       [rule] = rules
       result = (
-          self.SingleRuleSql(rule, allocator, external_vocabulary) +
+          self.SingleRuleSql(rule, allocator, external_vocabulary,
+                             must_not_be_nil=True) +
           self.annotations.OrderByClause(name) +
           self.annotations.LimitClause(name))
-      if result.startswith('/* nil */'):
-        raise rule_translate.RuleCompileException(
-          'Single rule is nil for predicate %s. '
-          'Recursion unfolding failed.' % color.Warn(name),
-          rule['full_text'])
+      # Exception should be raised by SingleRuleSql.
+      assert not result.startswith('/* nil */')
       return result
     elif len(rules) > 1:
       rules_sql = []
@@ -751,6 +818,10 @@ class LogicaProgram(object):
                                                                [])
     self.execution.dependencies_of = self.functors.args_of
     self.execution.dialect = dialects.Get(self.annotations.Engine())
+  
+  def UpdateExecutionWithTyping(self):
+    if self.execution.dialect.Name() == 'PostgreSQL':
+      self.execution.preamble += '\n' + self.typing_preamble
 
   def FormattedPredicateSql(self, name, allocator=None):
     """Printing top-level formatted SQL statement with defines and exports."""
@@ -766,6 +837,8 @@ class LogicaProgram(object):
       sql = self.FunctionSql(name, allocator)
     else:
       sql = self.PredicateSql(name, allocator)
+
+    self.UpdateExecutionWithTyping()
 
     assert self.execution.workflow_predicates_stack == [name], (
         'Logica internal error: unexpected workflow stack: %s' %
@@ -850,7 +923,7 @@ class LogicaProgram(object):
           [r] = rules
           rs = rule_translate.ExtractRuleStructure(
               r, allocator, None)
-          rs.ElliminateInternalVariables(assert_full_ellimination=False)
+          rs.ElliminateInternalVariables(assert_full_ellimination=False, unfold_records=False)
           new_tables.update(rs.tables)
           InjectStructure(s, rs)
 
@@ -877,11 +950,15 @@ class LogicaProgram(object):
                           }
                       }
                   })
+                elif table_var == '*':
+                  s.vars_unification.append({
+                    'left': {'variable': {'var_name': clause_var}},
+                    'right': rs.SelectAsRecord()
+                  })
                 else:
                   extra_hint = '' if table_var != '*' else (
                       ' Are you using ..<rest of> for injectible predicate? '
-                      'Please list the fields that you extract explicitly. '
-                      'Tracking bug: b/131759583.')
+                      'Please list the fields that you extract explicitly.')
                   raise rule_translate.RuleCompileException(
                       color.Format(
                           'Predicate {warning}{table_predicate_rsql}{end} '
@@ -907,7 +984,7 @@ class LogicaProgram(object):
 
   def SingleRuleSql(self, rule,
                     allocator=None, external_vocabulary=None,
-                    is_combine=False):
+                    is_combine=False, must_not_be_nil=False):
     """Producing SQL for a given rule in the program."""
     allocator = allocator or self.NewNamesAllocator()
     r = rule
@@ -916,11 +993,33 @@ class LogicaProgram(object):
     s = rule_translate.ExtractRuleStructure(
         r, allocator, external_vocabulary)
 
-    s.ElliminateInternalVariables(assert_full_ellimination=False)
+    # TODO(2023 July): Was this always redundant?
+    # s.ElliminateInternalVariables(assert_full_ellimination=False)
 
     self.RunInjections(s, allocator)
     s.ElliminateInternalVariables(assert_full_ellimination=True)
     s.UnificationsToConstraints()
+    type_inference = infer.TypeInferenceForStructure(s, self.predicate_signatures)
+    type_inference.PerformInference()
+    error_checker = infer.TypeErrorChecker([type_inference.quazy_rule])
+    error_checker.CheckForError('raise')
+    # New types may arrive here when we have an injetible predicate with variables
+    # which specific record type depends on the inputs. 
+    self.required_type_definitions.update(type_inference.collector.definitions)
+    self.typing_preamble = infer.BuildPreamble(self.required_type_definitions)
+
+    if 'nil' in s.tables.values():
+      if must_not_be_nil:
+        raise rule_translate.RuleCompileException(
+          'Single rule is nil for predicate %s. '
+          'Recursion unfolding failed.' % color.Warn(s.this_predicate_name),
+          rule['full_text'])
+      else:
+        # Calling compilation could result in type error, as
+        # types coming from nil are not known.
+        # Return a rule marked for deletion.
+        return '/* nil */ SELECT 42'
+
     try:
       sql = s.AsSql(self.MakeSubqueryTranslator(allocator), self.flag_values)
     except RuntimeError as runtime_error:
@@ -930,6 +1029,7 @@ class LogicaProgram(object):
             s.full_rule_text)
       else:
         raise runtime_error
+    # TODO: Should this be removed?
     if 'nil' in s.tables.values():
       # Mark rule for deletion.
       sql = '/* nil */' + sql
@@ -988,8 +1088,9 @@ class SubqueryTranslator(object):
       dependency_sql = self.program.UseFlagsAsParameters(dependency_sql)
       self.execution.workflow_predicates_stack.pop()
       maybe_drop_table = (
-          'DROP TABLE IF EXISTS %s;\n' % ground.table_name
-          if ground.overwrite else '')
+          'DROP TABLE IF EXISTS %s%s;\n' % ((
+              ground.table_name if ground.overwrite else '',
+              self.execution.dialect.MaybeCascadingDeletionWord())))
       export_statement = (
           maybe_drop_table +
           'CREATE TABLE {name} AS {dependency_sql}'.format(
@@ -1074,13 +1175,15 @@ def InjectStructure(target, source):
   target.vars_unification.extend(source.vars_unification)
   target.unnestings.extend(source.unnestings)
   target.constraints.extend(source.constraints)
+  target.synonym_log.update(source.synonym_log)
 
 
 def RecursionError():
   return color.Format(
-      'The rule appears to use recursion. '
-      '{warning}Recursion{end} is neither supported by '
-      'Logica nor by StandardSQL.')
+      'Recursion in this rule is {warning}too deep{end}. It is running '
+      'over Python defualt recursion limit. If this is intentional use '
+      '{warning}sys.setrecursionlimit(10000){end} command in your '
+      'notebook, or script.')
 
 
 def RaiseCompilerError(message, context):

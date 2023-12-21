@@ -19,7 +19,7 @@ done
 cd ../../../scripts
 
 # Run sCASP
-echo "Reasoning with sCASP on a fragment of voting."
+echo "Reasoning with sCASP on a fragment of NetBill."
 cd ../systems/scasp
 for event_no in ${EventNos[@]}; do
     echo -e "\tNumber of events: ${event_no}"
@@ -32,4 +32,17 @@ for event_no in ${EventNos[@]}; do
 done
 
 # Run jRECfi
-echo "Reasoning with jRECfi on a fragment of voting."
+echo "Reasoning with jRECfi on a fragment of NetBill."
+
+# Run Ticker
+
+
+# Run Fusemate
+echo "Reasoning with Fusemate on a fragment of NetBill."
+cd ../systems/fusemate/examples/event-calculus
+./run.sh
+cd ../../../../scripts
+
+# Run Logica
+
+# Run jRECrbt

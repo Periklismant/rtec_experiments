@@ -42,6 +42,16 @@ else:
   from ..compiler.dialect_libraries import recursion_library
   from ..parser_py import parse
 
+import datetime
+
+class Timer:
+  def __init__(self, name):
+    self.name = name
+    self.time = datetime.datetime.now()
+
+  def Stop(self):
+    print('%s / micros elapsed:' % self.name, (datetime.datetime.now() - self.time).microseconds)
+
 
 class FunctorError(Exception):
   """Exception thrown when Make is bad."""
@@ -67,6 +77,20 @@ def Walk(x, act):
   if isinstance(x, dict):
     for k in x:
       r |= Walk(x[k], act)
+  return r
+
+
+def WalkWithTaboo(x, act, taboo):
+  """Walking over a dictionary of lists, modifying and/or collecting info."""
+  r = set()
+  r |= set(act(x))
+  if isinstance(x, list):
+    for v in x:
+      r |= WalkWithTaboo(v, act, taboo)
+  if isinstance(x, dict):
+    for k in x:
+      if k not in taboo:
+        r |= WalkWithTaboo(x[k], act, taboo)
   return r
 
 
@@ -172,9 +196,18 @@ class Functors(object):
     while queue:
       e = queue.popleft()
       result.add(e)
-      for a in self.ArgsOf(e):
+      args_of_e = self.ArgsOf(e)
+      if isinstance(args_of_e, set):
+        arg_type = 'final'
+      else:
+        arg_type = 'preliminary'
+
+      for a in args_of_e:
         if a not in result:
-          queue.append(a)
+          if arg_type == 'preliminary':
+            queue.append(a)
+          else:
+            result.add(a)
 
     del self.args_of[functor]
 
@@ -219,6 +252,12 @@ class Functors(object):
       if needs_building and not something_built:
         raise FunctorError('Could not resolve Make order.',
                            str(needs_building))
+    surviving_rules = self.CountSurvivingRules(self.extended_rules)
+    for p, c in surviving_rules.items():
+      if c == 0:
+        raise FunctorError('All rules contain nil for predicate %s. '
+                           'Recursion unfolding failed.' % color.Warn(p), p)
+
     if False:
       with open('/tmp/functors.dot', 'w') as w:
         w.write('digraph Functors {\n')
@@ -384,6 +423,27 @@ class Functors(object):
       depth = depth_map.get(p, {}).get('1', 8)
       self.UnfoldRecursivePredicate(p, my_cover[p], depth, new_rules)
     return new_rules
+
+  def CountSurvivingRules(self, rules):
+    rules_per_predicate = {}
+    class NilCounter:
+      def __init__(self):
+        self.nil_count  = 0
+      def CountNils(self, node):
+        if isinstance(node, dict):
+          if 'predicate_name' in node:
+            if node['predicate_name'] == 'nil':
+              self.nil_count += 1
+        return []
+    for rule in rules:
+      p = rule['head']['predicate_name']
+      c = NilCounter()
+      WalkWithTaboo(rule, c.CountNils,
+                    # Do not walk into predicate value literals.
+                    taboo=['the_predicate'])
+      rules_per_predicate[p] = rules_per_predicate.get(p,0) + (
+        c.nil_count == 0)
+    return rules_per_predicate
 
   def RecursiveAnalysis(self, depth_map):
     """Finds recursive cycles and predicates that would unfold them."""

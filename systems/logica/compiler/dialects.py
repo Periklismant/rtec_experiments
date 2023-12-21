@@ -24,12 +24,14 @@ if '.' not in __package__:
   from compiler.dialect_libraries import sqlite_library
   from compiler.dialect_libraries import trino_library
   from compiler.dialect_libraries import presto_library
+  from compiler.dialect_libraries import databricks_library
 else:
   from ..compiler.dialect_libraries import bq_library
   from ..compiler.dialect_libraries import psql_library
   from ..compiler.dialect_libraries import sqlite_library
   from ..compiler.dialect_libraries import trino_library
   from ..compiler.dialect_libraries import presto_library
+  from ..compiler.dialect_libraries import databricks_library
 
 def Get(engine):
   return DIALECTS[engine]()
@@ -37,6 +39,13 @@ def Get(engine):
 
 class Dialect(object):
   pass
+
+  # Default methods:
+  def MaybeCascadingDeletionWord(self):
+    return ''  # No CASCADE is needed by default.
+  
+  def PredicateLiteral(self, predicate_name):
+    return "'predicate_name:%s'" % predicate_name
 
 
 class BigQueryDialect(Dialect):
@@ -53,9 +62,9 @@ class BigQueryDialect(Dialect):
         '++': 'CONCAT(%s, %s)',
     }
 
-  def Subscript(self, record, subscript):
+  def Subscript(self, record, subscript, record_is_table):
     return '%s.%s' % (record, subscript)
-  
+
   def LibraryProgram(self):
     return bq_library.library
 
@@ -71,6 +80,10 @@ class BigQueryDialect(Dialect):
   def DecorateCombineRule(self, rule, var):
     return rule
 
+  def PredicateLiteral(self, predicate_name):
+    return 'STRUCT("%s" AS predicate_name)' % predicate_name
+
+  
 class SqLiteDialect(Dialect):
   """SqLite SQL dialect."""
 
@@ -97,77 +110,11 @@ class SqLiteDialect(Dialect):
         'Least': 'MIN(%s)',
         'Greatest': 'MAX(%s)',
         'ToString': 'CAST(%s AS TEXT)',
+        'DateAddDay': "DATE({0}, {1} || ' days')",
     }
 
   def DecorateCombineRule(self, rule, var):
-    """Resolving ambiguity of aggregation scope."""
-    # Entangling result of aggregation with a variable that comes from a list
-    # unnested inside a combine expression, to make it clear that aggregation
-    # must be done in the combine. 
-    rule = copy.deepcopy(rule)
-
-    rule['head']['record']['field_value'][0]['value'][
-      'aggregation']['expression']['call'][
-      'record']['field_value'][0]['value'] = (
-      {
-        'expression': {
-          'call': {
-            'predicate_name': 'MagicalEntangle',
-            'record': {
-              'field_value': [
-                {
-                  'field': 0,
-                  'value': rule['head']['record']['field_value'][0]['value'][
-                    'aggregation']['expression']['call'][
-                      'record']['field_value'][0]['value']      
-                },
-                {
-                  'field': 1,
-                  'value': {
-                    'expression': {
-                      'variable': {
-                        'var_name': var
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
-    )
-
-    if 'body' not in rule:
-      rule['body'] = {'conjunction': {'conjunct': []}}
-    rule['body']['conjunction']['conjunct'].append(
-      {
-        "inclusion": {
-          "list": {
-            "literal": {
-              "the_list": {
-                "element": [
-                  {
-                    "literal": {
-                      "the_number": {
-                        "number": "0"
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "element": {
-            "variable": {
-              "var_name": var
-            }
-          }
-        }
-      }      
-    )
-    return rule
-
+    return DecorateCombineRule(rule, var)
 
   def InfixOperators(self):
     return {
@@ -176,8 +123,11 @@ class SqLiteDialect(Dialect):
         'in': 'IN_LIST(%s, %s)'
     }
 
-  def Subscript(self, record, subscript):
-    return 'JSON_EXTRACT(%s, "$.%s")' % (record, subscript)
+  def Subscript(self, record, subscript, record_is_table):
+    if record_is_table:
+      return '%s.%s' % (record, subscript)
+    else:
+      return 'JSON_EXTRACT(%s, "$.%s")' % (record, subscript)
   
   def LibraryProgram(self):
     return sqlite_library.library
@@ -200,20 +150,26 @@ class PostgreSQL(Dialect):
   def BuiltInFunctions(self):
     return {
         'Range': '(SELECT ARRAY_AGG(x) FROM GENERATE_SERIES(0, {0} - 1) as x)',
+        'RangeOf' : '(SELECT ARRAY_AGG(x) FROM GENERATE_SERIES(0, ARRAY_LENGTH({0}, 1) - 1) as x)',
         'ToString': 'CAST(%s AS TEXT)',
+        'ToInt64': 'CAST(%s AS BIGINT)',
         'Element': '({0})[{1} + 1]',
-        'Size': 'ARRAY_LENGTH(%s, 1)',
-        'Count': 'COUNT(DISTINCT {0})'
+        'Size': 'COALESCE(ARRAY_LENGTH({0}, 1), 0)',
+        'Count': 'COUNT(DISTINCT {0})',
+        'MagicalEntangle': '(CASE WHEN {1} = 0 THEN {0} ELSE NULL END)',
+        'ArrayConcat': '{0} || {1}',
+        'Split': 'STRING_TO_ARRAY({0}, {1})'
       }
 
   def InfixOperators(self):
     return {
         '++': 'CONCAT(%s, %s)',
+        'in': '%s = ANY(%s)'
     }
 
-  def Subscript(self, record, subscript):
+  def Subscript(self, record, subscript, record_is_table):
     return '(%s).%s' % (record, subscript)
-  
+
   def LibraryProgram(self):
     return psql_library.library
 
@@ -224,10 +180,13 @@ class PostgreSQL(Dialect):
     return 'ARRAY[%s]'
 
   def GroupBySpecBy(self):
-    return 'name'
+    return 'expr'
 
   def DecorateCombineRule(self, rule, var):
-    return rule
+    return DecorateCombineRule(rule, var)
+  
+  def MaybeCascadingDeletionWord(self):
+    return ' CASCADE'  # Need to cascade in PSQL.
 
 
 class Trino(Dialect):
@@ -251,9 +210,9 @@ class Trino(Dialect):
         '++': 'CONCAT(%s, %s)',
     }
 
-  def Subscript(self, record, subscript):
+  def Subscript(self, record, subscript, record_is_table):
     return '%s.%s' % (record, subscript)
-  
+
   def LibraryProgram(self):
     return trino_library.library
 
@@ -274,7 +233,7 @@ class Presto(Dialect):
 
   def Name(self):
     return 'Presto'
-  
+
   def BuiltInFunctions(self):
     return {
         'Range': 'SEQUENCE(0, %s - 1)',
@@ -289,9 +248,9 @@ class Presto(Dialect):
         '++': 'CONCAT(%s, %s)',
     }
 
-  def Subscript(self, record, subscript):
+  def Subscript(self, record, subscript, record_is_table):
     return '%s.%s' % (record, subscript)
-  
+
   def LibraryProgram(self):
     return presto_library.library
 
@@ -307,12 +266,132 @@ class Presto(Dialect):
   def DecorateCombineRule(self, rule, var):
     return rule
 
+def DecorateCombineRule(rule, var):
+  """Resolving ambiguity of aggregation scope."""
+  # Entangling result of aggregation with a variable that comes from a list
+  # unnested inside a combine expression, to make it clear that aggregation
+  # must be done in the combine. 
+  rule = copy.deepcopy(rule)
+
+  rule['head']['record']['field_value'][0]['value'][
+    'aggregation']['expression']['call'][
+    'record']['field_value'][0]['value'] = (
+    {
+      'expression': {
+        'call': {
+          'predicate_name': 'MagicalEntangle',
+          'record': {
+            'field_value': [
+              {
+                'field': 0,
+                'value': rule['head']['record']['field_value'][0]['value'][
+                  'aggregation']['expression']['call'][
+                    'record']['field_value'][0]['value']      
+              },
+              {
+                'field': 1,
+                'value': {
+                  'expression': {
+                    'variable': {
+                      'var_name': var
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  )
+
+  if 'body' not in rule:
+    rule['body'] = {'conjunction': {'conjunct': []}}
+  rule['body']['conjunction']['conjunct'].append(
+    {
+      "inclusion": {
+        "list": {
+          "literal": {
+            "the_list": {
+              "element": [
+                {
+                  "literal": {
+                    "the_number": {
+                      "number": "0"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "element": {
+          "variable": {
+            "var_name": var
+          }
+        }
+      }
+    }      
+  )
+  return rule
+
+class Databricks(Dialect):
+    """Databricks dialect"""
+
+    #TODO: add DATEDIFF and NOW function
+
+    def Name(self):
+        return 'Databricks'
+
+    def BuiltInFunctions(self):
+        return {
+            'ToString': 'CAST(%s AS STRING)',
+            'ToInt64': 'CAST(%s AS BIGINT)',
+            'ToFloat64': 'CAST(%s AS DOUBLE)',
+            'AnyValue': 'ANY_VALUE(%s)',
+            'ILike': '({0}::string ILIKE {1})',
+            'Like': '({0}::string LIKE {1})',
+            'Replace': 'REPLACE({0}::string, {1}, {2})',
+            'ArrayConcat': 'ARRAY_JOIN({0}, {1})',
+            'JsonExtract': 'GET_JSON_OBJECT({0}, {1})',
+            'JsonExtractScalar': 'GET_JSON_OBJECT({0}, {1})',
+            'Length': 'ARRAY_SIZE(%s)',
+            'DateDiff': 'DATEDIFF({0}, {1}, {2})',
+            'IsNull': '({0} IS NULL)',
+            'LogicalOr': 'BOOL_OR(%s)',
+            'LogicalAnd': 'BOOL AND(%s)'
+        }
+
+    def InfixOperators(self):
+        return {
+            '++': 'CONCAT(%s, %s)',
+            'in': 'ARRAY_CONTAINS(%s, %s)'
+        }
+
+    def Subscript(self, record, subscript):
+        return '%s.%s' % (record, subscript)
+
+    def LibraryProgram(self):
+        return databricks_library.library
+
+    def UnnestPhrase(self):
+        return 'explode({0}) AS pushkin({1})'
+
+    def ArrayPhrase(self):
+        return 'ARRAY(%s)'
+
+    def GroupBySpecBy(self):
+        return 'index'
+
+    def DecorateCombineRule(self, rule, var):
+        return rule
 
 DIALECTS = {
     'bigquery': BigQueryDialect,
     'sqlite': SqLiteDialect,
     'psql': PostgreSQL,
     'presto': Presto,
-    'trino': Trino
+    'trino': Trino,
+    'databricks': Databricks
 }
 

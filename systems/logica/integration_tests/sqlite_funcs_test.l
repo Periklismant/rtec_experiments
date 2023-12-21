@@ -15,7 +15,7 @@
 
 # Testing misc functions of SQLite.
 
-@Engine("sqlite");
+@Engine("sqlite", type_checking: false);
 
 Test("Set") = Size(s) :- s Set= (x + y :- x in Range(5), y in Range(5));
 Test("Sort") = Sort([6,3,2,5,1,4]);
@@ -47,6 +47,8 @@ Test("StringLiteral") = "People's artist";
 Test("ArrayConcatNull") = ArrayConcat([1,2,3], null);
 
 Test("ArrayConcatAggNull") = TestArrayConcatAggNull();
+
+Test("Char") = Char(66);
 
 TestArrayConcatAgg() ArrayConcatAgg= l :-
   l == Range(i + 1),
