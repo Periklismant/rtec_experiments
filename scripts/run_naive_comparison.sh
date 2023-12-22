@@ -8,6 +8,7 @@
 Applications=("voting" "netbillnop" "netbillp")
 Systems=("rtec" "rtecnaive")
 window_sizes=(10 20 40 80)
+step=10
 
 for App in ${Applications[@]}; do
     echo "%%% Running ${App} experiments %%%"
@@ -20,9 +21,9 @@ for App in ${Applications[@]}; do
         for window_size in ${window_sizes[@]}; do
             echo -e "\t* Window size: ${window_size}"
             cd ${system_path}/execution\ scripts
-            # Run 
             end_time=$((${window_size}*10))
-            ./run_rtec.sh --app=${App} --window-size=${window_size} --step=10 --input=${dataset} --end-time=${end_time} --background-knowledge=../examples/${App}/dataset/auxiliary/domain_${window_size}.prolog > ../../../logs/${system}/naivecomp_${system}_${App}_win${window_size}.txt 
+            ./run_rtec.sh --app=${App} --window-size=${window_size} --step=${step} --input=${dataset} --end-time=${end_time} --background-knowledge=../examples/${App}/dataset/auxiliary/domain_${window_size}.prolog > ../../../logs/${system}/naivecomp_${system}_${App}_win${window_size}.txt 
+            awk 'ENDFILE{print "Average rule computations: " $11 " with standard deviation: " $14}' log-swi-${window_size}-${step}-csv-file-log.txt
             cd ../../../scripts
         done
     done

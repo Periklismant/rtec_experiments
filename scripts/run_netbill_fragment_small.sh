@@ -14,7 +14,7 @@ for event_no in ${EventNos[@]}; do
         end_time=`date +%s.%N`
         run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
         run_time=${run_time_float%.*}
-        echo "\tReasoning Time: ${run_time}ms"
+        echo -e "\tReasoning Time: ${run_time}ms"
 done
 cd ../../../scripts
 

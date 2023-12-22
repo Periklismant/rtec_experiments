@@ -46,7 +46,7 @@ output_mode = "file"
 results_directory = "../examples/maritime_no_fi/results"
 # Compiler Parameters
 compile=true
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/maritime_no_fi/resources/graphs'
 include_input = false
 

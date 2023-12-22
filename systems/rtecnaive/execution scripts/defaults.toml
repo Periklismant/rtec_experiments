@@ -45,7 +45,7 @@ background_knowledge = ['../examples/toy/dataset/auxiliary/toy_var_domain.prolog
 output_mode = "file"
 results_directory = "../examples/toy/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/toy/resources/graphs'
 include_input = false
 
@@ -67,7 +67,7 @@ background_knowledge = ['../examples/maritime/resources/auxiliary/compare.prolog
 output_mode = "file"
 results_directory = "../examples/maritime/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/maritime/resources/graphs'
 include_input = false
 
@@ -89,7 +89,7 @@ background_knowledge = ['../examples/voting/dataset/auxiliary/voting_static_gene
 output_mode = "file"
 results_directory = "../examples/voting/results"
 # Compiler parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/voting/resources/graphs'
 include_input = false
 
@@ -111,7 +111,7 @@ background_knowledge = ['../examples/netbill/dataset/auxiliary/netbill_static_ge
 output_mode = "file"
 results_directory = "../examples/netbill/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/netbill/resources/graphs'
 include_input = false
 
@@ -133,7 +133,7 @@ background_knowledge = ['../examples/netbillp/dataset/auxiliary/netbill_static_g
 output_mode = "file"
 results_directory = "../examples/netbillp/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/netbillp/resources/graphs'
 include_input = false
 
@@ -155,7 +155,7 @@ background_knowledge = ['../examples/netbillnop/dataset/auxiliary/netbill_static
 output_mode = "file"
 results_directory = "../examples/netbillnop/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/netbillnop/resources/graphs'
 include_input = false
 
@@ -177,7 +177,7 @@ background_knowledge = ['../examples/caviar/resources/auxiliary/pre-processing.p
 output_mode = "file"
 results_directory = "../examples/caviar/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/caviar/resources/graphs'
 include_input = false
 
@@ -199,7 +199,7 @@ background_knowledge = ['../examples/ctm/dataset/auxiliary/vehicles.prolog']
 output_mode = "file"
 results_directory = "../examples/ctm/results"
 # Compiler Parameters
-dependency_graph_flag = true
+dependency_graph_flag = false
 dependency_graph_directory = '../examples/ctm/resources/graphs'
 include_input = false
 
