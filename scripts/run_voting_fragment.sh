@@ -26,7 +26,12 @@ for event_no in ${EventNos[@]}; do
     echo "?- holdsAt(permitted_to_close(M), T)." > query.pl
     echo "#include 'input/voting-${event_no}.pl'." > event_description.pl
     cat event_descriptions/voting.pl >> event_description.pl
-    time scasp --prev_forall -n0 event_description.pl query.pl > ../../logs/scasp/voting-eventsNo${event_no}.txt &&
+    start_time=`date +%s.%N`
+    scasp --prev_forall -n0 event_description.pl query.pl > ../../logs/scasp/voting-eventsNo${event_no}.txt &&
+    end_time=`date +%s.%N`
+    run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
+    run_time=${run_time_float%.*}
+    echo -e "\tReasoning time: ${run_time}ms"
     rm query.pl
     rm event_description.pl
 done

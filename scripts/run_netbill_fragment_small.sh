@@ -14,7 +14,7 @@ for event_no in ${EventNos[@]}; do
         end_time=`date +%s.%N`
         run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
         run_time=${run_time_float%.*}
-        echo $run_time
+        echo "\tReasoning Time: ${run_time}ms"
 done
 cd ../../../scripts
 
@@ -26,16 +26,22 @@ for event_no in ${EventNos[@]}; do
     echo "?- holdsAt(quote(M,C,book), T)." > query.pl
     echo "#include 'input/netbill-${event_no}.pl'." > event_description.pl
     cat event_descriptions/netbill.pl >> event_description.pl
-    time scasp --prev_forall -n0 event_description.pl query.pl > ../../logs/netbill/netbill-eventsNo${event_no}.txt &&
+    start_time=`date +%s.%N`
+    scasp --prev_forall -n0 event_description.pl query.pl > ../../logs/scasp/netbill-eventsNo${event_no}.txt &&
+    end_time=`date +%s.%N`
+    run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
+    run_time=${run_time_float%.*}
+    echo -e "\tReasoning time: ${run_time}ms"
     rm query.pl
     rm event_description.pl
 done
+cd ../../../scripts
 
 # Run jRECfi
-echo "Reasoning with jRECfi on a fragment of NetBill."
+#echo "Reasoning with jRECfi on a fragment of NetBill."
 
 # Run Ticker
-
+echo "Reasoning with Ticker on a fragment of NetBill."
 
 # Run Fusemate
 echo "Reasoning with Fusemate on a fragment of NetBill."
@@ -44,5 +50,7 @@ cd ../systems/fusemate/examples/event-calculus
 cd ../../../../scripts
 
 # Run Logica
+echo "Reasoning with Logica on a fragment of NetBill."
 
 # Run jRECrbt
+echo "Reasoning with jRECrbt on a fragment of NetBill."

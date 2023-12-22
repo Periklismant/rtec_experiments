@@ -1,1 +1,1 @@
-?- holdsAt(permitted_to_close(M), T).
+?- holdsAt(quote(M,C,book), T).
