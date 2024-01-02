@@ -1,0 +1,49 @@
+Manifest-Version: 1.0
+Class-Path: .
+Main-Class: it.unibo.ai.rec.tester.TesterMain
+
+Name: javax/xml/
+Specification-Version: 1.1
+Specification-Title: Java API for XML Parsing (JAXP)
+Specification-Vendor: Sun Microsystems
+
+Name: javax/servlet/
+Implementation-Vendor: Apache Software Foundation
+Specification-Title: Java API for Servlets
+Implementation-Title: javax.servlet
+Implementation-Version: 2.3.1
+Specification-Version: 2.3
+Specification-Vendor: Sun Microsystems, Inc.
+
+Name: org.apache.log4j
+Implementation-Vendor: "Apache Software Foundation"
+Implementation-Title: log4j
+Implementation-Version: 1.2.15
+
+Name: gnu/xml/aelfred2/
+Implementation-Title: AElfred2
+
+Name: org/xml/sax/
+Specification-Title: Simple API for XML (SAX) core
+Implementation-URL: http://sax.sourceforge.net
+Specification-Version: 2.0
+Specification-Vendor: sax.sourceforge.net
+
+Name: javassist/
+
+Name: gnu/xml/dom/
+Implementation-Title: DOM2
+
+Name: org/w3c/dom
+Specification-Version: Level 2
+Specification-Title: Document Object Model (DOM)
+Specification-Vendor: www.w3c.org
+
+Name: javax/servlet/jsp/
+Implementation-Vendor: Apache Software Foundation
+Implementation-Title: javax.servlet.jsp
+Specification-Title: Java API for JavaServer Pages
+Implementation-Version: 1.2.1
+Specification-Version: 1.2
+Specification-Vendor: Sun Microsystems, Inc.
+

@@ -1,0 +1,284 @@
+initially(status(Instance, State)):-
+	initial_state(Instance, State).
+
+initiates(Ev, status(Instance, State), T):-
+	creation(Ev, T, Instance, State).
+
+terminates(Ev, status(Instance, State), T):-
+	termination(Ev, T, Instance, State).
+
+terminates(Ev, status(Instance, OldState), T):-
+	transition(Ev, T, Instance, OldState, NewState).
+
+initiates(Ev, status(Instance, NewState), T):-
+	transition(Ev, T, Instance, OldState, NewState),
+	holds_at(status(Instance, OldState),T).
+
+current_state(Instance, State, T):-
+	holds_at(status(Instance,State),T).
+
+% Existence N
+initial_state(i(ID,0), pend):-
+	constraint(ID, existence, _).
+
+transition(exec(A), T, i(ID, Ti), pend, sat):-
+	constraint(ID, existence, params(A, N)),
+	happened(exec(A), N).
+
+transition(exec(case_complete), T, i(ID, Ti), pend, viol):-
+	constraint(ID, existence, params(A, N)).
+
+% Absence N
+
+creation(exec(A), T, i(ID, T), viol):-
+	constraint(ID, absence, params(A, N)),
+	happened(exec(A), N).
+
+% Between N M
+
+constraint(ID, existence, params(A, N)):-
+	constraint(ID, between, params(A, N, M)).
+
+constraint(ID, absence, params(A, M)):-
+	constraint(ID, between, params(A, N, M)).
+
+% Exactly N
+
+constraint(ID, between, params(A, N, M)):-
+	constraint(ID, exactly, params(A, N)),
+	M is N + 1.
+
+% Responded Existence
+
+creation(exec(A), T, i(ID,T), sat):-
+	constraint(ID, responded_existence, params(Source, Target)),
+	member(A, Source),
+	member(B, Target),
+	happens(exec(B), T2),
+	T2 < T.
+	
+creation(exec(A), T, i(ID,T), pend):-
+	constraint(ID, responded_existence, params(Source, Target)),
+	member(A, Source),
+	\+ (member(B, Target),
+	happens(exec(B), T2),
+	T2 < T).
+
+transition(exec(B), T, i(ID, Ti), pend, sat):-
+	constraint(ID, responded_existence, params(Source, Target)),
+	member(B, Target).
+
+transition(exec(case_complete), T, i(ID, Ti), pend, viol):-
+	constraint(ID, responded_existence, _).
+
+% Coexistence
+
+constraint(ID, responded_existence, params(Target, Source)):-
+	constraint(ID, coexistence, params(Source,Target)).
+
+constraint(ID, responded_existence, params(Source, Target)):-
+	constraint(ID, coexistence, params(Source,Target)).
+
+
+% Response
+creation(exec(A), T, i(ID,T), pend):-
+	constraint(ID, response, params(Source, _)),
+	member(A, Source).
+
+transition(exec(B), T, i(ID, Ti), pend, sat):-
+	constraint(ID, response, params(_, Target)),
+	current_state(i(ID,Ti), pend, T),
+	member(B, Target),
+	forward_time_interval(ID, Ti, Limits),
+	inside(T, Limits).
+
+transition(current_time, T, i(ID, Ti), pend, viol):-
+	constraint(ID, response, _),
+	current_state(i(ID,Ti), pend, T),
+	forward_time_interval(ID, Ti, [_,T_e]),
+	gt(T,T_e).
+
+
+transition(exec(case_complete), T, i(ID, Ti), pend, viol):-
+	constraint(ID, response, _).
+	
+
+% Precedence
+
+creation(exec(B), T, i(ID,T), sat):-
+	constraint(ID, precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	happens(exec(A), Ta),
+	member(A, Source),
+	inside(Ta, Limits),
+	!.
+
+creation(exec(B), T, i(ID,T), viol):-
+	constraint(ID, precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	\+ (happens(exec(A), Ta),member(A, Source),inside(Ta, Limits)).
+
+
+% Succession
+
+constraint(ID, response, params(Source, Target)):-
+	constraint(ID, succession, params(Source,Target)).
+
+constraint(ID, precedence, params(Source, Target)):-
+	constraint(ID, succession, params(Source,Target)).
+
+% Alternate Response
+
+constraint(ID, response, params(Source, Target)):-
+	constraint(ID, alternate_response, params(Source, Target)).
+
+
+transition(exec(A), T, i(ID, Ti), pend, viol):-
+	constraint(ID, alternate_response, params(Source, Target)),
+	member(A, Source),
+	holds_at(status(i(ID,Ti), pend), T).
+
+
+% Alternate Precedence
+creation(exec(B), T, i(ID,T), sat):-
+	constraint(ID, alternate_precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	happens(exec(A), Ta),
+	member(A, Source),
+	inside(Ta, Limits),
+	\+ (happens(exec(B),Tb),Tb>Ta,Tb<T).
+
+
+creation(exec(B), T, i(ID,T), viol):-
+	constraint(ID, alternate_precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	\+ (happens(exec(A), Ta),member(A, Source),inside(Ta, Limits)).
+
+creation(exec(B), T, i(ID,T), viol):-
+	constraint(ID, alternate_precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	\+ (
+		happens(exec(A), Ta),
+		member(A, Source),
+		inside(Ta, Limits),
+		\+ (happens(exec(B),Tb),Tb>Ta,Tb<T)
+	).
+
+% Alternate Succession
+constraint(ID, alternate_response, params(Source, Target)):-
+	constraint(ID, alternate_succession, params(Source,Target)).
+
+constraint(ID, alternate_precedence, params(Source, Target)):-
+	constraint(ID, alternate_succession, params(Source,Target)).
+
+
+
+
+
+% Chain Response
+
+constraint(ID, response, params(Source, Target)):-
+	constraint(ID, chain_response, params(Source, Target)).
+
+termination(current_time, T, i(ID,Ti), pend):-
+	constraint(ID, chain_response, params(Source, Target)).
+
+creation(exec(B), T, i(ID,Ti), viol):-
+	constraint(ID, chain_response, params(Source, Target)),
+	\+ member(B, Target),
+	current_state(i(ID,Ti), pend, T).
+
+% Chain Precedence
+
+creation(exec(B), T, i(ID, T), sat):-
+	constraint(ID, chain_precedence, params(Source, Target)),
+	member(B, Target),
+	happens(exec(X), Tprev),
+	\+(happens(exec(Y),Tin),Tin>Tprev,Tin<T),
+	backward_time_interval(ID, T, Limits),
+	member(X,Source), 
+	inside(Tprev,Limits). 
+
+	
+creation(exec(B), T, i(ID, T), viol):-
+	constraint(ID, chain_precedence, params(Source, Target)),
+	member(B, Target),
+	\+(
+		happens(exec(X), Tprev),
+		\+(happens(exec(Y),Tin),Tin>Tprev,Tin<T),
+		backward_time_interval(ID, T, Limits),
+		member(X,Source), 
+		inside(Tprev,Limits)
+	). 
+
+% Chain Succession
+constraint(ID, chain_response, params(Source, Target)):-
+	constraint(ID, chain_succession, params(Source,Target)).
+
+constraint(ID, chain_precedence, params(Source, Target)):-
+	constraint(ID, chain_succession, params(Source,Target)).
+
+
+% Responded Absence
+creation(exec(A), T, i(ID, T), sat):-
+	constraint(ID, responded_absence, params(Source,Target)),
+	member(A, Source),
+	\+ (happens(exec(B),Tb), member(B, Target)).
+
+creation(exec(A), T, i(ID, T), viol):-
+	constraint(ID, responded_absence, params(Source,Target)),
+	member(A, Source),
+	happens(exec(B),Tb), 
+	member(B, Target).
+
+transition(exec(B), T, i(ID, Ti), sat, viol):-
+	constraint(ID, responded_absence, params(Source,Target)), 
+	member(B, Target).
+
+	
+% Not Coexistence
+constraint(ID, responded_absence, params(Source, Target)):-
+	constraint(ID, not_coexistence, params(Source,Target)).
+
+constraint(ID, responded_absence, params(Target, Source)):-
+	constraint(ID, not_coexistence, params(Source,Target)).
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       Time-related predicates      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+
+forward_time_interval(ID, T, [T, inf]):-
+	\+ time_interval(ID, _).
+
+forward_time_interval(ID, T, [TInf, TSup]):-
+	time_interval(ID, [Inf, Sup]),
+	TInf is T + Inf,
+	TSup is T + Sup.
+
+inside(T, [Inf, Sup]):-
+	ge(T,Inf),
+	le(T,Sup).
+
+backward_time_interval(ID, T, [0, T]):-
+	\+ time_interval(ID, _).
+
+backward_time_interval(ID, T, [TInf, TSup]):-
+	time_interval(ID, [Inf, Sup]),
+	TInf is T - Sup,
+	TSup is T - Inf.	
+
+happened(Ev, N):-
+	findall(_,happens(Ev,_),L),
+	length(L,Card),
+	Card >= N.
+
+
+

@@ -4,14 +4,14 @@ test:-
 
 merchant(0).
 merchant(10).
-consumer(1).
 consumer(10).
-consumer(11).
-consumer(4).
-consumer(19).
-consumer(7).
-consumer(8).
 consumer(14).
+consumer(1).
+consumer(11).
+consumer(8).
+consumer(7).
+consumer(19).
+consumer(4).
 goods(book).
 
 initiates(presentQuote(M,C,GD), quote(M,C,GD), _):-

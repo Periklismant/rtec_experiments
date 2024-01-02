@@ -1,0 +1,177 @@
+/*******
+initiates(Ev, status(viol(ID),ViolNo), T):-
+	findall(ID,violates(Ev, ID, T),Count),
+	Count = [ID|_],
+	length(Count,ViolNo),
+	\+ holds_at(status(viol(ID),_),T).
+
+initiates(Ev, status(viol(ID),N2), T):-
+	findall(ID,violates(Ev, ID, T),Count),
+	Count = [ID|_],
+	length(Count,ViolNo),
+	holds_at(status(viol(ID),N),T),
+	N2 is N + ViolNo.
+
+*/
+
+violates(current_time,ID,T):-
+	constraint(ID, response, _),
+	holds_at(status(i(ID,[T_s,T_e]), pend), T),
+	gt(T,T_e).
+
+violates(exec(A, Data), ID, T):-
+	holds_at(forbidden(ID, As), T),
+	member(A, As).
+
+
+
+% Response
+/*
+initially(status(ID,sat)):-
+	constraint(ID, response, _).
+	
+
+terminates(exec(A, Data), status(ID, sat), T):-
+	constraint(ID, response, params(Source, _)),
+	member(A, Source).
+
+
+
+
+terminates(Ev, status(ID, sat), T):-
+	initiates(Ev, status(ID, pend), T).
+
+
+
+initiates(exec(A, Data), status(ID, pend), T):-
+	constraint(ID, response, params(Source, _)),
+	member(A, Source),
+	holds_at(status(ID,sat),T).
+
+
+terminates(exec(B,Data), status(ID, pend), T):-
+	constraint(ID, response, params(_,Target)),
+	member(B, Target).	
+		
+
+terminates(Ev, status(ID, pend), T):-
+	violates(Ev, ID, T).
+
+
+initiates(exec(B,Data), status(ID, sat), T):-
+	constraint(ID, response, params(_,Target)),
+	member(B, Target),
+	holds_at(status(ID,pend),T),
+	\+ violates(_,ID,T).	
+
+
+*/
+
+
+initiates(exec(A, Data), status(i(ID,Limits), pend), T):-
+	constraint(ID, response, params(Source, _)),
+	member(A, Source),
+	forward_time_interval(ID, T, Limits).
+	
+terminates(exec(B, Data), status(i(ID,Limits), pend), T):-
+	constraint(ID, response, params(_, Target)),
+	holds_at(status(i(ID,Limits), pend),T),
+	member(B, Target),
+	inside(T, Limits).
+	
+initiates(exec(B, Data), status(i(ID,Limits), sat), T):-
+	constraint(ID, response, params(_, Target)),
+	member(B, Target),
+	holds_at(status(i(ID,Limits), pend),T),
+	inside(T, Limits).	
+
+	
+terminates(current_time, status(i(ID,[T_s,T_e]), pend), T):-
+	holds_at(status(i(ID,[T_s,T_e]), pend),T),
+	gt(T,T_e).
+
+
+initiates(current_time, status(i(ID,[T_s,T_e]), viol), T):-
+	holds_at(status(i(ID,[T_s,T_e]), pend), T),
+	gt(T,T_e).
+
+
+initiates(exec(case_complete,Data), status(i(ID,[T_s,T_e]), viol), T):-
+	holds_at(status(i(ID,[T_s,T_e]), pend), T).
+
+
+terminates(exec(case_complete,Data), status(i(ID,[T_s,T_e]), pend), T).
+
+
+% Precedence
+
+initiates(exec(B, Data), status(i(ID,Limits), sat), T):-
+	constraint(ID, precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	happens(event(exec(A, Data)), Ta),
+	member(A, Source),
+	write(inside(Ta, Limits)),
+	inside(Ta, Limits),
+	write(test_passeddddddd),
+	!.
+
+initiates(exec(B, Data), status(i(ID,Limits), viol), T):-
+	constraint(ID, precedence, params(Source, Target)),
+	member(B, Target),
+	backward_time_interval(ID, T, Limits),
+	\+ (happens(event(exec(A, Data)), Ta),member(A, Source),inside(Ta, Limits)).
+
+
+% Succession
+
+constraint(ID, response, params(Source, Target)):-
+	constraint(ID, succession, params(Source,Target)).
+
+constraint(ID, precedence, params(Source, Target)):-
+	constraint(ID, succession, params(Source,Target)).
+	
+
+
+% Interposition
+
+initiates(exec(A, Data), forbidden(ID, Middle), T):-
+	constraint(ID, interposition, params(Source, Middle, Target)),
+	member(A, Source).
+
+terminates(exec(C, Data), forbidden(ID, Middle), T):-
+	constraint(ID, interposition, params(Source, Middle, Target)),
+	member(C, Target).
+
+
+% Alternate Response
+constraint(ID, interposition, params(Source, Source, Target)):-
+	constraint(ID, alternate_response, params(Source, Target)).
+
+constraint(ID, response, params(Source, Target)):-
+	constraint(ID, alternate_response, params(Source, Target)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       Time-related predicates      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+
+forward_time_interval(ID, T, [T, inf]):-
+	\+ time_interval(ID, _).
+
+forward_time_interval(ID, T, [TInf, TSup]):-
+	time_interval(ID, [Inf, Sup]),
+	TInf is T + Inf,
+	TSup is T + Sup.
+
+inside(T, [Inf, Sup]):-
+	ge(T,Inf),
+	le(T,Sup).
+
+backward_time_interval(ID, T, [0, T]):-
+	\+ time_interval(ID, _).
+
+backward_time_interval(ID, T, [TInf, TSup]):-
+	time_interval(ID, [Inf, Sup]),
+	TInf is T - Sup,
+	TSup is T - Inf.	
+

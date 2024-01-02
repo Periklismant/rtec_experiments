@@ -4,9 +4,9 @@ test:-
 
 merchant(0).
 merchant(10).
-consumer(4).
 consumer(14).
 consumer(10).
+consumer(4).
 consumer(8).
 goods(book).
 

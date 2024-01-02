@@ -37,8 +37,10 @@ start:-
 	set_classpath([""]),
 	java_object("TermRBTMap", [], kbMap),
 	java_object("TermRBTMap", [], mviMap),
+	%java_object("TermRBTMap", [], traceMap),
 	register(kbMap),
 	register(mviMap),
+	%register(traceMap),
 	update([happens(startf,-1)]).
 
 update(ExtTrace):-
@@ -173,9 +175,13 @@ open_mvi(F,T):-
 	assert(mholds_for(F,[T,inf])).
 
 
+%status(MVIs):-
+%        %query the index
+%	findall(mholds_for(F,[T1,T2]),(mholds_for(F,[T1,T2]), write(F), write("["), write(T1), write(","), write(T2), write("]"), nl), MVIs).
+
 status:-
         %query the index
-	findall(mholds_for(F,[T1,T2]),(mholds_for(F,[T1,T2]), write(F), write("["), write(T1), write(","), write(T2), write("]"), nl), _MVIs).
+	findall(mholds_for(F,[T1,T2]),(mholds_for(F,[T1,T2])), _MVIs). %, retractall(happens(_,_)). % write(MVIs).
 
 reset:-
 	retractall(happens(_,_)),
