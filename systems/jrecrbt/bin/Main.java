@@ -18,11 +18,12 @@ public class Main {
             
             String rec_variant=args[0];
             String events_no=args[1];
+            String app=args[2];
 
             System.out.println(rec_variant);
             System.out.println(events_no);
 
-            String modelPathStr = "../programs/netbill_" + events_no + "_" + rec_variant + ".pl";
+            String modelPathStr = "../programs/" + app + "_" + events_no + "_" + rec_variant + ".pl";
 
             //Theory recTheory = new Theory(Main.class.getResourceAsStream(modelPathStr));
 		    Theory recTheory = new Theory(new FileInputStream(new File(modelPathStr)));	
@@ -45,7 +46,7 @@ public class Main {
 
             //System.out.println("Experiment ended with flag: " + Boolean.toString(ok));
             System.out.println("Experiment ended with solve info: ");
-            System.out.println(solveInfo.isSuccess());
+            System.out.println(solveInfo);
 
             System.out.println("Execution Time: " + Long.toString(after-before));
 

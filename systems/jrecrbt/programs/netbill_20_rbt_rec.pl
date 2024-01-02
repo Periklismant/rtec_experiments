@@ -1,13 +1,13 @@
-test:-
+test(MVIs):-
 	update([happens(presentQuote(10,10,book),1),happens(presentQuote(0,4,book),1),happens(presentQuote(10,8,book),1),happens(presentQuote(10,14,book),1),happens(presentQuote(0,10,book),1),happens(presentQuote(10,4,book),1),happens(acceptQuote(10,10,book),6),happens(presentQuote(0,8,book),11),happens(presentQuote(0,10,book),11),happens(presentQuote(10,8,book),11),happens(acceptQuote(10,10,book),16),happens(presentQuote(0,14,book),21),happens(presentQuote(10,4,book),21),happens(presentQuote(10,14,book),31),happens(presentQuote(0,14,book),31),happens(presentQuote(10,10,book),31),happens(acceptQuote(10,10,book),36),happens(presentQuote(10,14,book),41),happens(presentQuote(0,8,book),41),happens(presentQuote(10,10,book),41),happens(presentQuote(0,14,book),41),happens(presentQuote(10,4,book),41),happens(acceptQuote(10,10,book),46)]),
-	status.
+	status(MVIs).
 
-merchant(10).
 merchant(0).
-consumer(10).
-consumer(14).
-consumer(4).
+merchant(10).
 consumer(8).
+consumer(4).
+consumer(14).
+consumer(10).
 goods(book).
 
 initiates(presentQuote(M,C,GD), quote(M,C,GD), _):-
@@ -205,7 +205,6 @@ reset:-
 	retractall(mholds_for(_,_)),
 	unregister(kbMap),
 	unregister(mviMap),
-    unregister(traceMap),
 	write("ENGINE RESET").
 
 assert_all([]).
