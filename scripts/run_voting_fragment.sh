@@ -38,4 +38,4 @@ done
 cd ../../../scripts
 
 # Run jRECfi
-echo "Reasoning with jRECfi on a fragment of voting."
+#echo "Reasoning with jRECfi on a fragment of voting."

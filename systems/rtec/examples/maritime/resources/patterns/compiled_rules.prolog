@@ -1,680 +1,680 @@
 :- dynamic vessel/1, vpair/2.
 
-initiatedAt(withinArea(_110,_112)=true, _142, _80, _148) :-
-     happensAtIE(entersArea(_110,_118),_80),_142=<_80,_80<_148,
-     areaType(_118,_112).
+initiatedAt(withinArea(_106,_108)=true, _138, _76, _144) :-
+     happensAtIE(entersArea(_106,_114),_76),_138=<_76,_76<_144,
+     areaType(_114,_108).
 
-initiatedAt(gap(_110)=nearPorts, _150, _80, _156) :-
-     happensAtIE(gap_start(_110),_80),_150=<_80,_80<_156,
-     holdsAtProcessedSimpleFluent(_110,withinArea(_110,nearPorts)=true,_80).
+initiatedAt(gap(_106)=nearPorts, _146, _76, _152) :-
+     happensAtIE(gap_start(_106),_76),_146=<_76,_76<_152,
+     holdsAtProcessedSimpleFluent(_106,withinArea(_106,nearPorts)=true,_76).
 
-initiatedAt(gap(_110)=farFromPorts, _154, _80, _160) :-
-     happensAtIE(gap_start(_110),_80),_154=<_80,_80<_160,
-     \+holdsAtProcessedSimpleFluent(_110,withinArea(_110,nearPorts)=true,_80).
+initiatedAt(gap(_106)=farFromPorts, _150, _76, _156) :-
+     happensAtIE(gap_start(_106),_76),_150=<_76,_76<_156,
+     \+holdsAtProcessedSimpleFluent(_106,withinArea(_106,nearPorts)=true,_76).
 
-initiatedAt(stopped(_110)=nearPorts, _150, _80, _156) :-
-     happensAtIE(stop_start(_110),_80),_150=<_80,_80<_156,
-     holdsAtProcessedSimpleFluent(_110,withinArea(_110,nearPorts)=true,_80).
+initiatedAt(stopped(_106)=nearPorts, _146, _76, _152) :-
+     happensAtIE(stop_start(_106),_76),_146=<_76,_76<_152,
+     holdsAtProcessedSimpleFluent(_106,withinArea(_106,nearPorts)=true,_76).
 
-initiatedAt(stopped(_110)=farFromPorts, _154, _80, _160) :-
-     happensAtIE(stop_start(_110),_80),_154=<_80,_80<_160,
-     \+holdsAtProcessedSimpleFluent(_110,withinArea(_110,nearPorts)=true,_80).
+initiatedAt(stopped(_106)=farFromPorts, _150, _76, _156) :-
+     happensAtIE(stop_start(_106),_76),_150=<_76,_76<_156,
+     \+holdsAtProcessedSimpleFluent(_106,withinArea(_106,nearPorts)=true,_76).
 
-initiatedAt(lowSpeed(_110)=true, _126, _80, _132) :-
-     happensAtIE(slow_motion_start(_110),_80),
-     _126=<_80,
-     _80<_132.
+initiatedAt(lowSpeed(_106)=true, _122, _76, _128) :-
+     happensAtIE(slow_motion_start(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-initiatedAt(changingSpeed(_110)=true, _126, _80, _132) :-
-     happensAtIE(change_in_speed_start(_110),_80),
-     _126=<_80,
-     _80<_132.
+initiatedAt(changingSpeed(_106)=true, _122, _76, _128) :-
+     happensAtIE(change_in_speed_start(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-initiatedAt(highSpeedNearCoast(_110)=true, _186, _80, _192) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_186=<_80,_80<_192,
-     thresholds(hcNearCoastMax,_132),
-     \+inRange(_116,0,_132),
-     holdsAtProcessedSimpleFluent(_110,withinArea(_110,nearCoast)=true,_80).
+initiatedAt(highSpeedNearCoast(_106)=true, _182, _76, _188) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_182=<_76,_76<_188,
+     thresholds(hcNearCoastMax,_128),
+     \+inRange(_112,0,_128),
+     holdsAtProcessedSimpleFluent(_106,withinArea(_106,nearCoast)=true,_76).
 
-initiatedAt(movingSpeed(_110)=below, _186, _80, _192) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_186=<_80,_80<_192,
-     vesselType(_110,_132),
-     typeSpeed(_132,_138,_140,_142),
-     thresholds(movingMin,_148),
-     inRange(_116,_148,_138).
+initiatedAt(movingSpeed(_106)=below, _182, _76, _188) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_182=<_76,_76<_188,
+     vesselType(_106,_128),
+     typeSpeed(_128,_134,_136,_138),
+     thresholds(movingMin,_144),
+     inRange(_112,_144,_134).
 
-initiatedAt(movingSpeed(_110)=normal, _174, _80, _180) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_174=<_80,_80<_180,
-     vesselType(_110,_132),
-     typeSpeed(_132,_138,_140,_142),
-     inRange(_116,_138,_140).
+initiatedAt(movingSpeed(_106)=normal, _170, _76, _176) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_170=<_76,_76<_176,
+     vesselType(_106,_128),
+     typeSpeed(_128,_134,_136,_138),
+     inRange(_112,_134,_136).
 
-initiatedAt(movingSpeed(_110)=above, _174, _80, _180) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_174=<_80,_80<_180,
-     vesselType(_110,_132),
-     typeSpeed(_132,_138,_140,_142),
-     inRange(_116,_140,inf).
+initiatedAt(movingSpeed(_106)=above, _170, _76, _176) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_170=<_76,_76<_176,
+     vesselType(_106,_128),
+     typeSpeed(_128,_134,_136,_138),
+     inRange(_112,_136,inf).
 
-initiatedAt(drifting(_110)=true, _210, _80, _216) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_210=<_80,_80<_216,
-     _120=\=511.0,
-     absoluteAngleDiff(_118,_120,_146),
-     thresholds(adriftAngThr,_152),
-     _146>_152,
-     holdsAtProcessedSDFluent(_110,underWay(_110)=true,_80).
+initiatedAt(drifting(_106)=true, _206, _76, _212) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_206=<_76,_76<_212,
+     _116=\=511.0,
+     absoluteAngleDiff(_114,_116,_142),
+     thresholds(adriftAngThr,_148),
+     _142>_148,
+     holdsAtProcessedSDFluent(_106,underWay(_106)=true,_76).
 
-initiatedAt(tuggingSpeed(_110)=true, _170, _80, _176) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_170=<_80,_80<_176,
-     thresholds(tuggingMin,_132),
-     thresholds(tuggingMax,_138),
-     inRange(_116,_132,_138).
+initiatedAt(tuggingSpeed(_106)=true, _166, _76, _172) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_166=<_76,_76<_172,
+     thresholds(tuggingMin,_128),
+     thresholds(tuggingMax,_134),
+     inRange(_112,_128,_134).
 
-initiatedAt(trawlSpeed(_110)=true, _194, _80, _200) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_194=<_80,_80<_200,
-     thresholds(trawlspeedMin,_132),
-     thresholds(trawlspeedMax,_138),
-     inRange(_116,_132,_138),
-     holdsAtProcessedSimpleFluent(_110,withinArea(_110,fishing)=true,_80).
+initiatedAt(trawlSpeed(_106)=true, _190, _76, _196) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_190=<_76,_76<_196,
+     thresholds(trawlspeedMin,_128),
+     thresholds(trawlspeedMax,_134),
+     inRange(_112,_128,_134),
+     holdsAtProcessedSimpleFluent(_106,withinArea(_106,fishing)=true,_76).
 
-initiatedAt(trawlingMovement(_110)=true, _150, _80, _156) :-
-     happensAtIE(change_in_heading(_110),_80),_150=<_80,_80<_156,
-     holdsAtProcessedSimpleFluent(_110,withinArea(_110,fishing)=true,_80).
+initiatedAt(trawlingMovement(_106)=true, _146, _76, _152) :-
+     happensAtIE(change_in_heading(_106),_76),_146=<_76,_76<_152,
+     holdsAtProcessedSimpleFluent(_106,withinArea(_106,fishing)=true,_76).
 
-initiatedAt(sarSpeed(_110)=true, _158, _80, _164) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_158=<_80,_80<_164,
-     thresholds(sarMinSpeed,_132),
-     inRange(_116,_132,inf).
+initiatedAt(sarSpeed(_106)=true, _154, _76, _160) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_154=<_76,_76<_160,
+     thresholds(sarMinSpeed,_128),
+     inRange(_112,_128,inf).
 
-initiatedAt(sarMovement(_110)=true, _126, _80, _132) :-
-     happensAtIE(change_in_heading(_110),_80),
-     _126=<_80,
-     _80<_132.
+initiatedAt(sarMovement(_106)=true, _122, _76, _128) :-
+     happensAtIE(change_in_heading(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-initiatedAt(sarMovement(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(changingSpeed(_110)=true),_80),
-     _136=<_80,
-     _80<_142.
+initiatedAt(sarMovement(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(changingSpeed(_106)=true),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(withinArea(_110,_112)=true, _142, _80, _148) :-
-     happensAtIE(leavesArea(_110,_118),_80),_142=<_80,_80<_148,
-     areaType(_118,_112).
+terminatedAt(withinArea(_106,_108)=true, _138, _76, _144) :-
+     happensAtIE(leavesArea(_106,_114),_76),_138=<_76,_76<_144,
+     areaType(_114,_108).
 
-terminatedAt(withinArea(_110,_112)=true, _128, _80, _134) :-
-     happensAtIE(gap_start(_110),_80),
-     _128=<_80,
-     _80<_134.
+terminatedAt(withinArea(_106,_108)=true, _124, _76, _130) :-
+     happensAtIE(gap_start(_106),_76),
+     _124=<_76,
+     _76<_130.
 
-terminatedAt(gap(_110)=_86, _126, _80, _132) :-
-     happensAtIE(gap_end(_110),_80),
-     _126=<_80,
-     _80<_132.
+terminatedAt(gap(_106)=_82, _122, _76, _128) :-
+     happensAtIE(gap_end(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-terminatedAt(stopped(_110)=_86, _126, _80, _132) :-
-     happensAtIE(stop_end(_110),_80),
-     _126=<_80,
-     _80<_132.
+terminatedAt(stopped(_106)=_82, _122, _76, _128) :-
+     happensAtIE(stop_end(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-terminatedAt(stopped(_110)=_86, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(stopped(_106)=_82, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(lowSpeed(_110)=true, _126, _80, _132) :-
-     happensAtIE(slow_motion_end(_110),_80),
-     _126=<_80,
-     _80<_132.
+terminatedAt(lowSpeed(_106)=true, _122, _76, _128) :-
+     happensAtIE(slow_motion_end(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-terminatedAt(lowSpeed(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(lowSpeed(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(changingSpeed(_110)=true, _126, _80, _132) :-
-     happensAtIE(change_in_speed_end(_110),_80),
-     _126=<_80,
-     _80<_132.
+terminatedAt(changingSpeed(_106)=true, _122, _76, _128) :-
+     happensAtIE(change_in_speed_end(_106),_76),
+     _122=<_76,
+     _76<_128.
 
-terminatedAt(changingSpeed(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(changingSpeed(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(highSpeedNearCoast(_110)=true, _158, _80, _164) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_158=<_80,_80<_164,
-     thresholds(hcNearCoastMax,_132),
-     inRange(_116,0,_132).
+terminatedAt(highSpeedNearCoast(_106)=true, _154, _76, _160) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_154=<_76,_76<_160,
+     thresholds(hcNearCoastMax,_128),
+     inRange(_112,0,_128).
 
-terminatedAt(highSpeedNearCoast(_110)=true, _138, _80, _144) :-
-     happensAtProcessedSimpleFluent(_110,end(withinArea(_110,nearCoast)=true),_80),
-     _138=<_80,
-     _80<_144.
+terminatedAt(highSpeedNearCoast(_106)=true, _134, _76, _140) :-
+     happensAtProcessedSimpleFluent(_106,end(withinArea(_106,nearCoast)=true),_76),
+     _134=<_76,
+     _76<_140.
 
-terminatedAt(movingSpeed(_110)=_86, _162, _80, _168) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_162=<_80,_80<_168,
-     thresholds(movingMin,_132),
-     \+inRange(_116,_132,inf).
+terminatedAt(movingSpeed(_106)=_82, _158, _76, _164) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_158=<_76,_76<_164,
+     thresholds(movingMin,_128),
+     \+inRange(_112,_128,inf).
 
-terminatedAt(movingSpeed(_110)=_86, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(movingSpeed(_106)=_82, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(drifting(_110)=true, _170, _80, _176) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_170=<_80,_80<_176,
-     absoluteAngleDiff(_118,_120,_134),
-     thresholds(adriftAngThr,_140),
-     _134=<_140.
+terminatedAt(drifting(_106)=true, _166, _76, _172) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_166=<_76,_76<_172,
+     absoluteAngleDiff(_114,_116,_130),
+     thresholds(adriftAngThr,_136),
+     _130=<_136.
 
-terminatedAt(drifting(_110)=true, _138, _80, _144) :-
-     happensAtIE(velocity(_110,_116,_118,511.0),_80),
-     _138=<_80,
-     _80<_144.
+terminatedAt(drifting(_106)=true, _134, _76, _140) :-
+     happensAtIE(velocity(_106,_112,_114,511.0),_76),
+     _134=<_76,
+     _76<_140.
 
-terminatedAt(drifting(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSDFluent(_110,end(underWay(_110)=true),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(drifting(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSDFluent(_106,end(underWay(_106)=true),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(tuggingSpeed(_110)=true, _174, _80, _180) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_174=<_80,_80<_180,
-     thresholds(tuggingMin,_132),
-     thresholds(tuggingMax,_138),
-     \+inRange(_116,_132,_138).
+terminatedAt(tuggingSpeed(_106)=true, _170, _76, _176) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_170=<_76,_76<_176,
+     thresholds(tuggingMin,_128),
+     thresholds(tuggingMax,_134),
+     \+inRange(_112,_128,_134).
 
-terminatedAt(tuggingSpeed(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(tuggingSpeed(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(trawlSpeed(_110)=true, _174, _80, _180) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_174=<_80,_80<_180,
-     thresholds(trawlspeedMin,_132),
-     thresholds(trawlspeedMax,_138),
-     \+inRange(_116,_132,_138).
+terminatedAt(trawlSpeed(_106)=true, _170, _76, _176) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_170=<_76,_76<_176,
+     thresholds(trawlspeedMin,_128),
+     thresholds(trawlspeedMax,_134),
+     \+inRange(_112,_128,_134).
 
-terminatedAt(trawlSpeed(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(trawlSpeed(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(trawlSpeed(_110)=true, _138, _80, _144) :-
-     happensAtProcessedSimpleFluent(_110,end(withinArea(_110,fishing)=true),_80),
-     _138=<_80,
-     _80<_144.
+terminatedAt(trawlSpeed(_106)=true, _134, _76, _140) :-
+     happensAtProcessedSimpleFluent(_106,end(withinArea(_106,fishing)=true),_76),
+     _134=<_76,
+     _76<_140.
 
-terminatedAt(trawlingMovement(_110)=true, _138, _80, _144) :-
-     happensAtProcessedSimpleFluent(_110,end(withinArea(_110,fishing)=true),_80),
-     _138=<_80,
-     _80<_144.
+terminatedAt(trawlingMovement(_106)=true, _134, _76, _140) :-
+     happensAtProcessedSimpleFluent(_106,end(withinArea(_106,fishing)=true),_76),
+     _134=<_76,
+     _76<_140.
 
-terminatedAt(sarSpeed(_110)=true, _158, _80, _164) :-
-     happensAtIE(velocity(_110,_116,_118,_120),_80),_158=<_80,_80<_164,
-     thresholds(sarMinSpeed,_132),
-     inRange(_116,0,_132).
+terminatedAt(sarSpeed(_106)=true, _154, _76, _160) :-
+     happensAtIE(velocity(_106,_112,_114,_116),_76),_154=<_76,_76<_160,
+     thresholds(sarMinSpeed,_128),
+     inRange(_112,0,_128).
 
-terminatedAt(sarSpeed(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(sarSpeed(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-terminatedAt(sarMovement(_110)=true, _136, _80, _142) :-
-     happensAtProcessedSimpleFluent(_110,start(gap(_110)=_120),_80),
-     _136=<_80,
-     _80<_142.
+terminatedAt(sarMovement(_106)=true, _132, _76, _138) :-
+     happensAtProcessedSimpleFluent(_106,start(gap(_106)=_116),_76),
+     _132=<_76,
+     _76<_138.
 
-holdsForSDFluent(underWay(_110)=true,_80) :-
-     holdsForProcessedSimpleFluent(_110,movingSpeed(_110)=below,_126),
-     holdsForProcessedSimpleFluent(_110,movingSpeed(_110)=normal,_142),
-     holdsForProcessedSimpleFluent(_110,movingSpeed(_110)=above,_158),
-     union_all([_126,_142,_158],_80).
+holdsForSDFluent(underWay(_106)=true,_76) :-
+     holdsForProcessedSimpleFluent(_106,movingSpeed(_106)=below,_122),
+     holdsForProcessedSimpleFluent(_106,movingSpeed(_106)=normal,_138),
+     holdsForProcessedSimpleFluent(_106,movingSpeed(_106)=above,_154),
+     union_all([_122,_138,_154],_76).
 
-holdsForSDFluent(anchoredOrMoored(_110)=true,_80) :-
-     holdsForProcessedSimpleFluent(_110,stopped(_110)=farFromPorts,_126),
-     holdsForProcessedSimpleFluent(_110,withinArea(_110,anchorage)=true,_144),
-     intersect_all([_126,_144],_162),
-     holdsForProcessedSimpleFluent(_110,stopped(_110)=nearPorts,_178),
-     union_all([_162,_178],_196),
-     thresholds(aOrMTime,_202),
-     intDurGreater(_196,_202,_80).
+holdsForSDFluent(anchoredOrMoored(_106)=true,_76) :-
+     holdsForProcessedSimpleFluent(_106,stopped(_106)=farFromPorts,_122),
+     holdsForProcessedSimpleFluent(_106,withinArea(_106,anchorage)=true,_140),
+     intersect_all([_122,_140],_158),
+     holdsForProcessedSimpleFluent(_106,stopped(_106)=nearPorts,_174),
+     union_all([_158,_174],_192),
+     thresholds(aOrMTime,_198),
+     intDurGreater(_192,_198,_76).
 
-holdsForSDFluent(tugging(_110,_112)=true,_80) :-
-     holdsForProcessedIE(_110,proximity(_110,_112)=true,_130),
-     oneIsTug(_110,_112),
-     \+oneIsPilot(_110,_112),
-     \+twoAreTugs(_110,_112),
-     holdsForProcessedSimpleFluent(_110,tuggingSpeed(_110)=true,_172),
-     holdsForProcessedSimpleFluent(_112,tuggingSpeed(_112)=true,_188),
-     intersect_all([_130,_172,_188],_212),
-     thresholds(tuggingTime,_218),
-     intDurGreater(_212,_218,_80).
+holdsForSDFluent(tugging(_106,_108)=true,_76) :-
+     holdsForProcessedIE(_106,proximity(_106,_108)=true,_126),
+     oneIsTug(_106,_108),
+     \+oneIsPilot(_106,_108),
+     \+twoAreTugs(_106,_108),
+     holdsForProcessedSimpleFluent(_106,tuggingSpeed(_106)=true,_168),
+     holdsForProcessedSimpleFluent(_108,tuggingSpeed(_108)=true,_184),
+     intersect_all([_126,_168,_184],_208),
+     thresholds(tuggingTime,_214),
+     intDurGreater(_208,_214,_76).
 
-holdsForSDFluent(rendezVous(_110,_112)=true,_80) :-
-     holdsForProcessedIE(_110,proximity(_110,_112)=true,_130),
-     \+oneIsTug(_110,_112),
-     \+oneIsPilot(_110,_112),
-     holdsForProcessedSimpleFluent(_110,lowSpeed(_110)=true,_166),
-     holdsForProcessedSimpleFluent(_112,lowSpeed(_112)=true,_182),
-     holdsForProcessedSimpleFluent(_110,stopped(_110)=farFromPorts,_198),
-     holdsForProcessedSimpleFluent(_112,stopped(_112)=farFromPorts,_214),
-     union_all([_166,_198],_232),
-     union_all([_182,_214],_250),
-     intersect_all([_232,_250,_130],_274),
-     _274\=[],
-     holdsForProcessedSimpleFluent(_110,withinArea(_110,nearPorts)=true,_298),
-     holdsForProcessedSimpleFluent(_112,withinArea(_112,nearPorts)=true,_316),
-     holdsForProcessedSimpleFluent(_110,withinArea(_110,nearCoast)=true,_334),
-     holdsForProcessedSimpleFluent(_112,withinArea(_112,nearCoast)=true,_352),
-     relative_complement_all(_274,[_298,_316,_334,_352],_384),
-     thresholds(rendezvousTime,_390),
-     intDurGreater(_384,_390,_80).
+holdsForSDFluent(rendezVous(_106,_108)=true,_76) :-
+     holdsForProcessedIE(_106,proximity(_106,_108)=true,_126),
+     \+oneIsTug(_106,_108),
+     \+oneIsPilot(_106,_108),
+     holdsForProcessedSimpleFluent(_106,lowSpeed(_106)=true,_162),
+     holdsForProcessedSimpleFluent(_108,lowSpeed(_108)=true,_178),
+     holdsForProcessedSimpleFluent(_106,stopped(_106)=farFromPorts,_194),
+     holdsForProcessedSimpleFluent(_108,stopped(_108)=farFromPorts,_210),
+     union_all([_162,_194],_228),
+     union_all([_178,_210],_246),
+     intersect_all([_228,_246,_126],_270),
+     _270\=[],
+     holdsForProcessedSimpleFluent(_106,withinArea(_106,nearPorts)=true,_294),
+     holdsForProcessedSimpleFluent(_108,withinArea(_108,nearPorts)=true,_312),
+     holdsForProcessedSimpleFluent(_106,withinArea(_106,nearCoast)=true,_330),
+     holdsForProcessedSimpleFluent(_108,withinArea(_108,nearCoast)=true,_348),
+     relative_complement_all(_270,[_294,_312,_330,_348],_380),
+     thresholds(rendezvousTime,_386),
+     intDurGreater(_380,_386,_76).
 
-holdsForSDFluent(trawling(_110)=true,_80) :-
-     holdsForProcessedSimpleFluent(_110,trawlSpeed(_110)=true,_126),
-     holdsForProcessedSimpleFluent(_110,trawlingMovement(_110)=true,_142),
-     intersect_all([_126,_142],_160),
-     thresholds(trawlingTime,_166),
-     intDurGreater(_160,_166,_80).
+holdsForSDFluent(trawling(_106)=true,_76) :-
+     holdsForProcessedSimpleFluent(_106,trawlSpeed(_106)=true,_122),
+     holdsForProcessedSimpleFluent(_106,trawlingMovement(_106)=true,_138),
+     intersect_all([_122,_138],_156),
+     thresholds(trawlingTime,_162),
+     intDurGreater(_156,_162,_76).
 
-holdsForSDFluent(inSAR(_110)=true,_80) :-
-     holdsForProcessedSimpleFluent(_110,sarSpeed(_110)=true,_126),
-     holdsForProcessedSimpleFluent(_110,sarMovement(_110)=true,_142),
-     intersect_all([_126,_142],_160),
-     intDurGreater(_160,3600,_80).
+holdsForSDFluent(inSAR(_106)=true,_76) :-
+     holdsForProcessedSimpleFluent(_106,sarSpeed(_106)=true,_122),
+     holdsForProcessedSimpleFluent(_106,sarMovement(_106)=true,_138),
+     intersect_all([_122,_138],_156),
+     intDurGreater(_156,3600,_76).
 
-holdsForSDFluent(loitering(_110)=true,_80) :-
-     holdsForProcessedSimpleFluent(_110,lowSpeed(_110)=true,_126),
-     holdsForProcessedSimpleFluent(_110,stopped(_110)=farFromPorts,_142),
-     union_all([_126,_142],_160),
-     holdsForProcessedSimpleFluent(_110,withinArea(_110,nearCoast)=true,_178),
-     holdsForProcessedSDFluent(_110,anchoredOrMoored(_110)=true,_194),
-     relative_complement_all(_160,[_178,_194],_214),
-     thresholds(loiteringTime,_220),
-     intDurGreater(_214,_220,_80).
+holdsForSDFluent(loitering(_106)=true,_76) :-
+     holdsForProcessedSimpleFluent(_106,lowSpeed(_106)=true,_122),
+     holdsForProcessedSimpleFluent(_106,stopped(_106)=farFromPorts,_138),
+     union_all([_122,_138],_156),
+     holdsForProcessedSimpleFluent(_106,withinArea(_106,nearCoast)=true,_174),
+     holdsForProcessedSDFluent(_106,anchoredOrMoored(_106)=true,_190),
+     relative_complement_all(_156,[_174,_190],_210),
+     thresholds(loiteringTime,_216),
+     intDurGreater(_210,_216,_76).
 
-holdsForSDFluent(pilotOps(_110,_112)=true,_80) :-
-     holdsForProcessedIE(_110,proximity(_110,_112)=true,_130),
-     oneIsPilot(_110,_112),
-     holdsForProcessedSimpleFluent(_110,lowSpeed(_110)=true,_152),
-     holdsForProcessedSimpleFluent(_112,lowSpeed(_112)=true,_168),
-     holdsForProcessedSimpleFluent(_110,stopped(_110)=farFromPorts,_184),
-     holdsForProcessedSimpleFluent(_112,stopped(_112)=farFromPorts,_200),
-     union_all([_152,_184],_218),
-     union_all([_168,_200],_236),
-     intersect_all([_218,_236,_130],_260),
-     _260\=[],
-     holdsForProcessedSimpleFluent(_110,withinArea(_110,nearCoast)=true,_284),
-     holdsForProcessedSimpleFluent(_112,withinArea(_112,nearCoast)=true,_302),
-     relative_complement_all(_260,[_284,_302],_80).
+holdsForSDFluent(pilotOps(_106,_108)=true,_76) :-
+     holdsForProcessedIE(_106,proximity(_106,_108)=true,_126),
+     oneIsPilot(_106,_108),
+     holdsForProcessedSimpleFluent(_106,lowSpeed(_106)=true,_148),
+     holdsForProcessedSimpleFluent(_108,lowSpeed(_108)=true,_164),
+     holdsForProcessedSimpleFluent(_106,stopped(_106)=farFromPorts,_180),
+     holdsForProcessedSimpleFluent(_108,stopped(_108)=farFromPorts,_196),
+     union_all([_148,_180],_214),
+     union_all([_164,_196],_232),
+     intersect_all([_214,_232,_126],_256),
+     _256\=[],
+     holdsForProcessedSimpleFluent(_106,withinArea(_106,nearCoast)=true,_280),
+     holdsForProcessedSimpleFluent(_108,withinArea(_108,nearCoast)=true,_298),
+     relative_complement_all(_256,[_280,_298],_76).
 
-fi(trawlingMovement(_120)=true,trawlingMovement(_120)=false,_82):-
-     thresholds(trawlingCrs,_82),
-     grounding(trawlingMovement(_120)=true),
-     grounding(trawlingMovement(_120)=false).
+fi(trawlingMovement(_116)=true,trawlingMovement(_116)=false,_78):-
+     thresholds(trawlingCrs,_78),
+     grounding(trawlingMovement(_116)=true),
+     grounding(trawlingMovement(_116)=false).
 
-fi(sarMovement(_114)=true,sarMovement(_114)=false,1800):-
-     grounding(sarMovement(_114)=true),
-     grounding(sarMovement(_114)=false).
+fi(sarMovement(_110)=true,sarMovement(_110)=false,1800):-
+     grounding(sarMovement(_110)=true),
+     grounding(sarMovement(_110)=false).
 
-collectIntervals2(_84, proximity(_84,_86)=true) :-
-     vpair(_84,_86).
+collectIntervals2(_80, proximity(_80,_82)=true) :-
+     vpair(_80,_82).
 
-needsGrounding(_298,_300,_302) :- 
+needsGrounding(_266,_268,_270) :- 
      fail.
 
-grounding(change_in_speed_start(_480)) :- 
-     vessel(_480).
+grounding(change_in_speed_start(_448)) :- 
+     vessel(_448).
 
-grounding(change_in_speed_end(_480)) :- 
-     vessel(_480).
+grounding(change_in_speed_end(_448)) :- 
+     vessel(_448).
 
-grounding(change_in_heading(_480)) :- 
-     vessel(_480).
+grounding(change_in_heading(_448)) :- 
+     vessel(_448).
 
-grounding(stop_start(_480)) :- 
-     vessel(_480).
+grounding(stop_start(_448)) :- 
+     vessel(_448).
 
-grounding(stop_end(_480)) :- 
-     vessel(_480).
+grounding(stop_end(_448)) :- 
+     vessel(_448).
 
-grounding(slow_motion_start(_480)) :- 
-     vessel(_480).
+grounding(slow_motion_start(_448)) :- 
+     vessel(_448).
 
-grounding(slow_motion_end(_480)) :- 
-     vessel(_480).
+grounding(slow_motion_end(_448)) :- 
+     vessel(_448).
 
-grounding(gap_start(_480)) :- 
-     vessel(_480).
+grounding(gap_start(_448)) :- 
+     vessel(_448).
 
-grounding(gap_end(_480)) :- 
-     vessel(_480).
+grounding(gap_end(_448)) :- 
+     vessel(_448).
 
-grounding(entersArea(_480,_482)) :- 
-     vessel(_480),areaType(_482).
+grounding(entersArea(_448,_450)) :- 
+     vessel(_448),areaType(_450).
 
-grounding(leavesArea(_480,_482)) :- 
-     vessel(_480),areaType(_482).
+grounding(leavesArea(_448,_450)) :- 
+     vessel(_448),areaType(_450).
 
-grounding(coord(_480,_482,_484)) :- 
-     vessel(_480).
+grounding(coord(_448,_450,_452)) :- 
+     vessel(_448).
 
-grounding(velocity(_480,_482,_484,_486)) :- 
-     vessel(_480).
+grounding(velocity(_448,_450,_452,_454)) :- 
+     vessel(_448).
 
-grounding(proximity(_486,_488)=true) :- 
-     vpair(_486,_488).
+grounding(proximity(_454,_456)=true) :- 
+     vpair(_454,_456).
 
-grounding(gap(_486)=_482) :- 
-     vessel(_486),portStatus(_482).
+grounding(gap(_454)=_450) :- 
+     vessel(_454),portStatus(_450).
 
-grounding(stopped(_486)=_482) :- 
-     vessel(_486),portStatus(_482).
+grounding(stopped(_454)=_450) :- 
+     vessel(_454),portStatus(_450).
 
-grounding(lowSpeed(_486)=true) :- 
-     vessel(_486).
+grounding(lowSpeed(_454)=true) :- 
+     vessel(_454).
 
-grounding(changingSpeed(_486)=true) :- 
-     vessel(_486).
+grounding(changingSpeed(_454)=true) :- 
+     vessel(_454).
 
-grounding(withinArea(_486,_488)=true) :- 
-     vessel(_486),areaType(_488).
+grounding(withinArea(_454,_456)=true) :- 
+     vessel(_454),areaType(_456).
 
-grounding(underWay(_486)=true) :- 
-     vessel(_486).
+grounding(underWay(_454)=true) :- 
+     vessel(_454).
 
-grounding(sarSpeed(_486)=true) :- 
-     vessel(_486),vesselType(_486,sar).
+grounding(sarSpeed(_454)=true) :- 
+     vessel(_454),vesselType(_454,sar).
 
-grounding(sarMovement(_486)=true) :- 
-     vessel(_486),vesselType(_486,sar).
-
-grounding(sarMovement(_486)=false) :- 
-     vessel(_486),vesselType(_486,sar).
-
-grounding(inSAR(_486)=true) :- 
-     vessel(_486).
-
-grounding(highSpeedNearCoast(_486)=true) :- 
-     vessel(_486).
-
-grounding(drifting(_486)=true) :- 
-     vessel(_486).
-
-grounding(anchoredOrMoored(_486)=true) :- 
-     vessel(_486).
-
-grounding(trawlSpeed(_486)=true) :- 
-     vessel(_486),vesselType(_486,fishing).
-
-grounding(movingSpeed(_486)=_482) :- 
-     vessel(_486),movingStatus(_482).
-
-grounding(pilotOps(_486,_488)=true) :- 
-     vpair(_486,_488).
-
-grounding(tuggingSpeed(_486)=true) :- 
-     vessel(_486).
-
-grounding(tugging(_486,_488)=true) :- 
-     vpair(_486,_488).
-
-grounding(rendezVous(_486,_488)=true) :- 
-     vpair(_486,_488).
-
-grounding(trawlingMovement(_486)=true) :- 
-     vessel(_486),vesselType(_486,fishing).
-
-grounding(trawlingMovement(_486)=false) :- 
-     vessel(_486),vesselType(_486,fishing).
-
-grounding(trawling(_486)=true) :- 
-     vessel(_486).
-
-grounding(loitering(_486)=true) :- 
-     vessel(_486).
-
-p(trawlingMovement(_480)=true).
-
-p(sarMovement(_480)=true).
-
-inputEntity(entersArea(_134,_136)).
-inputEntity(gap_start(_134)).
-inputEntity(stop_start(_134)).
-inputEntity(slow_motion_start(_134)).
-inputEntity(change_in_speed_start(_134)).
-inputEntity(velocity(_134,_136,_138,_140)).
-inputEntity(change_in_heading(_134)).
-inputEntity(leavesArea(_134,_136)).
-inputEntity(gap_end(_134)).
-inputEntity(stop_end(_134)).
-inputEntity(slow_motion_end(_134)).
-inputEntity(change_in_speed_end(_134)).
-inputEntity(proximity(_140,_142)=true).
-inputEntity(coord(_134,_136,_138)).
-
-outputEntity(withinArea(_280,_282)=true).
-outputEntity(gap(_280)=nearPorts).
-outputEntity(gap(_280)=farFromPorts).
-outputEntity(stopped(_280)=nearPorts).
-outputEntity(stopped(_280)=farFromPorts).
-outputEntity(lowSpeed(_280)=true).
-outputEntity(changingSpeed(_280)=true).
-outputEntity(highSpeedNearCoast(_280)=true).
-outputEntity(movingSpeed(_280)=below).
-outputEntity(movingSpeed(_280)=normal).
-outputEntity(movingSpeed(_280)=above).
-outputEntity(drifting(_280)=true).
-outputEntity(tuggingSpeed(_280)=true).
-outputEntity(trawlSpeed(_280)=true).
-outputEntity(trawlingMovement(_280)=true).
-outputEntity(sarSpeed(_280)=true).
-outputEntity(sarMovement(_280)=true).
-outputEntity(trawlingMovement(_280)=false).
-outputEntity(sarMovement(_280)=false).
-outputEntity(underWay(_280)=true).
-outputEntity(anchoredOrMoored(_280)=true).
-outputEntity(tugging(_280,_282)=true).
-outputEntity(rendezVous(_280,_282)=true).
-outputEntity(trawling(_280)=true).
-outputEntity(inSAR(_280)=true).
-outputEntity(loitering(_280)=true).
-outputEntity(pilotOps(_280,_282)=true).
-
-event(entersArea(_492,_494)).
-event(gap_start(_492)).
-event(stop_start(_492)).
-event(slow_motion_start(_492)).
-event(change_in_speed_start(_492)).
-event(velocity(_492,_494,_496,_498)).
-event(change_in_heading(_492)).
-event(leavesArea(_492,_494)).
-event(gap_end(_492)).
-event(stop_end(_492)).
-event(slow_motion_end(_492)).
-event(change_in_speed_end(_492)).
-event(coord(_492,_494,_496)).
-
-simpleFluent(withinArea(_632,_634)=true).
-simpleFluent(gap(_632)=nearPorts).
-simpleFluent(gap(_632)=farFromPorts).
-simpleFluent(stopped(_632)=nearPorts).
-simpleFluent(stopped(_632)=farFromPorts).
-simpleFluent(lowSpeed(_632)=true).
-simpleFluent(changingSpeed(_632)=true).
-simpleFluent(highSpeedNearCoast(_632)=true).
-simpleFluent(movingSpeed(_632)=below).
-simpleFluent(movingSpeed(_632)=normal).
-simpleFluent(movingSpeed(_632)=above).
-simpleFluent(drifting(_632)=true).
-simpleFluent(tuggingSpeed(_632)=true).
-simpleFluent(trawlSpeed(_632)=true).
-simpleFluent(trawlingMovement(_632)=true).
-simpleFluent(sarSpeed(_632)=true).
-simpleFluent(sarMovement(_632)=true).
-simpleFluent(trawlingMovement(_632)=false).
-simpleFluent(sarMovement(_632)=false).
-
-sDFluent(underWay(_802)=true).
-sDFluent(anchoredOrMoored(_802)=true).
-sDFluent(tugging(_802,_804)=true).
-sDFluent(rendezVous(_802,_804)=true).
-sDFluent(trawling(_802)=true).
-sDFluent(inSAR(_802)=true).
-sDFluent(loitering(_802)=true).
-sDFluent(pilotOps(_802,_804)=true).
-sDFluent(proximity(_802,_804)=true).
-
-index(entersArea(_858,_912),_858).
-index(gap_start(_858),_858).
-index(stop_start(_858),_858).
-index(slow_motion_start(_858),_858).
-index(change_in_speed_start(_858),_858).
-index(velocity(_858,_912,_914,_916),_858).
-index(change_in_heading(_858),_858).
-index(leavesArea(_858,_912),_858).
-index(gap_end(_858),_858).
-index(stop_end(_858),_858).
-index(slow_motion_end(_858),_858).
-index(change_in_speed_end(_858),_858).
-index(coord(_858,_912,_914),_858).
-index(withinArea(_858,_918)=true,_858).
-index(gap(_858)=nearPorts,_858).
-index(gap(_858)=farFromPorts,_858).
-index(stopped(_858)=nearPorts,_858).
-index(stopped(_858)=farFromPorts,_858).
-index(lowSpeed(_858)=true,_858).
-index(changingSpeed(_858)=true,_858).
-index(highSpeedNearCoast(_858)=true,_858).
-index(movingSpeed(_858)=below,_858).
-index(movingSpeed(_858)=normal,_858).
-index(movingSpeed(_858)=above,_858).
-index(drifting(_858)=true,_858).
-index(tuggingSpeed(_858)=true,_858).
-index(trawlSpeed(_858)=true,_858).
-index(trawlingMovement(_858)=true,_858).
-index(sarSpeed(_858)=true,_858).
-index(sarMovement(_858)=true,_858).
-index(trawlingMovement(_858)=false,_858).
-index(sarMovement(_858)=false,_858).
-index(underWay(_858)=true,_858).
-index(anchoredOrMoored(_858)=true,_858).
-index(tugging(_858,_918)=true,_858).
-index(rendezVous(_858,_918)=true,_858).
-index(trawling(_858)=true,_858).
-index(inSAR(_858)=true,_858).
-index(loitering(_858)=true,_858).
-index(pilotOps(_858,_918)=true,_858).
-index(proximity(_858,_918)=true,_858).
-
-
-cachingOrder2(_1338, withinArea(_1338,_1340)=true) :- % level in dependency graph: 1, processing order in component: 1
-     vessel(_1338),areaType(_1340).
-
-cachingOrder2(_1588, gap(_1588)=nearPorts) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1588),portStatus(nearPorts).
-
-cachingOrder2(_1566, gap(_1566)=farFromPorts) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1566),portStatus(farFromPorts).
-
-cachingOrder2(_1544, highSpeedNearCoast(_1544)=true) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1544).
-
-cachingOrder2(_1506, trawlingMovement(_1506)=true) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1506),vesselType(_1506,fishing).
-
-cachingOrder2(_1506, trawlingMovement(_1506)=false) :- % level in dependency graph: 2, processing order in component: 2
-     vessel(_1506),vesselType(_1506,fishing).
-
-cachingOrder2(_2250, stopped(_2250)=nearPorts) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2250),portStatus(nearPorts).
-
-cachingOrder2(_2228, stopped(_2228)=farFromPorts) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2228),portStatus(farFromPorts).
-
-cachingOrder2(_2206, lowSpeed(_2206)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2206).
-
-cachingOrder2(_2184, changingSpeed(_2184)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2184).
-
-cachingOrder2(_2162, movingSpeed(_2162)=below) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2162),movingStatus(below).
-
-cachingOrder2(_2140, movingSpeed(_2140)=normal) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2140),movingStatus(normal).
-
-cachingOrder2(_2118, movingSpeed(_2118)=above) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2118),movingStatus(above).
-
-cachingOrder2(_2096, tuggingSpeed(_2096)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2096).
-
-cachingOrder2(_2074, trawlSpeed(_2074)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2074),vesselType(_2074,fishing).
-
-cachingOrder2(_2052, sarSpeed(_2052)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2052),vesselType(_2052,sar).
-
-cachingOrder2(_3232, sarMovement(_3232)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3232),vesselType(_3232,sar).
-
-cachingOrder2(_3232, sarMovement(_3232)=false) :- % level in dependency graph: 4, processing order in component: 2
-     vessel(_3232),vesselType(_3232,sar).
-
-cachingOrder2(_3210, underWay(_3210)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3210).
-
-cachingOrder2(_3188, anchoredOrMoored(_3188)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3188).
-
-cachingOrder2(_3164, tugging(_3164,_3166)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3164,_3166).
-
-cachingOrder2(_3140, rendezVous(_3140,_3142)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3140,_3142).
-
-cachingOrder2(_3118, trawling(_3118)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3118).
-
-cachingOrder2(_3094, pilotOps(_3094,_3096)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3094,_3096).
-
-cachingOrder2(_4000, drifting(_4000)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_4000).
-
-cachingOrder2(_3978, inSAR(_3978)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_3978).
-
-cachingOrder2(_3956, loitering(_3956)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_3956).
-
-collectGrounds([entersArea(_680,_694), gap_start(_680), stop_start(_680), slow_motion_start(_680), change_in_speed_start(_680), velocity(_680,_694,_696,_698), change_in_heading(_680), leavesArea(_680,_694), gap_end(_680), stop_end(_680), slow_motion_end(_680), change_in_speed_end(_680), coord(_680,_694,_696)],vessel(_680)).
-
-collectGrounds([proximity(_668,_670)=true],vpair(_668,_670)).
-
-dgrounded(withinArea(_1756,_1758)=true, vessel(_1756)).
-dgrounded(gap(_1714)=nearPorts, vessel(_1714)).
-dgrounded(gap(_1672)=farFromPorts, vessel(_1672)).
-dgrounded(stopped(_1630)=nearPorts, vessel(_1630)).
-dgrounded(stopped(_1588)=farFromPorts, vessel(_1588)).
-dgrounded(lowSpeed(_1556)=true, vessel(_1556)).
-dgrounded(changingSpeed(_1524)=true, vessel(_1524)).
-dgrounded(highSpeedNearCoast(_1492)=true, vessel(_1492)).
-dgrounded(movingSpeed(_1450)=below, vessel(_1450)).
-dgrounded(movingSpeed(_1408)=normal, vessel(_1408)).
-dgrounded(movingSpeed(_1366)=above, vessel(_1366)).
-dgrounded(drifting(_1334)=true, vessel(_1334)).
-dgrounded(tuggingSpeed(_1302)=true, vessel(_1302)).
-dgrounded(trawlSpeed(_1258)=true, vessel(_1258)).
-dgrounded(trawlingMovement(_1214)=true, vessel(_1214)).
-dgrounded(sarSpeed(_1170)=true, vessel(_1170)).
-dgrounded(sarMovement(_1126)=true, vessel(_1126)).
-dgrounded(trawlingMovement(_1082)=false, vessel(_1082)).
-dgrounded(sarMovement(_1038)=false, vessel(_1038)).
-dgrounded(underWay(_1006)=true, vessel(_1006)).
-dgrounded(anchoredOrMoored(_974)=true, vessel(_974)).
-dgrounded(tugging(_938,_940)=true, vpair(_938,_940)).
-dgrounded(rendezVous(_902,_904)=true, vpair(_902,_904)).
-dgrounded(trawling(_870)=true, vessel(_870)).
-dgrounded(inSAR(_838)=true, vessel(_838)).
-dgrounded(loitering(_806)=true, vessel(_806)).
-dgrounded(pilotOps(_770,_772)=true, vpair(_770,_772)).
+grounding(sarMovement(_454)=true) :- 
+     vessel(_454),vesselType(_454,sar).
+
+grounding(sarMovement(_454)=false) :- 
+     vessel(_454),vesselType(_454,sar).
+
+grounding(inSAR(_454)=true) :- 
+     vessel(_454).
+
+grounding(highSpeedNearCoast(_454)=true) :- 
+     vessel(_454).
+
+grounding(drifting(_454)=true) :- 
+     vessel(_454).
+
+grounding(anchoredOrMoored(_454)=true) :- 
+     vessel(_454).
+
+grounding(trawlSpeed(_454)=true) :- 
+     vessel(_454),vesselType(_454,fishing).
+
+grounding(movingSpeed(_454)=_450) :- 
+     vessel(_454),movingStatus(_450).
+
+grounding(pilotOps(_454,_456)=true) :- 
+     vpair(_454,_456).
+
+grounding(tuggingSpeed(_454)=true) :- 
+     vessel(_454).
+
+grounding(tugging(_454,_456)=true) :- 
+     vpair(_454,_456).
+
+grounding(rendezVous(_454,_456)=true) :- 
+     vpair(_454,_456).
+
+grounding(trawlingMovement(_454)=true) :- 
+     vessel(_454),vesselType(_454,fishing).
+
+grounding(trawlingMovement(_454)=false) :- 
+     vessel(_454),vesselType(_454,fishing).
+
+grounding(trawling(_454)=true) :- 
+     vessel(_454).
+
+grounding(loitering(_454)=true) :- 
+     vessel(_454).
+
+p(trawlingMovement(_448)=true).
+
+p(sarMovement(_448)=true).
+
+inputEntity(entersArea(_136,_138)).
+inputEntity(gap_start(_136)).
+inputEntity(stop_start(_136)).
+inputEntity(slow_motion_start(_136)).
+inputEntity(change_in_speed_start(_136)).
+inputEntity(velocity(_136,_138,_140,_142)).
+inputEntity(change_in_heading(_136)).
+inputEntity(leavesArea(_136,_138)).
+inputEntity(gap_end(_136)).
+inputEntity(stop_end(_136)).
+inputEntity(slow_motion_end(_136)).
+inputEntity(change_in_speed_end(_136)).
+inputEntity(proximity(_142,_144)=true).
+inputEntity(coord(_136,_138,_140)).
+
+outputEntity(withinArea(_288,_290)=true).
+outputEntity(gap(_288)=nearPorts).
+outputEntity(gap(_288)=farFromPorts).
+outputEntity(stopped(_288)=nearPorts).
+outputEntity(stopped(_288)=farFromPorts).
+outputEntity(lowSpeed(_288)=true).
+outputEntity(changingSpeed(_288)=true).
+outputEntity(highSpeedNearCoast(_288)=true).
+outputEntity(movingSpeed(_288)=below).
+outputEntity(movingSpeed(_288)=normal).
+outputEntity(movingSpeed(_288)=above).
+outputEntity(drifting(_288)=true).
+outputEntity(tuggingSpeed(_288)=true).
+outputEntity(trawlSpeed(_288)=true).
+outputEntity(trawlingMovement(_288)=true).
+outputEntity(sarSpeed(_288)=true).
+outputEntity(sarMovement(_288)=true).
+outputEntity(trawlingMovement(_288)=false).
+outputEntity(sarMovement(_288)=false).
+outputEntity(underWay(_288)=true).
+outputEntity(anchoredOrMoored(_288)=true).
+outputEntity(tugging(_288,_290)=true).
+outputEntity(rendezVous(_288,_290)=true).
+outputEntity(trawling(_288)=true).
+outputEntity(inSAR(_288)=true).
+outputEntity(loitering(_288)=true).
+outputEntity(pilotOps(_288,_290)=true).
+
+event(entersArea(_506,_508)).
+event(gap_start(_506)).
+event(stop_start(_506)).
+event(slow_motion_start(_506)).
+event(change_in_speed_start(_506)).
+event(velocity(_506,_508,_510,_512)).
+event(change_in_heading(_506)).
+event(leavesArea(_506,_508)).
+event(gap_end(_506)).
+event(stop_end(_506)).
+event(slow_motion_end(_506)).
+event(change_in_speed_end(_506)).
+event(coord(_506,_508,_510)).
+
+simpleFluent(withinArea(_652,_654)=true).
+simpleFluent(gap(_652)=nearPorts).
+simpleFluent(gap(_652)=farFromPorts).
+simpleFluent(stopped(_652)=nearPorts).
+simpleFluent(stopped(_652)=farFromPorts).
+simpleFluent(lowSpeed(_652)=true).
+simpleFluent(changingSpeed(_652)=true).
+simpleFluent(highSpeedNearCoast(_652)=true).
+simpleFluent(movingSpeed(_652)=below).
+simpleFluent(movingSpeed(_652)=normal).
+simpleFluent(movingSpeed(_652)=above).
+simpleFluent(drifting(_652)=true).
+simpleFluent(tuggingSpeed(_652)=true).
+simpleFluent(trawlSpeed(_652)=true).
+simpleFluent(trawlingMovement(_652)=true).
+simpleFluent(sarSpeed(_652)=true).
+simpleFluent(sarMovement(_652)=true).
+simpleFluent(trawlingMovement(_652)=false).
+simpleFluent(sarMovement(_652)=false).
+
+sDFluent(underWay(_828)=true).
+sDFluent(anchoredOrMoored(_828)=true).
+sDFluent(tugging(_828,_830)=true).
+sDFluent(rendezVous(_828,_830)=true).
+sDFluent(trawling(_828)=true).
+sDFluent(inSAR(_828)=true).
+sDFluent(loitering(_828)=true).
+sDFluent(pilotOps(_828,_830)=true).
+sDFluent(proximity(_828,_830)=true).
+
+index(entersArea(_884,_944),_884).
+index(gap_start(_884),_884).
+index(stop_start(_884),_884).
+index(slow_motion_start(_884),_884).
+index(change_in_speed_start(_884),_884).
+index(velocity(_884,_944,_946,_948),_884).
+index(change_in_heading(_884),_884).
+index(leavesArea(_884,_944),_884).
+index(gap_end(_884),_884).
+index(stop_end(_884),_884).
+index(slow_motion_end(_884),_884).
+index(change_in_speed_end(_884),_884).
+index(coord(_884,_944,_946),_884).
+index(withinArea(_884,_950)=true,_884).
+index(gap(_884)=nearPorts,_884).
+index(gap(_884)=farFromPorts,_884).
+index(stopped(_884)=nearPorts,_884).
+index(stopped(_884)=farFromPorts,_884).
+index(lowSpeed(_884)=true,_884).
+index(changingSpeed(_884)=true,_884).
+index(highSpeedNearCoast(_884)=true,_884).
+index(movingSpeed(_884)=below,_884).
+index(movingSpeed(_884)=normal,_884).
+index(movingSpeed(_884)=above,_884).
+index(drifting(_884)=true,_884).
+index(tuggingSpeed(_884)=true,_884).
+index(trawlSpeed(_884)=true,_884).
+index(trawlingMovement(_884)=true,_884).
+index(sarSpeed(_884)=true,_884).
+index(sarMovement(_884)=true,_884).
+index(trawlingMovement(_884)=false,_884).
+index(sarMovement(_884)=false,_884).
+index(underWay(_884)=true,_884).
+index(anchoredOrMoored(_884)=true,_884).
+index(tugging(_884,_950)=true,_884).
+index(rendezVous(_884,_950)=true,_884).
+index(trawling(_884)=true,_884).
+index(inSAR(_884)=true,_884).
+index(loitering(_884)=true,_884).
+index(pilotOps(_884,_950)=true,_884).
+index(proximity(_884,_950)=true,_884).
+
+
+cachingOrder2(_1382, withinArea(_1382,_1384)=true) :- % level in dependency graph: 1, processing order in component: 1
+     vessel(_1382),areaType(_1384).
+
+cachingOrder2(_1638, gap(_1638)=nearPorts) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1638),portStatus(nearPorts).
+
+cachingOrder2(_1616, gap(_1616)=farFromPorts) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1616),portStatus(farFromPorts).
+
+cachingOrder2(_1594, highSpeedNearCoast(_1594)=true) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1594).
+
+cachingOrder2(_1556, trawlingMovement(_1556)=true) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1556),vesselType(_1556,fishing).
+
+cachingOrder2(_1556, trawlingMovement(_1556)=false) :- % level in dependency graph: 2, processing order in component: 2
+     vessel(_1556),vesselType(_1556,fishing).
+
+cachingOrder2(_2306, stopped(_2306)=nearPorts) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2306),portStatus(nearPorts).
+
+cachingOrder2(_2284, stopped(_2284)=farFromPorts) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2284),portStatus(farFromPorts).
+
+cachingOrder2(_2262, lowSpeed(_2262)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2262).
+
+cachingOrder2(_2240, changingSpeed(_2240)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2240).
+
+cachingOrder2(_2218, movingSpeed(_2218)=below) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2218),movingStatus(below).
+
+cachingOrder2(_2196, movingSpeed(_2196)=normal) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2196),movingStatus(normal).
+
+cachingOrder2(_2174, movingSpeed(_2174)=above) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2174),movingStatus(above).
+
+cachingOrder2(_2152, tuggingSpeed(_2152)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2152).
+
+cachingOrder2(_2130, trawlSpeed(_2130)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2130),vesselType(_2130,fishing).
+
+cachingOrder2(_2108, sarSpeed(_2108)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2108),vesselType(_2108,sar).
+
+cachingOrder2(_3294, sarMovement(_3294)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3294),vesselType(_3294,sar).
+
+cachingOrder2(_3294, sarMovement(_3294)=false) :- % level in dependency graph: 4, processing order in component: 2
+     vessel(_3294),vesselType(_3294,sar).
+
+cachingOrder2(_3272, underWay(_3272)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3272).
+
+cachingOrder2(_3250, anchoredOrMoored(_3250)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3250).
+
+cachingOrder2(_3226, tugging(_3226,_3228)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3226,_3228).
+
+cachingOrder2(_3202, rendezVous(_3202,_3204)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3202,_3204).
+
+cachingOrder2(_3180, trawling(_3180)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3180).
+
+cachingOrder2(_3156, pilotOps(_3156,_3158)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3156,_3158).
+
+cachingOrder2(_4068, drifting(_4068)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_4068).
+
+cachingOrder2(_4046, inSAR(_4046)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_4046).
+
+cachingOrder2(_4024, loitering(_4024)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_4024).
+
+collectGrounds([entersArea(_688,_702), gap_start(_688), stop_start(_688), slow_motion_start(_688), change_in_speed_start(_688), velocity(_688,_702,_704,_706), change_in_heading(_688), leavesArea(_688,_702), gap_end(_688), stop_end(_688), slow_motion_end(_688), change_in_speed_end(_688), coord(_688,_702,_704)],vessel(_688)).
+
+collectGrounds([proximity(_676,_678)=true],vpair(_676,_678)).
+
+dgrounded(withinArea(_1770,_1772)=true, vessel(_1770)).
+dgrounded(gap(_1728)=nearPorts, vessel(_1728)).
+dgrounded(gap(_1686)=farFromPorts, vessel(_1686)).
+dgrounded(stopped(_1644)=nearPorts, vessel(_1644)).
+dgrounded(stopped(_1602)=farFromPorts, vessel(_1602)).
+dgrounded(lowSpeed(_1570)=true, vessel(_1570)).
+dgrounded(changingSpeed(_1538)=true, vessel(_1538)).
+dgrounded(highSpeedNearCoast(_1506)=true, vessel(_1506)).
+dgrounded(movingSpeed(_1464)=below, vessel(_1464)).
+dgrounded(movingSpeed(_1422)=normal, vessel(_1422)).
+dgrounded(movingSpeed(_1380)=above, vessel(_1380)).
+dgrounded(drifting(_1348)=true, vessel(_1348)).
+dgrounded(tuggingSpeed(_1316)=true, vessel(_1316)).
+dgrounded(trawlSpeed(_1272)=true, vessel(_1272)).
+dgrounded(trawlingMovement(_1228)=true, vessel(_1228)).
+dgrounded(sarSpeed(_1184)=true, vessel(_1184)).
+dgrounded(sarMovement(_1140)=true, vessel(_1140)).
+dgrounded(trawlingMovement(_1096)=false, vessel(_1096)).
+dgrounded(sarMovement(_1052)=false, vessel(_1052)).
+dgrounded(underWay(_1020)=true, vessel(_1020)).
+dgrounded(anchoredOrMoored(_988)=true, vessel(_988)).
+dgrounded(tugging(_952,_954)=true, vpair(_952,_954)).
+dgrounded(rendezVous(_916,_918)=true, vpair(_916,_918)).
+dgrounded(trawling(_884)=true, vessel(_884)).
+dgrounded(inSAR(_852)=true, vessel(_852)).
+dgrounded(loitering(_820)=true, vessel(_820)).
+dgrounded(pilotOps(_784,_786)=true, vpair(_784,_786)).

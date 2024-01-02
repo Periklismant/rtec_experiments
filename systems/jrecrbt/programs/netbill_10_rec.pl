@@ -1,11 +1,15 @@
-test(MVIs):-
-	update([happens(presentQuote(10,10,book),1),happens(presentQuote(0,4,book),1),happens(presentQuote(0,10,book),1),happens(presentQuote(10,4,book),1),happens(acceptQuote(10,10,book),6),happens(presentQuote(0,10,book),11),happens(acceptQuote(10,10,book),16),happens(presentQuote(10,4,book),21),happens(presentQuote(10,10,book),31),happens(acceptQuote(10,10,book),36),happens(presentQuote(10,10,book),41),happens(presentQuote(10,4,book),41),happens(acceptQuote(10,10,book),46)]),
-	status(MVIs).
+test:-
+	update([happens(presentQuote(10,10,book),1),happens(presentQuote(0,4,book),1),happens(presentQuote(0,10,book),1),happens(presentQuote(10,4,book),1),happens(acceptQuote(10,10,book),6),happens(presentQuote(0,10,book),11)]),
+	update([happens(acceptQuote(10,10,book),16),happens(presentQuote(10,4,book),21)]),
+	update([happens(presentQuote(10,10,book),31)]),
+	update([happens(acceptQuote(10,10,book),36),happens(presentQuote(10,10,book),41)]),
+	update([happens(presentQuote(10,4,book),41),happens(acceptQuote(10,10,book),46)]),
+	status.
 
-merchant(0).
 merchant(10).
-consumer(4).
+merchant(0).
 consumer(10).
+consumer(4).
 goods(book).
 
 initiates(presentQuote(M,C,GD), quote(M,C,GD), _):-
