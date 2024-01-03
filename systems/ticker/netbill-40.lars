@@ -85,11 +85,11 @@ timepoint(46).
 timepoint(47).
 timepoint(48).
 timepoint(49).
-merchant(1).
-consumer(2).
-consumer(4).
-consumer(1).
 merchant(4).
+consumer(1).
+merchant(1).
 consumer(3).
 merchant(2).
+consumer(2).
 merchant(3).
+consumer(4).

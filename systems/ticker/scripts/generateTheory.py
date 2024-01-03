@@ -5,6 +5,7 @@ timepointsNo=argv[2]
 
 #netbillTheory="netbillTheory.lars"
 netbillTheory="event_description/netbillTheoryInitTerm.lars"
+#netbillTheory="event_description/netbillTheory.lars"
 f=open(netbillTheory, 'r')
 outputFile="netbill-"+agentsNo+".lars"
 fw=open(outputFile, 'w')

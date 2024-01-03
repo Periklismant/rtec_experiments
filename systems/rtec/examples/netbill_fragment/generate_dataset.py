@@ -3,13 +3,18 @@ from random import uniform,choice
 
 events_no_str=argv[1] # > 100
 # 30 agents seems ok 
-agents_no=10 #30 # argv[2]
-timeline_length=80
+agents_no=5 #30 # argv[2]
+timeline_length=20
 goods="book"
 fw=open('dataset/csv/netbill-'+events_no_str+'.csv', 'w')
 
 events_no=int(events_no_str)
 events_per_timepoint=events_no/timeline_length
+
+if events_per_timepoint<1:
+	skip_factor=int(1/events_per_timepoint)
+else:
+	skip_factor=1
 
 merchants=list(range(1,agents_no))
 consumers=list(range(1,agents_no))
@@ -32,7 +37,7 @@ while timepoint<=timeline_length:
 		fw.write(gen_accept_quote(timepoint,merch,cons,goods))
 	event_at_tp+=1
 	if event_at_tp+1>events_per_timepoint:
-		timepoint+=1
+		timepoint+=skip_factor
 		event_at_tp=0
 
 fw.close()

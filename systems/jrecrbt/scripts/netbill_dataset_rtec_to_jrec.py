@@ -15,7 +15,7 @@ def generate_rec_theory(agentsNo, system):
 	fw.write("test:-\n\tupdate([")
 
 	windowNo=1
-	windowSize=10
+	windowSize=100
 	first=True
 	for line in f:
 		lineSpl=line.split("|")

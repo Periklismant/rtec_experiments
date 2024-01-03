@@ -1,6 +1,0 @@
-   col0   
-----------
- machine
- universe
-(2 rows)
-

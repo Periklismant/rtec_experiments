@@ -2,14 +2,14 @@
 # This script reproduces the results of Figure 4 (middle) of the paper.
 # We execute RTEC and GKL-EC on the immune response feedback loop.
 
-Timeline_sizes=(200)
+#Timeline_sizes=(200)
 App="immune"
-#Timeline_sizes=(400 800 1600 3200) # These timelines contain, resp., 200, 400, 800 and 1600 events, i.e., changes in the functions that may lead to delayed variable modifications.
+Timeline_sizes=(400 800 1600 3200) # These timelines contain, resp., 200, 400, 800 and 1600 events, i.e., changes in the functions that may lead to delayed variable modifications.
 # Run RTEC 
 cd ../systems/rtec/execution\ scripts
 echo "Reasoning with RTEC on $App"
 for timeline_size in ${Timeline_sizes[@]}; do
-    echo -e "\tTimeline size: ${timeline_size}"
+    echo -e "\tNumber of events: $((${timeline_size}/2))"
     total_run_time=0
     total_run_time_sq=0
     count=0
@@ -39,14 +39,14 @@ done
 cd ../../gklec/scripts
 echo "Reasoning with GKL-EC on $App"
 for EndTime in ${Timeline_sizes[@]}; do
-    echo -e "\tTimeline size: ${timeline_size}"
+    echo -e "\tNumber of events: $((${timeline_size}/2))"
     swipl -l ../src/gklec.prolog -q -g "runQueryAllInits(immune_g, ${EndTime}), halt."
     HVals='0 1' # 2'
     SVals='0 1 2'
-    for HVal in $HVals; do
-            for SVal in $SVals; do
-                    python3 transform_flec_logs.py immune_g ${EndTime} ${HVal} ${SVal}
-            done
-    done
+    #for HVal in $HVals; do
+    #       for SVal in $SVals; do
+    #              python3 transform_flec_logs.py immune_g ${EndTime} ${HVal} ${SVal}
+    #       done
+    #done
 done
 cd ../../../scripts

@@ -38,10 +38,32 @@ done
 cd ../../../scripts
 
 # Run jRECfi
-#echo "Reasoning with jRECfi on a fragment of NetBill."
+echo "Reasoning with jRECfi on a fragment of NetBill."
+cd ../systems/jrecrbt/bin
+for event_no in ${EventNos[@]}; do
+    echo -e "\tNumber of events: ${event_no}"
+    start_time=`date +%s.%N`
+    java -Xss9m Main rec $event_no netbill
+    end_time=`date +%s.%N`
+    run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
+    run_time=${run_time_float%.*}
+    echo -e "\tReasoning time: ${run_time}ms"
+done
+cd ../../../scripts
 
 # Run Ticker
 echo "Reasoning with Ticker on a fragment of NetBill."
+cd ../systems/ticker
+for event_no in ${EventNos[@]}; do
+    echo -e "\tNumber of events: ${event_no}"
+    start_time=`date +%s.%N`
+    ./run.sh ${event_no} 50
+    end_time=`date +%s.%N`
+    run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
+    run_time=${run_time_float%.*}
+    echo -e "\tReasoning time: ${run_time}ms"
+done
+cd ../../scripts
 
 # Run Fusemate
 echo "Reasoning with Fusemate on a fragment of NetBill."
@@ -51,6 +73,17 @@ cd ../../../../scripts
 
 # Run Logica
 echo "Reasoning with Logica on a fragment of NetBill."
+cd ../systems/logica
+for event_no in ${EventNos[@]}; do
+    echo -e "\tNumber of events: ${event_no}"
+    start_time=`date +%s.%N`
+    logica netbill-${event_no}.l run holdsAt &>/dev/null
+    end_time=`date +%s.%N`
+    run_time_float=$( echo "($end_time - $start_time)*1000" | bc -l )
+    run_time=${run_time_float%.*}
+    echo -e "\tReasoning time: ${run_time}ms"
+done
+cd ../../scripts
 
 # Run jRECrbt
 echo "Reasoning with jRECrbt on a fragment of NetBill."
@@ -64,3 +97,4 @@ for event_no in ${EventNos[@]}; do
     run_time=${run_time_float%.*}
     echo -e "\tReasoning time: ${run_time}ms"
 done
+cd ../../../scripts

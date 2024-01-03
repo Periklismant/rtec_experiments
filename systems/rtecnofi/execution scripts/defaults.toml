@@ -36,7 +36,7 @@ end_time = 1448834400
 clock_tick = 1
 # Input Specification Parameters
 input_mode = "csv"
-input_providers = ['../examples/maritime_no_fi/dataset/csv/brest_critical.csv']
+input_providers = ['../../../datasets/maritime/brest_critical.csv']
 stream_rate = 10000
 # Knowledge Base
 event_description = '../examples/maritime_no_fi/resources/patterns/rules.prolog'

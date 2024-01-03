@@ -4,7 +4,7 @@ COPY . .
 # Setup aptitude
 RUN apt-get -y update
 # Install General
-RUN apt-get -y install build-essential
+RUN apt-get -y install build-essential 
 RUN apt-get -y install apt-utils
 RUN apt-get -y install curl
 RUN apt-get -y install wget
@@ -12,6 +12,8 @@ RUN apt-get -y install libasound2
 RUN apt-get -y install libxi6
 RUN apt-get -y install libxtst6
 RUN apt-get -y install bc
+RUN apt-get -y install unzip
+RUN apt-get -y install vim
 #RUN apt-get -y install emacs
 # Install SWI Prolog
 RUN apt-get -y install software-properties-common 
@@ -57,11 +59,20 @@ RUN apt-get -y update
 RUN apt-get -y install apt-transport-https ca-certificates gnupg 
 #RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
+RUN gcloud auth activate-service-account tkde_experiments --key-file=gcloud_key.json
 # Install Logica 
 RUN apt-get -y update
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN python3 -m pip install logica
+# Download Brest dataset
+RUN wget -O datasets/maritime/brest_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/67dJSuymyIw1Mng/download"
+RUN unzip -o datasets/maritime/brest_dataset.zip -d datasets/maritime/
+RUN rm datasets/maritime/brest_dataset.zip
+# Download Europe dataset
+RUN wget -O datasets/maritime/imis_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/REYgngK1wN45g1C/download"
+RUN unzip -o datasets/maritime/imis_dataset.zip -d datasets/maritime/
+RUN rm datasets/maritime/imis_dataset.zip
 
 EXPOSE 3000
 

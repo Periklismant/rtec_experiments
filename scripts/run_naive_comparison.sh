@@ -10,20 +10,21 @@ Systems=("rtec" "rtecnaive")
 window_sizes=(10 20 40 80)
 step=10
 
+echo "%%% Comparing RTEC and RTEC-naive on voting and NetBill (see Figure 3 of the paper).%%%"
 for App in ${Applications[@]}; do
-    echo "%%% Running ${App} experiments %%%"
+    echo -e "\t**Application: ${App}**"
     # Path relative to systems/rtec/execution\ scripts
     dataset="../../../datasets/${App}/naive_comparison_input.csv"
     for system in ${Systems[@]}; do
-        echo "- System: ${system}" 
+        echo -e "\t\t- System: ${system}" 
         # Paths relative to this directory 
         system_path="../systems/${system}"
         for window_size in ${window_sizes[@]}; do
-            echo -e "\t* Window size: ${window_size}"
+            echo -e "\t\t\t* Window size: ${window_size}"
             cd ${system_path}/execution\ scripts
             end_time=$((${window_size}*10))
             ./run_rtec.sh --app=${App} --window-size=${window_size} --step=${step} --input=${dataset} --end-time=${end_time} --background-knowledge=../examples/${App}/dataset/auxiliary/domain_${window_size}.prolog > ../../../logs/${system}/naivecomp_${system}_${App}_win${window_size}.txt 
-            awk 'ENDFILE{print "Average rule computations: " $11 " with standard deviation: " $14}' log-swi-${window_size}-${step}-csv-file-log.txt
+            awk 'END{print "\t\t\tAverage rule computations: " $11 " with standard deviation: " $14}' ../examples/${App}/results/log-swi-${window_size}-${step}-csv-file-log.txt
             cd ../../../scripts
         done
     done

@@ -40,7 +40,7 @@ public class Main {
             //System.out.println("Engine started successfully");
 
             //SolveInfo solveInfo = p.solve("test(X).");
-            //SolveInfo solveInfo = p.solve("test.");
+            SolveInfo solveInfo = p.solve("test.");
             p.solve("reset.");
             long after = System.currentTimeMillis();
 
@@ -48,7 +48,7 @@ public class Main {
             //System.out.println("Experiment ended with solve info: ");
             //System.out.println(solveInfo);
 
-            System.out.println("\tReasoning time: " + Long.toString(after-before));
+            //System.out.println("\tReasoning time: " + Long.toString(after-before));
 
 
             //System.out.println("Reset OK.");

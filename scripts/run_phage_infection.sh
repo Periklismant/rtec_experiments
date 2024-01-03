@@ -2,14 +2,14 @@
 # This script reproduces the results of Figure 4 (right) of the paper.
 # We execute RTEC and GKL-EC on the phage infection feedback loop.
 
-Timeline_sizes=(100)
-#Timeline_sizes=(300 600 1200 2400) # These timelines contain, resp., 200, 400, 800 and 1600 events, i.e., changes in the functions that may lead to delayed variable modifications.
+#Timeline_sizes=(100)
+Timeline_sizes=(300 600 1200 2400) # These timelines contain, resp., 200, 400, 800 and 1600 events, i.e., changes in the functions that may lead to delayed variable modifications.
 App="phage"
 # Run RTEC 
 cd ../systems/rtec/execution\ scripts
 echo "Reasoning with RTEC on $App"
 for timeline_size in ${Timeline_sizes[@]}; do
-    echo -e "\tTimeline size: ${timeline_size}"
+    echo -e "\tNumber of events: $((2*${timeline_size}/3))"
     App="phage"
     total_run_time=0
     total_run_time_sq=0
@@ -45,7 +45,7 @@ done
 cd ../../gklec/scripts
 echo "Reasoning with GKL-EC on $App"
 for EndTime in ${Timeline_sizes[@]}; do
-    echo -e "\tTimeline size: ${timeline_size}"
+    echo -e "\tNumber of events: $((2*${timeline_size}/3))"
 	swipl -l ../src/gklec.prolog -q -g "runQueryAllInits(phage_g, ${EndTime}), halt."
 	CIVals='0 1 2'
 	CroVals='0 1 2 3'

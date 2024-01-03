@@ -24,4 +24,6 @@ systems/fusemate/examples/event-calculus/target/*
 systems/fusemate/repl/target/*
 systems/fusemate/project/target/*
 systems/fusemate/target/*
-
+systems/ticker/target/*
+systems/ticker/output/*
+datasets/maritime/*.csv
