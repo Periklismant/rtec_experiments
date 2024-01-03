@@ -59,7 +59,7 @@ RUN apt-get -y update
 RUN apt-get -y install apt-transport-https ca-certificates gnupg 
 #RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
-RUN gcloud auth activate-service-account tkde_experiments --key-file=gcloud_key.json
+RUN gcloud auth activate-service-account --key-file=gcloud_key.json
 # Install Logica 
 RUN apt-get -y update
 RUN apt-get install -y python3
