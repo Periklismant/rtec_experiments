@@ -5,12 +5,9 @@ systems/rtec/execution\ scripts/logs/*.txt
 systems/rtec/examples/feedback_loops/results/*.txt
 systems/jrecfi/scripts/__pycache__/*
 systems/sCASP/logs/*.txt
-systems/rtec/examples/voting/results/*.txt
-systems/rtecnaive/examples/voting/results/*.txt
-systems/rtec/examples/netbillp/results/*.txt
-systems/rtecnaive/examples/netbillp/results/*.txt
-systems/rtec/examples/netbillnop/results/*.txt
-systems/rtecnaive/examples/netbillnop/results/*.txt
+systems/rtec/examples/*/results/*.txt
+systems/rtecnaive/examples/*/results/*.txt
+systems/rtecnofi/examples/*/results/*.txt
 datasets/netbillnop/*.csv
 datasets/netbillp/*.csv
 datasets/voting/*.csv
@@ -18,8 +15,6 @@ systems/rtec/examples/maritime/dataset/csv/*.csv
 systems/rtec/examples/maritime_fi_only/dataset/csv/*.csv
 systems/rtec/examples/maritime_no_fi/dataset/csv/*.csv
 systems/rtecnofi/examples/maritime_no_fi/dataset/csv/*.csv
-systems/rtec/examples/maritime/results/*.txt
-systems/rtec/examples/*/results/*.txt
 systems/fusemate/examples/event-calculus/target/*
 systems/fusemate/repl/target/*
 systems/fusemate/project/target/*

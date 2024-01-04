@@ -26,7 +26,7 @@ public class Main {
             String modelPathStr = "../programs/" + app + "_" + events_no + "_" + rec_variant + ".pl";
 
             //Theory recTheory = new Theory(Main.class.getResourceAsStream(modelPathStr));
-		    Theory recTheory = new Theory(new FileInputStream(new File(modelPathStr)));	
+	    Theory recTheory = new Theory(new FileInputStream(new File(modelPathStr)));	
 
             //System.out.println("Theory created.");
 

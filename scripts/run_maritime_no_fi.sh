@@ -3,6 +3,10 @@
 # We execute RTEC and RTEC(without fi) on the maritime dataset concerning Brest, France.
 # The event description contains FVPs without future initiations.
 
+wget -O ../datasets/maritime/brest_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/67dJSuymyIw1Mng/download"
+unzip -o ../datasets/maritime/brest_dataset.zip -d ../datasets/maritime/
+rm ../datasets/maritime/brest_dataset.zip
+
 WindowSizes=(7200 14400 28800 57600)
 Systems=("rtec" "rtecnofi")
 
@@ -17,3 +21,4 @@ for system in ${Systems[@]}; do
     done
     cd ../../../scripts
 done
+rm ../datasets/maritime/brest-critical.csv

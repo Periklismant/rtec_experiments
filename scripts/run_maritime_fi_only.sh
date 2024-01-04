@@ -3,6 +3,10 @@
 # We execute RTEC on the maritime dataset concerning Brest, France.
 # The event description contains FVPs with future initiations.
 
+wget -O ../datasets/maritime/brest_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/67dJSuymyIw1Mng/download"
+unzip -o ../datasets/maritime/brest_dataset.zip -d ../datasets/maritime/
+rm ../datasets/maritime/brest_dataset.zip
+
 WindowSizes=(7200 14400 28800 57600)
 cd ../systems/rtec/execution\ scripts
 
@@ -13,3 +17,4 @@ for window_size in ${WindowSizes[@]}; do
     awk 'NR==3{print "\tAverage reasoning time: " $6} NR==4{print "\tStandard deviation: " $6}' ../examples/maritime_fi_only/results/log-swi-${window_size}-7200-csv-file-log.txt
 done
 cd ../../../scripts
+rm ../datasets/maritime/brest_critical.csv

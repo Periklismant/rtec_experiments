@@ -65,14 +65,6 @@ RUN apt-get -y update
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN python3 -m pip install logica
-# Download Brest dataset
-RUN wget -O datasets/maritime/brest_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/67dJSuymyIw1Mng/download"
-RUN unzip -o datasets/maritime/brest_dataset.zip -d datasets/maritime/
-RUN rm datasets/maritime/brest_dataset.zip
-# Download Europe dataset
-RUN wget -O datasets/maritime/imis_dataset.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/REYgngK1wN45g1C/download"
-RUN unzip -o datasets/maritime/imis_dataset.zip -d datasets/maritime/
-RUN rm datasets/maritime/imis_dataset.zip
 
 EXPOSE 3000
 

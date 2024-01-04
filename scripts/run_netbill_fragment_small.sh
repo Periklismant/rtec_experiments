@@ -18,6 +18,7 @@ for event_no in ${EventNos[@]}; do
 done
 cd ../../../scripts
 
+: '
 # Run sCASP
 echo "Reasoning with sCASP on a fragment of NetBill."
 cd ../systems/scasp
@@ -36,6 +37,7 @@ for event_no in ${EventNos[@]}; do
     rm event_description.pl
 done
 cd ../../../scripts
+'
 
 # Run jRECfi
 echo "Reasoning with jRECfi on a fragment of NetBill."
@@ -51,6 +53,7 @@ for event_no in ${EventNos[@]}; do
 done
 cd ../../../scripts
 
+: '
 # Run Ticker
 echo "Reasoning with Ticker on a fragment of NetBill."
 cd ../systems/ticker
@@ -64,9 +67,9 @@ for event_no in ${EventNos[@]}; do
     echo -e "\tReasoning time: ${run_time}ms"
 done
 cd ../../scripts
+'
 
 # Run Fusemate
-echo "Reasoning with Fusemate on a fragment of NetBill."
 cd ../systems/fusemate/examples/event-calculus
 ./run.sh
 cd ../../../../scripts
