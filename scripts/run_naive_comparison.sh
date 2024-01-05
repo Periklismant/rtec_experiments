@@ -10,7 +10,7 @@ Systems=("rtec" "rtecnaive")
 window_sizes=(10 20 40 80)
 step=10
 
-echo "%%% Comparing RTEC and RTEC-naive on voting and NetBill (see Figure 3 of the paper).%%%"
+echo "%%% Comparing RTEC and RTEC-naive on voting and NetBill (see Figure 3 of the paper). %%%"
 for App in ${Applications[@]}; do
     echo -e "\t**Application: ${App}**"
     # Path relative to systems/rtec/execution\ scripts

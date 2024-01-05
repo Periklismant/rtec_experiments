@@ -1,49 +1,49 @@
 :- dynamic person_pair/2.
 
-initiatedAt(quote(_2004,_2006,_2008)=true, _2030, _1974, _2036) :-
-     happensAtIE(present_quote(_2004,_2006,_2008,_2018),_1974),
-     _2030=<_1974,
-     _1974<_2036.
+initiatedAt(quote(_11380,_11382,_11384)=true, _11406, _11350, _11412) :-
+     happensAtIE(present_quote(_11380,_11382,_11384,_11394),_11350),
+     _11406=<_11350,
+     _11350<_11412.
 
-terminatedAt(quote(_2004,_2006,_2008)=true, _2028, _1974, _2034) :-
-     happensAtIE(accept_quote(_2006,_2004,_2008),_1974),
-     _2028=<_1974,
-     _1974<_2034.
+terminatedAt(quote(_11380,_11382,_11384)=true, _11404, _11350, _11410) :-
+     happensAtIE(accept_quote(_11382,_11380,_11384),_11350),
+     _11404=<_11350,
+     _11350<_11410.
 
-grounding(present_quote(_2268,_2270,_2272,_2274)) :- 
-     person_pair(_2268,_2270),goods(_2272).
+grounding(present_quote(_11616,_11618,_11620,_11622)) :- 
+     person_pair(_11616,_11618),goods(_11620).
 
-grounding(accept_quote(_2268,_2270,_2272)) :- 
-     person_pair(_2270,_2268),goods(_2272).
+grounding(accept_quote(_11616,_11618,_11620)) :- 
+     person_pair(_11618,_11616),goods(_11620).
 
-grounding(quote(_2274,_2276,_2278)=true) :- 
-     person_pair(_2274,_2276),goods(_2278).
+grounding(quote(_11622,_11624,_11626)=true) :- 
+     person_pair(_11622,_11624),goods(_11626).
 
-grounding(quote(_2274,_2276,_2278)=false) :- 
-     person_pair(_2274,_2276),goods(_2278).
+grounding(quote(_11622,_11624,_11626)=false) :- 
+     person_pair(_11622,_11624),goods(_11626).
 
-inputEntity(present_quote(_2028,_2030,_2032,_2034)).
-inputEntity(accept_quote(_2028,_2030,_2032)).
-inputEntity(quote(_2034,_2036,_2038)=false).
+inputEntity(present_quote(_11410,_11412,_11414,_11416)).
+inputEntity(accept_quote(_11410,_11412,_11414)).
+inputEntity(quote(_11416,_11418,_11420)=false).
 
-outputEntity(quote(_2108,_2110,_2112)=true).
+outputEntity(quote(_11496,_11498,_11500)=true).
 
-event(present_quote(_2164,_2166,_2168,_2170)).
-event(accept_quote(_2164,_2166,_2168)).
+event(present_quote(_11558,_11560,_11562,_11564)).
+event(accept_quote(_11558,_11560,_11562)).
 
-simpleFluent(quote(_2238,_2240,_2242)=true).
+simpleFluent(quote(_11638,_11640,_11642)=true).
 
-sDFluent(quote(_2300,_2302,_2304)=false).
+sDFluent(quote(_11706,_11708,_11710)=false).
 
-index(present_quote(_2308,_2362,_2364,_2366),_2308).
-index(accept_quote(_2308,_2362,_2364),_2308).
-index(quote(_2308,_2368,_2370)=true,_2308).
-index(quote(_2308,_2368,_2370)=false,_2308).
+index(present_quote(_11714,_11774,_11776,_11778),_11714).
+index(accept_quote(_11714,_11774,_11776),_11714).
+index(quote(_11714,_11780,_11782)=true,_11714).
+index(quote(_11714,_11780,_11782)=false,_11714).
 
 
-cachingOrder2(_2566, quote(_2566,_2568,_2570)=true) :- % level in dependency graph: 1, processing order in component: 1
-     person_pair(_2566,_2568),goods(_2570).
+cachingOrder2(_11990, quote(_11990,_11992,_11994)=true) :- % level in dependency graph: 1, processing order in component: 1
+     person_pair(_11990,_11992),goods(_11994).
 
-collectGrounds([present_quote(_2222,_2224,_2240,_2242), accept_quote(_2224,_2222,_2240), quote(_2222,_2224,_2246)=false],person_pair(_2222,_2224)).
+collectGrounds([present_quote(_11610,_11612,_11628,_11630), accept_quote(_11612,_11610,_11628), quote(_11610,_11612,_11634)=false],person_pair(_11610,_11612)).
 
-dgrounded(quote(_2314,_2316,_2318)=true, person_pair(_2314,_2316)).
+dgrounded(quote(_11708,_11710,_11712)=true, person_pair(_11708,_11710)).

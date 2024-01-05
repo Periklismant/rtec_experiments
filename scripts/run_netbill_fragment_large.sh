@@ -3,9 +3,10 @@
 # We execute RTEC and jRECrbt on a small fragment of NetBill.
 
 EventNos=(4000 8000 16000 32000)
+echo "%%% Comparing RTEC and jRECrbt on a fragment of NetBill (see Figure 5 (right) of the paper). %%%"
 
 # Run RTEC
-echo "Reasoning with RTEC on a fragment of NetBill."
+echo -e "\t**System: RTEC**"
 cd ../systems/rtec/execution\ scripts
 for event_no in ${EventNos[@]}; do
     echo -e "\tNumber of events: ${event_no}"
@@ -18,8 +19,8 @@ for event_no in ${EventNos[@]}; do
 done
 cd ../../../scripts
 
-# Run jRECfi
-echo "Reasoning with jRECrbt on a fragment of NetBill."
+# Run jRECrbt
+echo -e "\t**System: jRECrbt**"
 cd ../systems/jrecrbt/bin
 for event_no in ${EventNos[@]}; do
     echo -e "\tNumber of events: ${event_no}"

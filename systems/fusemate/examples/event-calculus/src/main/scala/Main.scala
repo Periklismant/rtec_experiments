@@ -30,15 +30,15 @@ object Main {
   // The Event Calculus axioms are defined in fm6/src/main/scala/InferenceEngine.scala 
 
   def main(args: Array[String]): Unit = {
-    println("Reasoning with Fusemate on a fragment of NetBill.") 
+    println("\t**System: Fusemate**") 
 
     val eventsNos = Array(10, 20, 40, 80)
     for (eventsNo <- eventsNos){
-      println("\tNumber of events: "+eventsNo)
+      println("\t\tNumber of events: "+eventsNo)
       val startTime = System.currentTimeMillis()
       run_netbill(eventsNo)
       val duration = System.currentTimeMillis() - startTime
-      println("\tReasoning time: "+duration+"ms")
+      println("\t\tReasoning time: "+duration+"ms")
     }
   }
   def run_netbill(eventsNo: Int): Unit = {
@@ -97,6 +97,10 @@ object Main {
 
           }
         }
+      }
+      for (i <- Seq(1,2,3,4,5)) {
+        output += (IsAAt(1, merchant(i*100), merchant))
+        output += (IsAAt(1, consumer(i*100), consumer))
       }
       output.toList
     }
