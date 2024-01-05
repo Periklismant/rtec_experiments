@@ -1,7 +1,1 @@
-[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT-sources.jar ...[0m
-[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
-[0m[[0m[0mdebug[0m] [0m[0m	scalac-plugin.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/src/main/resources/scalac-plugin.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Fusemate.scala[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/src/main/scala/Fusemate.scala[0m
-[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m
+[0m[[0m[0mdebug[0m] [0m[0mJar uptodate: /home/periklis/rtec/tkde_experiments/systems/fusemate/plugin/target/scala-2.13/plugin_2.13-0.1.0-SNAPSHOT-sources.jar[0m

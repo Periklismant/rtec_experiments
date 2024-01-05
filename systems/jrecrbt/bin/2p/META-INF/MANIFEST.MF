@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.9.6
-Created-By: 1.8.0_25-b17 (Oracle Corporation)
-Implementation-Vendor: tuProlog team
-Implementation-Title: tuProlog Engine
-Implementation-Version: 3.3.0
-Main-Class: alice.tuprologx.ide.GUILauncher
-Class-Path: .
-

@@ -1,118 +1,108 @@
 :- dynamic person/1, person_pair/2.
 
-initiatedAt(quote(_11382,_11384,_11386)=true, _11408, _11352, _11414) :-
-     happensAtIE(present_quote(_11382,_11384,_11386,_11396),_11352),
-     _11408=<_11352,
-     _11352<_11414.
+initiatedAt(quote(_2002,_2004,_2006)=true, _2028, _1972, _2034) :-
+     happensAtIE(present_quote(_2002,_2004,_2006,_2016),_1972),
+     _2028=<_1972,
+     _1972<_2034.
 
-initiatedAt(contract(_11382,_11384,_11386)=true, _11444, _11352, _11450) :-
-     happensAtIE(accept_quote(_11384,_11382,_11386),_11352),_11444=<_11352,_11352<_11450,
+initiatedAt(contract(_2002,_2004,_2006)=true, _2064, _1972, _2070) :-
+     happensAtIE(accept_quote(_2004,_2002,_2006),_1972),_2064=<_1972,_1972<_2070,
      updateVariableTemp(rule_evaluations,1),
-     holdsAtProcessedSimpleFluent(_11382,quote(_11382,_11384,_11386)=true,_11352).
+     holdsAtProcessedSimpleFluent(_2002,quote(_2002,_2004,_2006)=true,_1972).
 
-terminatedAt(quote(_11382,_11384,_11386)=true, _11406, _11352, _11412) :-
-     happensAtIE(accept_quote(_11384,_11382,_11386),_11352),
-     _11406=<_11352,
-     _11352<_11412.
+terminatedAt(quote(_2002,_2004,_2006)=true, _2026, _1972, _2032) :-
+     happensAtIE(accept_quote(_2004,_2002,_2006),_1972),
+     _2026=<_1972,
+     _1972<_2032.
 
-<<<<<<< HEAD
-fi(quote(_11386,_11388,_11390)=true,quote(_11386,_11388,_11390)=false,5):-
-     grounding(quote(_11386,_11388,_11390)=true),
-     grounding(quote(_11386,_11388,_11390)=false).
+fi(quote(_2006,_2008,_2010)=true,quote(_2006,_2008,_2010)=false,5):-
+     grounding(quote(_2006,_2008,_2010)=true),
+     grounding(quote(_2006,_2008,_2010)=false).
 
-fi(contract(_11386,_11388,_11390)=true,contract(_11386,_11388,_11390)=false,6):-
-     grounding(contract(_11386,_11388,_11390)=true),
-     grounding(contract(_11386,_11388,_11390)=false).
-=======
-fi(quote(_2010,_2012,_2014)=true,quote(_2010,_2012,_2014)=false,5):-
-     grounding(quote(_2010,_2012,_2014)=true),
-     grounding(quote(_2010,_2012,_2014)=false).
+fi(contract(_2006,_2008,_2010)=true,contract(_2006,_2008,_2010)=false,6):-
+     grounding(contract(_2006,_2008,_2010)=true),
+     grounding(contract(_2006,_2008,_2010)=false).
 
-fi(contract(_2010,_2012,_2014)=true,contract(_2010,_2012,_2014)=false,6):-
-     grounding(contract(_2010,_2012,_2014)=true),
-     grounding(contract(_2010,_2012,_2014)=false).
->>>>>>> 8fb2d223f4a78a2d80e15bc37c24e5d4d6084d04
+grounding(request_quote(_2302,_2304,_2306)) :- 
+     person_pair(_2304,_2302).
 
-grounding(request_quote(_11654,_11656,_11658)) :- 
-     person_pair(_11656,_11654).
+grounding(present_quote(_2302,_2304,_2306,_2308)) :- 
+     person_pair(_2302,_2304).
 
-grounding(present_quote(_11654,_11656,_11658,_11660)) :- 
-     person_pair(_11654,_11656).
+grounding(accept_quote(_2302,_2304,_2306)) :- 
+     person_pair(_2304,_2302).
 
-grounding(accept_quote(_11654,_11656,_11658)) :- 
-     person_pair(_11656,_11654).
+grounding(send_EPO(_2302,_2304,_2306,_2308)) :- 
+     person(_2302).
 
-grounding(send_EPO(_11654,_11656,_11658,_11660)) :- 
-     person(_11654).
+grounding(send_goods(_2302,_2304,_2306,_2308,_2310)) :- 
+     person(_2302).
 
-grounding(send_goods(_11654,_11656,_11658,_11660,_11662)) :- 
-     person(_11654).
+grounding(quote(_2308,_2310,_2312)=true) :- 
+     person_pair(_2308,_2310),role_of(_2310,consumer),role_of(_2308,merchant),\+_2308=_2310,queryGoodsDescription(_2312).
 
-grounding(quote(_11660,_11662,_11664)=true) :- 
-     person_pair(_11660,_11662),role_of(_11662,consumer),role_of(_11660,merchant),\+_11660=_11662,queryGoodsDescription(_11664).
+grounding(quote(_2308,_2310,_2312)=false) :- 
+     person_pair(_2308,_2310),role_of(_2310,consumer),role_of(_2308,merchant),\+_2308=_2310,queryGoodsDescription(_2312).
 
-grounding(quote(_11660,_11662,_11664)=false) :- 
-     person_pair(_11660,_11662),role_of(_11662,consumer),role_of(_11660,merchant),\+_11660=_11662,queryGoodsDescription(_11664).
+grounding(contract(_2308,_2310,_2312)=true) :- 
+     person_pair(_2308,_2310),role_of(_2308,merchant),role_of(_2310,consumer),\+_2308=_2310,queryGoodsDescription(_2312).
 
-grounding(contract(_11660,_11662,_11664)=true) :- 
-     person_pair(_11660,_11662),role_of(_11660,merchant),role_of(_11662,consumer),\+_11660=_11662,queryGoodsDescription(_11664).
+grounding(contract(_2308,_2310,_2312)=false) :- 
+     person_pair(_2308,_2310),role_of(_2308,merchant),role_of(_2310,consumer),\+_2308=_2310,queryGoodsDescription(_2312).
 
-grounding(contract(_11660,_11662,_11664)=false) :- 
-     person_pair(_11660,_11662),role_of(_11660,merchant),role_of(_11662,consumer),\+_11660=_11662,queryGoodsDescription(_11664).
+p(quote(_2302,_2304,_2306)=true).
 
-p(quote(_11654,_11656,_11658)=true).
+inputEntity(present_quote(_2026,_2028,_2030,_2032)).
+inputEntity(accept_quote(_2026,_2028,_2030)).
+inputEntity(request_quote(_2026,_2028,_2030)).
+inputEntity(send_EPO(_2026,_2028,_2030,_2032)).
+inputEntity(send_goods(_2026,_2028,_2030,_2032,_2034)).
 
-inputEntity(present_quote(_11412,_11414,_11416,_11418)).
-inputEntity(accept_quote(_11412,_11414,_11416)).
-inputEntity(request_quote(_11412,_11414,_11416)).
-inputEntity(send_EPO(_11412,_11414,_11416,_11418)).
-inputEntity(send_goods(_11412,_11414,_11416,_11418,_11420)).
+outputEntity(quote(_2118,_2120,_2122)=true).
+outputEntity(contract(_2118,_2120,_2122)=true).
+outputEntity(quote(_2118,_2120,_2122)=false).
+outputEntity(contract(_2118,_2120,_2122)=false).
 
-outputEntity(quote(_11510,_11512,_11514)=true).
-outputEntity(contract(_11510,_11512,_11514)=true).
-outputEntity(quote(_11510,_11512,_11514)=false).
-outputEntity(contract(_11510,_11512,_11514)=false).
+event(present_quote(_2192,_2194,_2196,_2198)).
+event(accept_quote(_2192,_2194,_2196)).
+event(request_quote(_2192,_2194,_2196)).
+event(send_EPO(_2192,_2194,_2196,_2198)).
+event(send_goods(_2192,_2194,_2196,_2198,_2200)).
 
-event(present_quote(_11590,_11592,_11594,_11596)).
-event(accept_quote(_11590,_11592,_11594)).
-event(request_quote(_11590,_11592,_11594)).
-event(send_EPO(_11590,_11592,_11594,_11596)).
-event(send_goods(_11590,_11592,_11594,_11596,_11598)).
-
-simpleFluent(quote(_11688,_11690,_11692)=true).
-simpleFluent(contract(_11688,_11690,_11692)=true).
-simpleFluent(quote(_11688,_11690,_11692)=false).
-simpleFluent(contract(_11688,_11690,_11692)=false).
+simpleFluent(quote(_2284,_2286,_2288)=true).
+simpleFluent(contract(_2284,_2286,_2288)=true).
+simpleFluent(quote(_2284,_2286,_2288)=false).
+simpleFluent(contract(_2284,_2286,_2288)=false).
 
 
-index(present_quote(_11776,_11836,_11838,_11840),_11776).
-index(accept_quote(_11776,_11836,_11838),_11776).
-index(request_quote(_11776,_11836,_11838),_11776).
-index(send_EPO(_11776,_11836,_11838,_11840),_11776).
-index(send_goods(_11776,_11836,_11838,_11840,_11842),_11776).
-index(quote(_11776,_11842,_11844)=true,_11776).
-index(contract(_11776,_11842,_11844)=true,_11776).
-index(quote(_11776,_11842,_11844)=false,_11776).
-index(contract(_11776,_11842,_11844)=false,_11776).
+index(present_quote(_2366,_2420,_2422,_2424),_2366).
+index(accept_quote(_2366,_2420,_2422),_2366).
+index(request_quote(_2366,_2420,_2422),_2366).
+index(send_EPO(_2366,_2420,_2422,_2424),_2366).
+index(send_goods(_2366,_2420,_2422,_2424,_2426),_2366).
+index(quote(_2366,_2426,_2428)=true,_2366).
+index(contract(_2366,_2426,_2428)=true,_2366).
+index(quote(_2366,_2426,_2428)=false,_2366).
+index(contract(_2366,_2426,_2428)=false,_2366).
 
 
-cachingOrder2(_12082, quote(_12082,_12084,_12086)=true) :- % level in dependency graph: 1, processing order in component: 1
-     person_pair(_12082,_12084),role_of(_12084,consumer),role_of(_12082,merchant),\+_12082=_12084,queryGoodsDescription(_12086).
+cachingOrder2(_2654, quote(_2654,_2656,_2658)=true) :- % level in dependency graph: 1, processing order in component: 1
+     person_pair(_2654,_2656),role_of(_2656,consumer),role_of(_2654,merchant),\+_2654=_2656,queryGoodsDescription(_2658).
 
-cachingOrder2(_12082, quote(_12082,_12084,_12086)=false) :- % level in dependency graph: 1, processing order in component: 2
-     person_pair(_12082,_12084),role_of(_12084,consumer),role_of(_12082,merchant),\+_12082=_12084,queryGoodsDescription(_12086).
+cachingOrder2(_2654, quote(_2654,_2656,_2658)=false) :- % level in dependency graph: 1, processing order in component: 2
+     person_pair(_2654,_2656),role_of(_2656,consumer),role_of(_2654,merchant),\+_2654=_2656,queryGoodsDescription(_2658).
 
-cachingOrder2(_12490, contract(_12490,_12492,_12494)=true) :- % level in dependency graph: 2, processing order in component: 1
-     person_pair(_12490,_12492),role_of(_12490,merchant),role_of(_12492,consumer),\+_12490=_12492,queryGoodsDescription(_12494).
+cachingOrder2(_3056, contract(_3056,_3058,_3060)=true) :- % level in dependency graph: 2, processing order in component: 1
+     person_pair(_3056,_3058),role_of(_3056,merchant),role_of(_3058,consumer),\+_3056=_3058,queryGoodsDescription(_3060).
 
-cachingOrder2(_12490, contract(_12490,_12492,_12494)=false) :- % level in dependency graph: 2, processing order in component: 2
-     person_pair(_12490,_12492),role_of(_12490,merchant),role_of(_12492,consumer),\+_12490=_12492,queryGoodsDescription(_12494).
+cachingOrder2(_3056, contract(_3056,_3058,_3060)=false) :- % level in dependency graph: 2, processing order in component: 2
+     person_pair(_3056,_3058),role_of(_3056,merchant),role_of(_3058,consumer),\+_3056=_3058,queryGoodsDescription(_3060).
 
-collectGrounds([send_EPO(_11666,_11680,_11682,_11684), send_goods(_11666,_11680,_11682,_11684,_11686)],person(_11666)).
+collectGrounds([send_EPO(_2274,_2288,_2290,_2292), send_goods(_2274,_2288,_2290,_2292,_2294)],person(_2274)).
 
-collectGrounds([present_quote(_11654,_11656,_11682,_11684), accept_quote(_11656,_11654,_11682), request_quote(_11656,_11654,_11682)],person_pair(_11654,_11656)).
+collectGrounds([present_quote(_2262,_2264,_2290,_2292), accept_quote(_2264,_2262,_2290), request_quote(_2264,_2262,_2290)],person_pair(_2262,_2264)).
 
-dgrounded(quote(_12026,_12028,_12030)=true, person_pair(_12026,_12028)).
-dgrounded(contract(_11938,_11940,_11942)=true, person_pair(_11938,_11940)).
-dgrounded(quote(_11850,_11852,_11854)=false, person_pair(_11850,_11852)).
-dgrounded(contract(_11762,_11764,_11766)=false, person_pair(_11762,_11764)).
+dgrounded(quote(_2628,_2630,_2632)=true, person_pair(_2628,_2630)).
+dgrounded(contract(_2540,_2542,_2544)=true, person_pair(_2540,_2542)).
+dgrounded(quote(_2452,_2454,_2456)=false, person_pair(_2452,_2454)).
+dgrounded(contract(_2364,_2366,_2368)=false, person_pair(_2364,_2366)).
