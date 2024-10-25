@@ -1,9 +1,11 @@
 #!/bin/bash 
 
+wget -O ../datasets/netbill/netbill_big.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/f6mV4swZkwiOLCq/download"
+unzip -o ../datasets/netbill/netbill_big.zip -d ../datasets/netbill/
+rm ../datasets/netbill/netbill_big.zip
+
 window_sizes=(250 500 1000 2000)
 step=250
-#end_times=(6800 7000 7200 7400)
-#window_sizes=(1000)
 end_times=(7500 7750 8250 9250)
 
 echo "%%% Executing RTEC on netbill using windows containing millions of events.%%%"

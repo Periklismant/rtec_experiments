@@ -1,5 +1,9 @@
 #!/bin/bash 
 
+wget -O ../datasets/voting/voting_big.zip "https://owncloud.skel.iit.demokritos.gr:443/index.php/s/Da1MKlt9rIvQbxl/download"
+unzip -o ../datasets/voting/voting_big.zip -d ../datasets/voting/
+rm ../datasets/voting/voting_big.zip
+
 #window_sizes=(75 150 300 600)
 #step=75
 #end_times=(2250 2325 2475 2775)
