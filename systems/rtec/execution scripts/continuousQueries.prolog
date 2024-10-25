@@ -23,10 +23,14 @@
 :- ['handleApplication.prolog'].
 :- ['logger.prolog'].
 
+%:- use_module(library(prolog_profile)).
+
 % Continuous query processing with RTEC on application <App> with the execution parameters <ParamList>.
 % This predicate does not call the compiler, i.e., the given event description should be compiled.
 % continuousQueries(+App,+ParamList)
 continuousQueries(App, ParamList) :-
+    get_time(StartTime),
+    assertz(startTime(StartTime)),
     % The flag we use to measure cpu time depends on the Prolog environment.
     handleProlog(Prolog, StatisticsFlag), 
     % Assign the value provided in <ParamList> to each parameter of RTEC. Assign the default value, if no value is provided in <ParamList>
@@ -104,7 +108,7 @@ querying(InputMode, InputStreams, PointerPositions, StatisticsFlag, LogFile, Out
                 % If the <OutputMode> is fifo, send a "ready" message to the thread writing the computed intervals into a named pipe.
         	(OutputMode=fifo, thread_send_message(OutputThreadID, printRecognitions) ;
                 % If the <OutputMode> is file, this thread writes the computed intervals into a regular file.
-         	 OutputMode=file), % printRecognitions(ResultsFile, QueryTime, WM)),
+         	 OutputMode=file, printRecognitions(ResultsFile, QueryTime, WM)),
 		% (ii) sleep until the next query time 
 		% after each window, except the first and the last one, sleep for an amount of tie calculated as the step minus the time used for event recognition on the current window.
                 !,
@@ -114,7 +118,7 @@ querying(InputMode, InputStreams, PointerPositions, StatisticsFlag, LogFile, Out
                 % Since this is the final window, this thread has to wait for the thread executing printRecognitions to terminate before exiting.
                 % This is why we have to wait for a "printRecognitionsOK" message in this case.
         	(OutputMode=fifo, thread_send_message(OutputThreadID, printRecognitions), thread_get_message(printRecognitionsOK(QueryTime)) ;
-         	 OutputMode=file), % printRecognitions(ResultsFile, QueryTime, WM)),
+         	 OutputMode=file, printRecognitions(ResultsFile, QueryTime, WM)),
 		% if the designated last time-point of reasoning has been passed, compute exit with the final execution metrics.
 		QueryTime >= EndReasoningTime,
 		RecTimes = [S|InitRecTime],

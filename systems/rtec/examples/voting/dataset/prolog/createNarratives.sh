@@ -3,7 +3,7 @@
 Agent_List='2000' #'1000 2000 4000 8000'
 Seed_List='1' #'1 2 3 4 5'
 Start=0
-End=1000
+End=6000
 
 
 for Agent in $Agent_List; do

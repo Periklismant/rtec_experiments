@@ -80,6 +80,7 @@ DECLARATIONS:
 :- set_prolog_flag(toplevel_print_options, [max_depth(400)]).
 :- use_module(library(lists)).
 :- use_module(library(socket)).
+:- set_prolog_flag(stack_limit, 4_000_000_000).
 
 %:- ['compiler.prolog']. %% After adding indexOf in compiler, some unit tests fail... so comment it for now...
 :- ['inputModule.prolog'].
@@ -98,6 +99,8 @@ DECLARATIONS:
 
 % The predicates below are asserted/retracted
 :- dynamic temporalDistance/1, input/1, noDynamicGrounding/0, preProcessing/1, initTime/1, queryTime/1, iePList/4, simpleFPList/4, sdFPList/4, evTList/3, happensAtIE/2, holdsForIESI/2, holdsAtIE/2, processedCyclic/2, initiallyCyclic/1, storedCyclicPoints/3, startingPoints/3, endingPoints/3, processedRangeInit/3, processedRangeTerm/3.
+
+:- dynamic startTime/1, bio_app/0, startingPointsBio/3.
 
 % The predicates below may or may not appear in the event description of an application;
 % thus they must be declared dynamic
@@ -127,6 +130,11 @@ updateSDE/4.
 
 /********************************** INITIALISE RECOGNITION ***********************************/
 
+ reportTime:-
+     startTime(StartTime),
+     get_time(CurrentTime),
+     TimeElapsed is CurrentTime - StartTime,
+     write("TimeElapsed: "), write(TimeElapsed), nl.
 
 
 initialiseRecognition(InputFlag, DynamicGroundingFlag, PreProcessingFlag, TemporalDistance) :-
@@ -175,6 +183,7 @@ eventRecognition(QueryTime, WM) :-
 	preProcessing(QueryTime),
 	% CYCLES & DEADLINES CHANGE
         findall((Index,F=V,SPoints), (startingPoints(Index,F=V,SPoints), retract(startingPoints(Index,F=V,SPoints))), _),
+        findall((Index,F=V,SPointsBio), (startingPointsBio(Index,F=V,SPointsBio), retract(startingPointsBio(Index,F=V,SPointsBio))), _),
         %findall((Index,F=V,SPoints), (startingPoints(Index,F=V,SPoints), write(startingPoints(Index,F=V,SPoints)), nl,
         %                              retractStartingPoints(Index, F=V, SPoints, InitTime)), _),
 	findall((Index,F=V,EPoints), (endingPoints(Index,F=V,EPoints),retract(endingPoints(Index,F=V,EPoints))), _),
@@ -194,7 +203,7 @@ eventRecognition(QueryTime, WM) :-
 	% cachingOrder2/2 is produced in the compilation stage 
 	% by combining cachingOrder/1, indexOf/2 and grounding/1
 	findall(OE, (cachingOrder2(Index,OE), processEntity(Index,OE,InitTime,QueryTime)), _),
-    (skipLogs, ! ; commitVariables(processEntityFlag)),
+    %(skipLogs, ! ; commitVariables(processEntityFlag)),
 	%findall(OE, (cachingOrder2(Index,OE), holdsFor(OE, I), write('Derived Intervals of '), write(OE), write(': '), write(I), nl), _),
 	%findall(OE, (cachingOrder2(Index,OE), startingPoints(Index, OE, SPoints), write('Cached initiation points of '),  write(OE), write(': '), write(SPoints), nl), _),
 	%findall(OE, (cachingOrder2(Index,OE), endingPoints(Index, OE, EPoints), write('Cached termination points of '),  write(OE), write(': '), write(EPoints), nl), _),
@@ -513,16 +522,66 @@ initPointBetween(Index, F=V, Ts, T, Te) :-
 	initiatedAt(F=V, NextTs, T, Te), !,
 	addStartingPoint(Index, F=V, T).
 
-	
+fixListLength(L, L, Diff):-
+    Diff<0, !.
+fixListLength([_|Tail], Lnew, Diff):-
+    NewDiff is Diff - 1, 
+    fixListLength(Tail, Lnew, NewDiff).
+
 addStartingPoint(Index, F=V, InitPoint) :-
-	retract(startingPoints(Index, F=V, SPoints)), !,
-	nextTimePoint(InitPoint, SPoint),
-	insertNo(SPoint, SPoints, NewSPoints),
-	assertz(startingPoints(Index, F=V, NewSPoints)).
+    bio_app,
+    retract(startingPointsBio(Index, F=V, SPointsBio)), !,
+    length(SPointsBio, Len), Diff is Len - 10,  
+    fixListLength(SPointsBio, SPointsFiltered, Diff), 
+    nextTimePoint(InitPoint, SPoint),
+    insertNo(SPoint, SPointsFiltered, NewSPointsBio),
+    assertz(startingPointsBio(Index, F=V, NewSPointsBio)),
+    retract(startingPoints(Index, F=V, SPoints)),
+    insertNo(SPoint, SPoints, NewSPoints),
+    assertz(startingPoints(Index, F=V, NewSPoints)).
 addStartingPoint(Index, F=V, InitPoint) :-
-	nextTimePoint(InitPoint, SPoint),
-	assertz(startingPoints(Index, F=V, [SPoint])).
+    bio_app, !,
+    nextTimePoint(InitPoint, SPoint),
+    assertz(startingPointsBio(Index, F=V, [SPoint])),
+    assertz(startingPoints(Index, F=V, [SPoint])).
+
+addStartingPoint(Index, F=V, InitPoint) :-
+    retract(startingPoints(Index, F=V, SPoints)), !,
+    nextTimePoint(InitPoint, SPoint),
+    insertNo(SPoint, SPoints, NewSPoints),
+    assertz(startingPoints(Index, F=V, NewSPoints)).
+addStartingPoint(Index, F=V, InitPoint) :-
+    nextTimePoint(InitPoint, SPoint),
+    assertz(startingPoints(Index, F=V, [SPoint])).
+    
+
+    %addStartingPoint(Index, F=V, InitPoint) :-
+    %retract(startingPoints(Index, F=V, SPoints)), % !,
+    %nextTimePoint(InitPoint, SPoint),
+    %insertNo
+        %SPoint > MostRecentSPoint, !,
+        %rb_insert(SPointsTree, SPoint, SPoint, NewSPointsTree),
+        %assertz(startingPoints(Index, F=V, NewSPointsTree, SPoint)).
 	
+        %addStartingPoint(Index, F=V, InitPoint) :-
+        %retract(startingPoints(Index, F=V, SPointsTree, MostRecentSPoint)), % !,
+        %nextTimePoint(InitPoint, SPoint),
+        %SPoint > MostRecentSPoint, !,
+        %rb_insert(SPointsTree, SPoint, SPoint, NewSPointsTree),
+        %assertz(startingPoints(Index, F=V, NewSPointsTree, SPoint)).
+        %
+        %addStartingPoint(Index, F=V, InitPoint) :-
+        %retract(startingPoints(Index, F=V, SPointsTree, MostRecentSPoint)), !,
+        %nextTimePoint(InitPoint, SPoint),
+        %rb_insert(SPointsTree, SPoint, SPoint, NewSPointsTree),
+        %%assertz(startingPoints(Index, F=V, NewSPointsTree, MostRecentSPoint)).
+        %
+        %addStartingPoint(Index, F=V, InitPoint) :-
+        %nextTimePoint(InitPoint, SPoint),
+        %rb_new(EmptyTree),
+        %rb_insert(EmptyTree, SPoint, SPoint, Tree),
+        %assertz(startingPoints(Index, F=V, Tree, SPoint)).
+    %%
 addCyclicPoint(Index, F=V, T, Val) :-
 	retract(storedCyclicPoints(Index, F=V, OldCPoints)), !, 
 	insertTuple((T,Val), OldCPoints, NewCPoints),
@@ -598,8 +657,9 @@ initiatedAtCyclic(Index, F=V, T) :-
 	%findall(Tterm, (member((S, f), StoredPoints), prevTimePoint(S, Tterm), Tterm>=T1, Tterm<T2), TermList),
 	%findAllStoredTermPointsBetween(StoredPoints, T1, T2, TermList),
 	%member(T, TermList).
-	member(S, SPoints),
-	prevTimePoint(S, T). %, T>=T1, T<T2.
+        nextTimePoint(T, Tnext),
+	member(Tnext, SPoints).
+        %prevTimePoint(S, T). %, T>=T1, T<T2.
 
 % case: T is not one of the time-points where the truth value of initiatedAt(F=V, Tp) has been computed.
 % TODO: Check if this can be broken up into sub cases
@@ -623,7 +683,7 @@ initiatedAtCyclic(Index, F=V, T1, T, T2) :-
 		%writeAll(['\t\t\tinitiatedAtCyclic(',F=V,T1,T,T2,')']),
 	processedCyclic(Index, F=V),
 		%write('\t\t\t\tprocessedCyclic1'), nl,
-	simpleFPList(Index, F=V, [(IntervalBreakingPoint,_)|Tail], [(_,IntervalBreakingPoint)]), 
+	simpleFPList(Index, F=V, [(IntervalBreakingPoint,_)|Tail], [(_,IntervalBreakingPoint)]), !,
 		%write('\t\t\t\tTail: '), write(Tail), nl,
 	member((S,_E), Tail), 
 	prevTimePoint(S, T), T>=T1, T<T2.
@@ -635,7 +695,7 @@ initiatedAtCyclic(Index, F=V, T1, T, T2) :-
 		%writeAll(['\t\t\tinitiatedAtCyclic(',F=V,T1,T,T2,')']),
 	processedCyclic(Index, F=V),
 		%write('\t\t\t\tprocessedCyclic2'), nl,
-	simpleFPList(Index, F=V, [H|Tail], []),
+	simpleFPList(Index, F=V, [H|Tail], []), !,
 		%write('\t\t\t\tTail: '), write(Tail), nl,
 	member((S,_E), [H|Tail]), 
 	prevTimePoint(S, T), T>=T1, T<T2.
@@ -651,17 +711,48 @@ initiatedAtCyclic(Index, F=V, T1, T, T2) :-
 	%write('FVP: '), write(F=V), write(' T1='), write(T1), write(' and T2='), write(T2), nl,
 		%write('\t\t\t'), write(initiatedAtCyclic(Index, F=V, T1, T, T2)), nl,
 	processedRangeInit(Index, F=V, ProcessedRange),
-		%writeAll(['\t\t\tprocessedRangeInit(',F=V,ProcessedRange,')']),
-		%write('\t\t\t\tProcessed range '), write(F=V), write(' : '), write(ProcessedRange), nl,
+                %writeAll(['\t\t\tprocessedRangeInit(',F=V,ProcessedRange,')']),
+                %write('\t\t\t\tProcessed range '), write(F=V), write(' : '), write(ProcessedRange), nl,
+	%write('ProcessedRangeInit: '), write(ProcessedRange), nl,
+	relative_complement_all([(T1,T2)], [ProcessedRange], []),
+        %write('\t\t\t\t\tRelative Complement Empty!'), nl,
+        startingPointsBio(Index, F=V, SPoints),
+        SPoints=[FirstSPoint|_],
+        FirstSPointMinusOne is FirstSPoint - 1,
+        T1>=FirstSPointMinusOne, !,
+        %startingPoints(Index, F=V, SPointsAll),
+		%write('startingPoints OK.'), nl,
+                %writeAll(['\t\t\tstartingPoints(',F=V,SPoints,')']),
+                write("FVP: "), write(F=V), nl,
+                write("ProcessedRange: "), write(ProcessedRange), nl,
+                write("Required Range: "), write([T1, T2]), nl,
+                write('\t\t\t\t\tRecent Starting Points: '), write(SPoints), nl,
+                %write('\t\t\t\t\tAll Starting Points: '), write(SPointsAll), nl,
+        member(S, SPoints), prevTimePoint(S, T), T>=T1, T<T2, write("\t\t\t\t\tT: "), write(T), nl.
+
+initiatedAtCyclic(Index, F=V, T1, T, T2) :-
+		%writeAll(['\t\t\tinitiatedAtCyclic(',F=V,T1,T,T2,')']),
+	%storedCyclicPoints(Index, F=V, StoredPoints),
+	%write('FVP: '), write(F=V), write(' T1='), write(T1), write(' and T2='), write(T2), nl,
+		%write('\t\t\t'), write(initiatedAtCyclic(Index, F=V, T1, T, T2)), nl,
+	processedRangeInit(Index, F=V, ProcessedRange),
+                %writeAll(['\t\t\tprocessedRangeInit(',F=V,ProcessedRange,')']),
+                %write('\t\t\t\tProcessed range '), write(F=V), write(' : '), write(ProcessedRange), nl,
 	%write('ProcessedRangeInit: '), write(ProcessedRange), nl,
 	relative_complement_all([(T1,T2)], [ProcessedRange], []), !,
-		%write('\t\t\t\tRelative Complement Empty!'), nl,
-	startingPoints(Index, F=V, SPoints),
+        %write('\t\t\t\t\tRelative Complement Empty!'), nl,
+        %startingPointsBio(Index, F=V, SPoints),
+        startingPoints(Index, F=V, SPointsAll),
 		%write('startingPoints OK.'), nl,
-		%writeAll(['\t\t\tstartingPoints(',F=V,SPoints,')']),
-		%write('\t\t\t\tStarting Points: '), write(SPoints), nl,
-	member(S, SPoints), prevTimePoint(S, T), T>=T1, T<T2.
-		%writeAll(['\t\t\t', F=V, 'is initated at', T]).
+                %writeAll(['\t\t\tstartingPoints(',F=V,SPoints,')']),
+                write("FVP: "), write(F=V), nl,
+                write("ProcessedRange: "), write(ProcessedRange), nl,
+                write("Required Range: "), write([T1, T2]), nl,
+                %write('\t\t\t\t\tRelevant Starting Points: '), write(SPoints), nl,
+                write('\t\t\t\t\tAll Starting Points: '), write(SPointsAll), nl,
+        member(S, SPointsAll), prevTimePoint(S, T), T>=T1, T<T2, write("\t\t\t\t\tT: "), write(T), nl.
+
+    %writeAll(['\t\t\t', F=V, 'is initated at', T]).
 	%computeInitiationsInRange(F=V, T1, T2, InitList), member(T, InitList), T>=T1, T<T2. 
 
 % case: (i) there are some time-points Tp inside the window where the truth value of initiatedAt(F=V, Tp) has been computed.
@@ -679,10 +770,13 @@ initiatedAtCyclic(Index, F=V, T1, T, T2) :-
 	relative_complement_all([(T1,T2)], [ProcessedRange], UnprocessedIntervals), 
 		%write('\t\t\t\tUnprocessed Intervals: '), write(UnprocessedIntervals), nl,
 	%write('UnprocessedIntervals: '), write(UnprocessedIntervals), nl,
-	startingPoints(Index, F=V, SPoints), !,
+        startingPoints(Index, F=V, SPoints), !,
+        %startingPoints(Index, F=V, SPoints), !,
+        %write("UNPROCESSED INTERVALS FOR FVP: "), write(F=V), nl,
+        %write(UnprocessedIntervals), nl,
 		%writeAll(['\t\t\tstartingPoints(',F=V,SPoints,')']),
 		%write('\t\t\t\tStarting Points: '), write(SPoints), nl,
-	(member(S, SPoints), prevTimePoint(S, T), T>=T1, T<T2 ; computeInitiationsInRangeAll(F=V, UnprocessedIntervals, InitList), member(T, InitList), T>=T1, T<T2).
+        (member(S, SPoints), prevTimePoint(S, T), T>=T1, T<T2 ; computeInitiationsInRangeAll(F=V, UnprocessedIntervals, InitList), member(T, InitList), T>=T1, T<T2).
 
 % case: There is no cached list of starting points, and thus we compute all initiation points, point-by-point, in the given range.
 initiatedAtCyclic(Index, F=V, T1, T, T2):-
@@ -695,7 +789,10 @@ initiatedAtCyclic(Index, F=V, T1, T, T2):-
 	%write('ProcessedRangeInit: '), write(ProcessedRange), nl,
 	relative_complement_all([(T1,T2)], [ProcessedRange], UnprocessedIntervals), !,
 	%write('UnprocessedIntervals: '), write(UnprocessedIntervals), nl,
-	\+ startingPoints(Index, F=V, _SPoints),
+        \+ startingPoints(Index, F=V, _SPoints),
+        %\+ startingPoints(Index, F=V, _SPoints),
+        write("NO STARTING POINTS AND UNPROCESSED INTERVALS"), nl,
+        write(UnprocessedIntervals), nl,
 	computeInitiationsInRangeAll(F=V, UnprocessedIntervals, InitList), member(T, InitList), T>=T1, T<T2.
 	%computeInitiationsInRange(F=V, T1, T2, InitList),
 	%member(T, InitList).
@@ -703,8 +800,8 @@ initiatedAtCyclic(Index, F=V, T1, T, T2):-
 % case: There is no time-point where initiatedAt has been evaluated for F=V, and thus we compute all initiation points, point-by-point, in the given range.
 initiatedAtCyclic(Index, F=V, T1, T, T2):-
 	\+ processedRangeInit(Index, F=V, _), !,
-		%writeAll(['\t\t\tcomputeInitiationsInRange(',F=V,T1,T2,')']),
-	computeInitiationsInRange(F=V, T1, T2, InitList), member(T, InitList), T>=T1, T<T2. 
+            %writeAll(['\t\t\tcomputeInitiationsInRange(',F=V,T1,T2,')']),
+	computeInitiationsInRange(F=V, T1, T2, InitList), write("InitList: "), write(InitList), nl, member(T, InitList), T>=T1, T<T2, write("T: "), write(T), nl.
 
 % computeInitiationsInRange(+F=V, +T1, +T2, -InitList)
 % Starting from time-point T1, we compute the initiation points of F=V at each time-point in [T1,T2).
@@ -712,33 +809,45 @@ initiatedAtCyclic(Index, F=V, T1, T, T2):-
 % The next time-point T+1 after each initiation is a cyclic point of F=V with value true, and a cyclic point of F=V' with value false.
 % case: stop when we reach time-point T2.
 computeInitiationsInRange(_, T1, T2, []):-
-	T1>=T2, !.
+	T1>=T2, write("T1 surpassed T2"), nl, !.
 % case: the initiation of F=V has been processed by an intermediate query, and F=V is initiated at T1.
 computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
+        write(computeInitiationsInRange(F=V, T1, T2)), write("Rule 1"), nl,
 	nextTimePoint(T1, T1next),
         indexOf(Index,F=V),
         processedRangeInit(Index, F=V, ProcRange),
         tinIntervals(T1, ProcRange),
-	startingPoints(Index, F=V, SPoints),
-	member(S, SPoints), !,
-	prevTimePoint(S, T1),
-	addStartingPointAllVals(Index, F=V, T1),
-	addProcessedRangeAllVals(Index, F=V, T1),
-	addCyclicPointAllFVPs(Index, F=V, T1next, t),
+        write("ProcRange: "), write(ProcRange), nl,
+        %startingPointsBio(Index, F=V, SPoints),
+        startingPoints(Index, F=V, SPoints),
+        write("StartingPoints: "), write(SPoints), nl,
+        member(S, SPoints), 
+        %member(T1next, SPoints), !,
+        prevTimePoint(S, T1), !,
+        addStartingPointAllVals(Index, F=V, T1),
+        addProcessedRangeAllVals(Index, F=V, T1),
+        addCyclicPointAllFVPs(Index, F=V, T1next, t),
 	computeInitiationsInRange(F=V, T1next, T2, Tail).
 % case: the initiation of F=V has been processed by an intermediate query, and F=V is not initiated at T1.
-computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
+computeInitiationsInRange(F=V, T1, T2, InitList):-
+        write(computeInitiationsInRange(F=V, T1, T2)), write("Rule 2"), nl,
 	nextTimePoint(T1, T1next),
+        write(T1next), nl,
         indexOf(Index,F=V),
         processedRangeInit(Index, F=V, ProcRange),
+        write("ProcRange: "), write(ProcRange), nl,
         tinIntervals(T1, ProcRange), !,
-	addProcessedRangeInit(Index, F=V, T1),
-	computeInitiationsInRange(F=V, T1next, T2, Tail).
+        addProcessedRangeInit(Index, F=V, T1),
+        write("Current InitList: "), write(InitList), nl,
+	computeInitiationsInRange(F=V, T1next, T2, InitList).
 
 % case: F=V is initiated at T1.
 computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
+        write(computeInitiationsInRange(F=V, T1, T2)), write("Rule 3"), nl,
 	nextTimePoint(T1, T1next),
         indexOf(Index,F=V),
+        write("Resorting to rules."), nl,
+        write(initiatedAt(F=V, T1, T1, T1next)), nl,
 	initiatedAt(F=V, T1, T1, T1next), !,
 	indexOf(Index, F=V),
 	addStartingPointAllVals(Index, F=V, T1),
@@ -747,6 +856,7 @@ computeInitiationsInRange(F=V, T1, T2, [T1|Tail]):-
 	computeInitiationsInRange(F=V, T1next, T2, Tail).
 % case: F=V is not initiated at T1.
 computeInitiationsInRange(F=V, T1, T2, InitList):-
+        write(computeInitiationsInRange(F=V, T1, T2)), write("Rule 4"), nl,
 	nextTimePoint(T1, T1next),
 	indexOf(Index, F=V),
 	addProcessedRangeInit(Index, F=V, T1),
@@ -756,13 +866,17 @@ computeInitiationsInRange(F=V, T1, T2, InitList):-
 % Compute all the initiation points of F=V in the temporal ranges stored in list Ranges.
 % The derived initiation points are stored in list FlatInits.
 computeInitiationsInRangeAll(F=V, Ranges, FlatInits):-
-	computeInitiationsInRangeAll0(F=V, Ranges, Inits),
+	computeInitiationsInRangeAll0(F=V, Ranges, Inits), !,
+        write("All Inits: "), write(Inits), nl,
 	flatten(Inits, FlatInits).
 % auxiliary predicate
 %computeInitiationsInRangeAll0(+F=V, +Ranges, -FlatInits)
-computeInitiationsInRangeAll0(_, [], []).
-computeInitiationsInRangeAll0(F=V, [(T1, T2)|RestRanges], [Inits|RestInits]):-
-	computeInitiationsInRange(F=V, T1, T2, Inits),
+computeInitiationsInRangeAll0(_, [], []):- !.
+computeInitiationsInRangeAll0(F=V, [(T1, T2)|RestRanges], [Inits|RestInits]):-  
+	computeInitiationsInRange(F=V, T1, T2, Inits), !,
+        write("FVP: "), write(F=V), nl,
+        write("ComputedInits: "), write(Inits), nl,
+        write("RestRanges: "), write(RestRanges),
 	computeInitiationsInRangeAll0(F=V, RestRanges, RestInits).
 
 initiatedAtPrev(Index, F=V, T1, T, T2) :-

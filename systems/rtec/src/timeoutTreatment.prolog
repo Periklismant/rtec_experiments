@@ -29,6 +29,7 @@ brokenOnce: shall we enforce early that T2>T1?
 % initiatedAt/4 for deadline fluents	
 initiatedAt(F=NewV, T1, T, T2) :-
         fi(F=V, F=NewV, Duration),
+        %write("Querying: "), write(initiatedAt(F=NewV, T1, T, T2)), nl,
         	%updateVariableTemp(rule_evaluations, 1),
         % do not evaluate dInitiatedAt/5 clauses to look for breaking points 
         % of F=V between an initiation of F=V and its deadline 

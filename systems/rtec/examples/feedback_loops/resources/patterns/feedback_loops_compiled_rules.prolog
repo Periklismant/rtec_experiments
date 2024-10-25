@@ -23,6 +23,8 @@
  ** Each feedback loop must have distinct variable names ** 
  **************************************************************************/
 
+ :- assertz(bio_app).
+
 /****************************
  * Loop Dependent Fluents   *
  ****************************/
@@ -170,6 +172,8 @@ initiatedAtCyclicAny(FVPList, Ts, T, Te):-
  ***********************************/
 
 initiatedAt(f(h)=0, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(f(h)=0, Ts, T, Te)), nl,
+     reportTime,
      var_value(s, Vals), Vals>0,
      initiatedAtCyclicAny([val(h)=0, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
 
@@ -177,6 +181,8 @@ initiatedAt(f(h)=0, Ts, T, Te) :-
      initiatedAtCyclicAny([val(h)=1, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(h)=1, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(f(h)=1, Ts, T, Te)), nl,
+     reportTime,
      initiatedAtCyclicAny([val(h)=0, val(s)=0], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(h)=1, Ts, T, Te) :-
@@ -184,14 +190,20 @@ initiatedAt(f(h)=1, Ts, T, Te) :-
      initiatedAtCyclicAny([val(h)=1, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(h)=2, Ts, T, Te) :-
-      initiatedAtCyclic(h, val(h)=2, Ts, T, Te), Ts=<T, T<Te.
+     write("Querying: "), write(initiatedAt(f(h)=2, Ts, T, Te)), nl,
+     reportTime,
+     initiatedAtCyclic(h, val(h)=2, Ts, T, Te), Ts=<T, T<Te.
 
 
 initiatedAt(f(s)=0, Ts, T, Te) :-
+    write("Querying: "), write(initiatedAt(f(s)=0, Ts, T, Te)), nl,
+    reportTime,
     var_value(s, Vals), Vals<2,
     initiatedAtCyclicAny([val(h)=0, val(s)=Vals], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(s)=1, Ts, T, Te) :-
+    write("Querying: "), write(initiatedAt(f(s)=1, Ts, T, Te)), nl,
+    reportTime,
     initiatedAtCyclicAny([val(h)=0, val(s)=2], Ts, T, Te), Ts=<T, T<Te.
         
 initiatedAt(f(s)=1, Ts, T, Te) :-
@@ -199,6 +211,8 @@ initiatedAt(f(s)=1, Ts, T, Te) :-
     initiatedAtCyclicAny([val(h)=Vh, val(s)=0], Ts, T, Te), Ts=<T, T<Te.
 
 initiatedAt(f(s)=2, Ts, T, Te) :-
+    write("Querying: "), write(initiatedAt(f(s)=2, Ts, T, Te)), nl,
+    reportTime,
     var_value(h, Vh), Vh>0,
     var_value(s, Vs), Vs>0,
     initiatedAtCyclicAny([val(h)=Vh, val(s)=Vs], Ts, T, Te), Ts=<T, T<Te.
@@ -351,6 +365,8 @@ initiatedAt(f(n)=0, Ts, T, Te) :-
  ****************************/
 
 initiatedAt(val(Var)=ValNew, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(val(Var)=ValNew, Ts, T, Te)), nl,
+     reportTime,
      initiatedAtCyclic(Var, order(Var, incr)=fulfilled, Ts, T, Te), Ts=<T, T<Te,
      var_value(Var, VarVal),
      holdsAtCyclic(Var, val(Var)=VarVal, T),
@@ -415,6 +431,8 @@ initiatedAt(val(Var)=ValNew, Ts, T, Te):-
 % in [T, T + dx{+} - 1].
 
 initiatedAt(order(Var,incr)=pending, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(order(Var,incr)=pending, Ts, T, Te)), nl,
+     reportTime,
      var_value(Var, FVal),
      var_value(Var, Val),
      initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
@@ -446,6 +464,8 @@ initiatedAt(order(Var, incr)=pending, Ts, T, Te) :-
      Rate>0.
 
 initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(order(Var,decr)=pending, Ts, T, Te)), nl,
+     reportTime,
      var_value(Var, FVal),
      var_value(Var, Val),
      initiatedAtCyclic(Var, f(Var)=FVal, Ts, T, Te), Ts=<T, T<Te,
@@ -481,6 +501,8 @@ initiatedAt(order(Var,decr)=pending, Ts, T, Te) :-
      Rate<0.
 
 initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
+     write("Querying: "), write(initiatedAt(order(Var,Sign)=cancelled, Ts, T, Te)), nl,
+     reportTime,
      var_value(Var, Vf),
      initiatedAtCyclic(Var, f(Var)=Vf,Ts,T,Te), Ts=<T, T<Te,
      holdsAtCyclic(Var, order(Var,Sign)=pending, T),
@@ -499,6 +521,8 @@ initiatedAt(order(Var, Sign)=cancelled, Ts, T, Te) :-
      Vf\=Vfcurr.
 
 initiatedAt(lastChange(Var)=incr, Ts, T, Te):-
+     write("Querying: "), write(initiatedAt(lastChange(Var)=incr, Ts, T, Te)), nl,
+     reportTime,
    var_value(Var, Val),
    initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
    OldVal is Val - 1,
@@ -506,6 +530,8 @@ initiatedAt(lastChange(Var)=incr, Ts, T, Te):-
    holdsAtCyclic(Var, val(Var)=OldVal, T).
 
 initiatedAt(lastChange(Var)=decr, Ts, T, Te):-
+   write("Querying: "), write(initiatedAt(lastChange(Var)=decr, Ts, T, Te)), nl,
+   reportTime,
    var_value(Var, Val),
    initiatedAtCyclic(Var, val(Var)=Val, Ts, T, Te), Ts=<T, T<Te,
    OldVal is Val + 1,

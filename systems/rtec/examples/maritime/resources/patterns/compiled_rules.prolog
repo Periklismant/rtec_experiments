@@ -318,363 +318,363 @@ fi(sarMovement(_110)=true,sarMovement(_110)=false,1800):-
 collectIntervals2(_80, proximity(_80,_82)=true) :-
      vpair(_80,_82).
 
-needsGrounding(_266,_268,_270) :- 
+needsGrounding(_294,_296,_298) :- 
      fail.
 
-grounding(change_in_speed_start(_448)) :- 
-     vessel(_448).
+grounding(change_in_speed_start(_476)) :- 
+     vessel(_476).
 
-grounding(change_in_speed_end(_448)) :- 
-     vessel(_448).
+grounding(change_in_speed_end(_476)) :- 
+     vessel(_476).
 
-grounding(change_in_heading(_448)) :- 
-     vessel(_448).
+grounding(change_in_heading(_476)) :- 
+     vessel(_476).
 
-grounding(stop_start(_448)) :- 
-     vessel(_448).
+grounding(stop_start(_476)) :- 
+     vessel(_476).
 
-grounding(stop_end(_448)) :- 
-     vessel(_448).
+grounding(stop_end(_476)) :- 
+     vessel(_476).
 
-grounding(slow_motion_start(_448)) :- 
-     vessel(_448).
+grounding(slow_motion_start(_476)) :- 
+     vessel(_476).
 
-grounding(slow_motion_end(_448)) :- 
-     vessel(_448).
+grounding(slow_motion_end(_476)) :- 
+     vessel(_476).
 
-grounding(gap_start(_448)) :- 
-     vessel(_448).
+grounding(gap_start(_476)) :- 
+     vessel(_476).
 
-grounding(gap_end(_448)) :- 
-     vessel(_448).
+grounding(gap_end(_476)) :- 
+     vessel(_476).
 
-grounding(entersArea(_448,_450)) :- 
-     vessel(_448),areaType(_450).
+grounding(entersArea(_476,_478)) :- 
+     vessel(_476),areaType(_478).
 
-grounding(leavesArea(_448,_450)) :- 
-     vessel(_448),areaType(_450).
+grounding(leavesArea(_476,_478)) :- 
+     vessel(_476),areaType(_478).
 
-grounding(coord(_448,_450,_452)) :- 
-     vessel(_448).
+grounding(coord(_476,_478,_480)) :- 
+     vessel(_476).
 
-grounding(velocity(_448,_450,_452,_454)) :- 
-     vessel(_448).
+grounding(velocity(_476,_478,_480,_482)) :- 
+     vessel(_476).
 
-grounding(proximity(_454,_456)=true) :- 
-     vpair(_454,_456).
+grounding(proximity(_482,_484)=true) :- 
+     vpair(_482,_484).
 
-grounding(gap(_454)=_450) :- 
-     vessel(_454),portStatus(_450).
+grounding(gap(_482)=_478) :- 
+     vessel(_482),portStatus(_478).
 
-grounding(stopped(_454)=_450) :- 
-     vessel(_454),portStatus(_450).
+grounding(stopped(_482)=_478) :- 
+     vessel(_482),portStatus(_478).
 
-grounding(lowSpeed(_454)=true) :- 
-     vessel(_454).
+grounding(lowSpeed(_482)=true) :- 
+     vessel(_482).
 
-grounding(changingSpeed(_454)=true) :- 
-     vessel(_454).
+grounding(changingSpeed(_482)=true) :- 
+     vessel(_482).
 
-grounding(withinArea(_454,_456)=true) :- 
-     vessel(_454),areaType(_456).
+grounding(withinArea(_482,_484)=true) :- 
+     vessel(_482),areaType(_484).
 
-grounding(underWay(_454)=true) :- 
-     vessel(_454).
+grounding(underWay(_482)=true) :- 
+     vessel(_482).
 
-grounding(sarSpeed(_454)=true) :- 
-     vessel(_454),vesselType(_454,sar).
+grounding(sarSpeed(_482)=true) :- 
+     vessel(_482),vesselType(_482,sar).
 
-grounding(sarMovement(_454)=true) :- 
-     vessel(_454),vesselType(_454,sar).
-
-grounding(sarMovement(_454)=false) :- 
-     vessel(_454),vesselType(_454,sar).
-
-grounding(inSAR(_454)=true) :- 
-     vessel(_454).
-
-grounding(highSpeedNearCoast(_454)=true) :- 
-     vessel(_454).
-
-grounding(drifting(_454)=true) :- 
-     vessel(_454).
-
-grounding(anchoredOrMoored(_454)=true) :- 
-     vessel(_454).
-
-grounding(trawlSpeed(_454)=true) :- 
-     vessel(_454),vesselType(_454,fishing).
-
-grounding(movingSpeed(_454)=_450) :- 
-     vessel(_454),movingStatus(_450).
-
-grounding(pilotOps(_454,_456)=true) :- 
-     vpair(_454,_456).
-
-grounding(tuggingSpeed(_454)=true) :- 
-     vessel(_454).
-
-grounding(tugging(_454,_456)=true) :- 
-     vpair(_454,_456).
-
-grounding(rendezVous(_454,_456)=true) :- 
-     vpair(_454,_456).
-
-grounding(trawlingMovement(_454)=true) :- 
-     vessel(_454),vesselType(_454,fishing).
-
-grounding(trawlingMovement(_454)=false) :- 
-     vessel(_454),vesselType(_454,fishing).
-
-grounding(trawling(_454)=true) :- 
-     vessel(_454).
-
-grounding(loitering(_454)=true) :- 
-     vessel(_454).
-
-p(trawlingMovement(_448)=true).
-
-p(sarMovement(_448)=true).
-
-inputEntity(entersArea(_136,_138)).
-inputEntity(gap_start(_136)).
-inputEntity(stop_start(_136)).
-inputEntity(slow_motion_start(_136)).
-inputEntity(change_in_speed_start(_136)).
-inputEntity(velocity(_136,_138,_140,_142)).
-inputEntity(change_in_heading(_136)).
-inputEntity(leavesArea(_136,_138)).
-inputEntity(gap_end(_136)).
-inputEntity(stop_end(_136)).
-inputEntity(slow_motion_end(_136)).
-inputEntity(change_in_speed_end(_136)).
-inputEntity(proximity(_142,_144)=true).
-inputEntity(coord(_136,_138,_140)).
-
-outputEntity(withinArea(_288,_290)=true).
-outputEntity(gap(_288)=nearPorts).
-outputEntity(gap(_288)=farFromPorts).
-outputEntity(stopped(_288)=nearPorts).
-outputEntity(stopped(_288)=farFromPorts).
-outputEntity(lowSpeed(_288)=true).
-outputEntity(changingSpeed(_288)=true).
-outputEntity(highSpeedNearCoast(_288)=true).
-outputEntity(movingSpeed(_288)=below).
-outputEntity(movingSpeed(_288)=normal).
-outputEntity(movingSpeed(_288)=above).
-outputEntity(drifting(_288)=true).
-outputEntity(tuggingSpeed(_288)=true).
-outputEntity(trawlSpeed(_288)=true).
-outputEntity(trawlingMovement(_288)=true).
-outputEntity(sarSpeed(_288)=true).
-outputEntity(sarMovement(_288)=true).
-outputEntity(trawlingMovement(_288)=false).
-outputEntity(sarMovement(_288)=false).
-outputEntity(underWay(_288)=true).
-outputEntity(anchoredOrMoored(_288)=true).
-outputEntity(tugging(_288,_290)=true).
-outputEntity(rendezVous(_288,_290)=true).
-outputEntity(trawling(_288)=true).
-outputEntity(inSAR(_288)=true).
-outputEntity(loitering(_288)=true).
-outputEntity(pilotOps(_288,_290)=true).
-
-event(entersArea(_506,_508)).
-event(gap_start(_506)).
-event(stop_start(_506)).
-event(slow_motion_start(_506)).
-event(change_in_speed_start(_506)).
-event(velocity(_506,_508,_510,_512)).
-event(change_in_heading(_506)).
-event(leavesArea(_506,_508)).
-event(gap_end(_506)).
-event(stop_end(_506)).
-event(slow_motion_end(_506)).
-event(change_in_speed_end(_506)).
-event(coord(_506,_508,_510)).
-
-simpleFluent(withinArea(_652,_654)=true).
-simpleFluent(gap(_652)=nearPorts).
-simpleFluent(gap(_652)=farFromPorts).
-simpleFluent(stopped(_652)=nearPorts).
-simpleFluent(stopped(_652)=farFromPorts).
-simpleFluent(lowSpeed(_652)=true).
-simpleFluent(changingSpeed(_652)=true).
-simpleFluent(highSpeedNearCoast(_652)=true).
-simpleFluent(movingSpeed(_652)=below).
-simpleFluent(movingSpeed(_652)=normal).
-simpleFluent(movingSpeed(_652)=above).
-simpleFluent(drifting(_652)=true).
-simpleFluent(tuggingSpeed(_652)=true).
-simpleFluent(trawlSpeed(_652)=true).
-simpleFluent(trawlingMovement(_652)=true).
-simpleFluent(sarSpeed(_652)=true).
-simpleFluent(sarMovement(_652)=true).
-simpleFluent(trawlingMovement(_652)=false).
-simpleFluent(sarMovement(_652)=false).
-
-sDFluent(underWay(_828)=true).
-sDFluent(anchoredOrMoored(_828)=true).
-sDFluent(tugging(_828,_830)=true).
-sDFluent(rendezVous(_828,_830)=true).
-sDFluent(trawling(_828)=true).
-sDFluent(inSAR(_828)=true).
-sDFluent(loitering(_828)=true).
-sDFluent(pilotOps(_828,_830)=true).
-sDFluent(proximity(_828,_830)=true).
-
-index(entersArea(_884,_944),_884).
-index(gap_start(_884),_884).
-index(stop_start(_884),_884).
-index(slow_motion_start(_884),_884).
-index(change_in_speed_start(_884),_884).
-index(velocity(_884,_944,_946,_948),_884).
-index(change_in_heading(_884),_884).
-index(leavesArea(_884,_944),_884).
-index(gap_end(_884),_884).
-index(stop_end(_884),_884).
-index(slow_motion_end(_884),_884).
-index(change_in_speed_end(_884),_884).
-index(coord(_884,_944,_946),_884).
-index(withinArea(_884,_950)=true,_884).
-index(gap(_884)=nearPorts,_884).
-index(gap(_884)=farFromPorts,_884).
-index(stopped(_884)=nearPorts,_884).
-index(stopped(_884)=farFromPorts,_884).
-index(lowSpeed(_884)=true,_884).
-index(changingSpeed(_884)=true,_884).
-index(highSpeedNearCoast(_884)=true,_884).
-index(movingSpeed(_884)=below,_884).
-index(movingSpeed(_884)=normal,_884).
-index(movingSpeed(_884)=above,_884).
-index(drifting(_884)=true,_884).
-index(tuggingSpeed(_884)=true,_884).
-index(trawlSpeed(_884)=true,_884).
-index(trawlingMovement(_884)=true,_884).
-index(sarSpeed(_884)=true,_884).
-index(sarMovement(_884)=true,_884).
-index(trawlingMovement(_884)=false,_884).
-index(sarMovement(_884)=false,_884).
-index(underWay(_884)=true,_884).
-index(anchoredOrMoored(_884)=true,_884).
-index(tugging(_884,_950)=true,_884).
-index(rendezVous(_884,_950)=true,_884).
-index(trawling(_884)=true,_884).
-index(inSAR(_884)=true,_884).
-index(loitering(_884)=true,_884).
-index(pilotOps(_884,_950)=true,_884).
-index(proximity(_884,_950)=true,_884).
-
-
-cachingOrder2(_1382, withinArea(_1382,_1384)=true) :- % level in dependency graph: 1, processing order in component: 1
-     vessel(_1382),areaType(_1384).
-
-cachingOrder2(_1638, gap(_1638)=nearPorts) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1638),portStatus(nearPorts).
-
-cachingOrder2(_1616, gap(_1616)=farFromPorts) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1616),portStatus(farFromPorts).
-
-cachingOrder2(_1594, highSpeedNearCoast(_1594)=true) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1594).
-
-cachingOrder2(_1556, trawlingMovement(_1556)=true) :- % level in dependency graph: 2, processing order in component: 1
-     vessel(_1556),vesselType(_1556,fishing).
-
-cachingOrder2(_1556, trawlingMovement(_1556)=false) :- % level in dependency graph: 2, processing order in component: 2
-     vessel(_1556),vesselType(_1556,fishing).
-
-cachingOrder2(_2306, stopped(_2306)=nearPorts) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2306),portStatus(nearPorts).
-
-cachingOrder2(_2284, stopped(_2284)=farFromPorts) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2284),portStatus(farFromPorts).
-
-cachingOrder2(_2262, lowSpeed(_2262)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2262).
-
-cachingOrder2(_2240, changingSpeed(_2240)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2240).
-
-cachingOrder2(_2218, movingSpeed(_2218)=below) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2218),movingStatus(below).
-
-cachingOrder2(_2196, movingSpeed(_2196)=normal) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2196),movingStatus(normal).
-
-cachingOrder2(_2174, movingSpeed(_2174)=above) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2174),movingStatus(above).
-
-cachingOrder2(_2152, tuggingSpeed(_2152)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2152).
-
-cachingOrder2(_2130, trawlSpeed(_2130)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2130),vesselType(_2130,fishing).
-
-cachingOrder2(_2108, sarSpeed(_2108)=true) :- % level in dependency graph: 3, processing order in component: 1
-     vessel(_2108),vesselType(_2108,sar).
-
-cachingOrder2(_3294, sarMovement(_3294)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3294),vesselType(_3294,sar).
-
-cachingOrder2(_3294, sarMovement(_3294)=false) :- % level in dependency graph: 4, processing order in component: 2
-     vessel(_3294),vesselType(_3294,sar).
-
-cachingOrder2(_3272, underWay(_3272)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3272).
-
-cachingOrder2(_3250, anchoredOrMoored(_3250)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3250).
-
-cachingOrder2(_3226, tugging(_3226,_3228)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3226,_3228).
-
-cachingOrder2(_3202, rendezVous(_3202,_3204)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3202,_3204).
-
-cachingOrder2(_3180, trawling(_3180)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vessel(_3180).
-
-cachingOrder2(_3156, pilotOps(_3156,_3158)=true) :- % level in dependency graph: 4, processing order in component: 1
-     vpair(_3156,_3158).
-
-cachingOrder2(_4068, drifting(_4068)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_4068).
-
-cachingOrder2(_4046, inSAR(_4046)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_4046).
-
-cachingOrder2(_4024, loitering(_4024)=true) :- % level in dependency graph: 5, processing order in component: 1
-     vessel(_4024).
-
-collectGrounds([entersArea(_688,_702), gap_start(_688), stop_start(_688), slow_motion_start(_688), change_in_speed_start(_688), velocity(_688,_702,_704,_706), change_in_heading(_688), leavesArea(_688,_702), gap_end(_688), stop_end(_688), slow_motion_end(_688), change_in_speed_end(_688), coord(_688,_702,_704)],vessel(_688)).
-
-collectGrounds([proximity(_676,_678)=true],vpair(_676,_678)).
-
-dgrounded(withinArea(_1770,_1772)=true, vessel(_1770)).
-dgrounded(gap(_1728)=nearPorts, vessel(_1728)).
-dgrounded(gap(_1686)=farFromPorts, vessel(_1686)).
-dgrounded(stopped(_1644)=nearPorts, vessel(_1644)).
-dgrounded(stopped(_1602)=farFromPorts, vessel(_1602)).
-dgrounded(lowSpeed(_1570)=true, vessel(_1570)).
-dgrounded(changingSpeed(_1538)=true, vessel(_1538)).
-dgrounded(highSpeedNearCoast(_1506)=true, vessel(_1506)).
-dgrounded(movingSpeed(_1464)=below, vessel(_1464)).
-dgrounded(movingSpeed(_1422)=normal, vessel(_1422)).
-dgrounded(movingSpeed(_1380)=above, vessel(_1380)).
-dgrounded(drifting(_1348)=true, vessel(_1348)).
-dgrounded(tuggingSpeed(_1316)=true, vessel(_1316)).
-dgrounded(trawlSpeed(_1272)=true, vessel(_1272)).
-dgrounded(trawlingMovement(_1228)=true, vessel(_1228)).
-dgrounded(sarSpeed(_1184)=true, vessel(_1184)).
-dgrounded(sarMovement(_1140)=true, vessel(_1140)).
-dgrounded(trawlingMovement(_1096)=false, vessel(_1096)).
-dgrounded(sarMovement(_1052)=false, vessel(_1052)).
-dgrounded(underWay(_1020)=true, vessel(_1020)).
-dgrounded(anchoredOrMoored(_988)=true, vessel(_988)).
-dgrounded(tugging(_952,_954)=true, vpair(_952,_954)).
-dgrounded(rendezVous(_916,_918)=true, vpair(_916,_918)).
-dgrounded(trawling(_884)=true, vessel(_884)).
-dgrounded(inSAR(_852)=true, vessel(_852)).
-dgrounded(loitering(_820)=true, vessel(_820)).
-dgrounded(pilotOps(_784,_786)=true, vpair(_784,_786)).
+grounding(sarMovement(_482)=true) :- 
+     vessel(_482),vesselType(_482,sar).
+
+grounding(sarMovement(_482)=false) :- 
+     vessel(_482),vesselType(_482,sar).
+
+grounding(inSAR(_482)=true) :- 
+     vessel(_482).
+
+grounding(highSpeedNearCoast(_482)=true) :- 
+     vessel(_482).
+
+grounding(drifting(_482)=true) :- 
+     vessel(_482).
+
+grounding(anchoredOrMoored(_482)=true) :- 
+     vessel(_482).
+
+grounding(trawlSpeed(_482)=true) :- 
+     vessel(_482),vesselType(_482,fishing).
+
+grounding(movingSpeed(_482)=_478) :- 
+     vessel(_482),movingStatus(_478).
+
+grounding(pilotOps(_482,_484)=true) :- 
+     vpair(_482,_484).
+
+grounding(tuggingSpeed(_482)=true) :- 
+     vessel(_482).
+
+grounding(tugging(_482,_484)=true) :- 
+     vpair(_482,_484).
+
+grounding(rendezVous(_482,_484)=true) :- 
+     vpair(_482,_484).
+
+grounding(trawlingMovement(_482)=true) :- 
+     vessel(_482),vesselType(_482,fishing).
+
+grounding(trawlingMovement(_482)=false) :- 
+     vessel(_482),vesselType(_482,fishing).
+
+grounding(trawling(_482)=true) :- 
+     vessel(_482).
+
+grounding(loitering(_482)=true) :- 
+     vessel(_482).
+
+p(trawlingMovement(_476)=true).
+
+p(sarMovement(_476)=true).
+
+inputEntity(entersArea(_130,_132)).
+inputEntity(gap_start(_130)).
+inputEntity(stop_start(_130)).
+inputEntity(slow_motion_start(_130)).
+inputEntity(change_in_speed_start(_130)).
+inputEntity(velocity(_130,_132,_134,_136)).
+inputEntity(change_in_heading(_130)).
+inputEntity(leavesArea(_130,_132)).
+inputEntity(gap_end(_130)).
+inputEntity(stop_end(_130)).
+inputEntity(slow_motion_end(_130)).
+inputEntity(change_in_speed_end(_130)).
+inputEntity(proximity(_136,_138)=true).
+inputEntity(coord(_130,_132,_134)).
+
+outputEntity(withinArea(_276,_278)=true).
+outputEntity(gap(_276)=nearPorts).
+outputEntity(gap(_276)=farFromPorts).
+outputEntity(stopped(_276)=nearPorts).
+outputEntity(stopped(_276)=farFromPorts).
+outputEntity(lowSpeed(_276)=true).
+outputEntity(changingSpeed(_276)=true).
+outputEntity(highSpeedNearCoast(_276)=true).
+outputEntity(movingSpeed(_276)=below).
+outputEntity(movingSpeed(_276)=normal).
+outputEntity(movingSpeed(_276)=above).
+outputEntity(drifting(_276)=true).
+outputEntity(tuggingSpeed(_276)=true).
+outputEntity(trawlSpeed(_276)=true).
+outputEntity(trawlingMovement(_276)=true).
+outputEntity(sarSpeed(_276)=true).
+outputEntity(sarMovement(_276)=true).
+outputEntity(trawlingMovement(_276)=false).
+outputEntity(sarMovement(_276)=false).
+outputEntity(underWay(_276)=true).
+outputEntity(anchoredOrMoored(_276)=true).
+outputEntity(tugging(_276,_278)=true).
+outputEntity(rendezVous(_276,_278)=true).
+outputEntity(trawling(_276)=true).
+outputEntity(inSAR(_276)=true).
+outputEntity(loitering(_276)=true).
+outputEntity(pilotOps(_276,_278)=true).
+
+event(entersArea(_488,_490)).
+event(gap_start(_488)).
+event(stop_start(_488)).
+event(slow_motion_start(_488)).
+event(change_in_speed_start(_488)).
+event(velocity(_488,_490,_492,_494)).
+event(change_in_heading(_488)).
+event(leavesArea(_488,_490)).
+event(gap_end(_488)).
+event(stop_end(_488)).
+event(slow_motion_end(_488)).
+event(change_in_speed_end(_488)).
+event(coord(_488,_490,_492)).
+
+simpleFluent(withinArea(_628,_630)=true).
+simpleFluent(gap(_628)=nearPorts).
+simpleFluent(gap(_628)=farFromPorts).
+simpleFluent(stopped(_628)=nearPorts).
+simpleFluent(stopped(_628)=farFromPorts).
+simpleFluent(lowSpeed(_628)=true).
+simpleFluent(changingSpeed(_628)=true).
+simpleFluent(highSpeedNearCoast(_628)=true).
+simpleFluent(movingSpeed(_628)=below).
+simpleFluent(movingSpeed(_628)=normal).
+simpleFluent(movingSpeed(_628)=above).
+simpleFluent(drifting(_628)=true).
+simpleFluent(tuggingSpeed(_628)=true).
+simpleFluent(trawlSpeed(_628)=true).
+simpleFluent(trawlingMovement(_628)=true).
+simpleFluent(sarSpeed(_628)=true).
+simpleFluent(sarMovement(_628)=true).
+simpleFluent(trawlingMovement(_628)=false).
+simpleFluent(sarMovement(_628)=false).
+
+sDFluent(underWay(_798)=true).
+sDFluent(anchoredOrMoored(_798)=true).
+sDFluent(tugging(_798,_800)=true).
+sDFluent(rendezVous(_798,_800)=true).
+sDFluent(trawling(_798)=true).
+sDFluent(inSAR(_798)=true).
+sDFluent(loitering(_798)=true).
+sDFluent(pilotOps(_798,_800)=true).
+sDFluent(proximity(_798,_800)=true).
+
+index(entersArea(_854,_908),_854).
+index(gap_start(_854),_854).
+index(stop_start(_854),_854).
+index(slow_motion_start(_854),_854).
+index(change_in_speed_start(_854),_854).
+index(velocity(_854,_908,_910,_912),_854).
+index(change_in_heading(_854),_854).
+index(leavesArea(_854,_908),_854).
+index(gap_end(_854),_854).
+index(stop_end(_854),_854).
+index(slow_motion_end(_854),_854).
+index(change_in_speed_end(_854),_854).
+index(coord(_854,_908,_910),_854).
+index(withinArea(_854,_914)=true,_854).
+index(gap(_854)=nearPorts,_854).
+index(gap(_854)=farFromPorts,_854).
+index(stopped(_854)=nearPorts,_854).
+index(stopped(_854)=farFromPorts,_854).
+index(lowSpeed(_854)=true,_854).
+index(changingSpeed(_854)=true,_854).
+index(highSpeedNearCoast(_854)=true,_854).
+index(movingSpeed(_854)=below,_854).
+index(movingSpeed(_854)=normal,_854).
+index(movingSpeed(_854)=above,_854).
+index(drifting(_854)=true,_854).
+index(tuggingSpeed(_854)=true,_854).
+index(trawlSpeed(_854)=true,_854).
+index(trawlingMovement(_854)=true,_854).
+index(sarSpeed(_854)=true,_854).
+index(sarMovement(_854)=true,_854).
+index(trawlingMovement(_854)=false,_854).
+index(sarMovement(_854)=false,_854).
+index(underWay(_854)=true,_854).
+index(anchoredOrMoored(_854)=true,_854).
+index(tugging(_854,_914)=true,_854).
+index(rendezVous(_854,_914)=true,_854).
+index(trawling(_854)=true,_854).
+index(inSAR(_854)=true,_854).
+index(loitering(_854)=true,_854).
+index(pilotOps(_854,_914)=true,_854).
+index(proximity(_854,_914)=true,_854).
+
+
+cachingOrder2(_1334, withinArea(_1334,_1336)=true) :- % level in dependency graph: 1, processing order in component: 1
+     vessel(_1334),areaType(_1336).
+
+cachingOrder2(_1584, gap(_1584)=nearPorts) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1584),portStatus(nearPorts).
+
+cachingOrder2(_1562, gap(_1562)=farFromPorts) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1562),portStatus(farFromPorts).
+
+cachingOrder2(_1540, highSpeedNearCoast(_1540)=true) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1540).
+
+cachingOrder2(_1502, trawlingMovement(_1502)=true) :- % level in dependency graph: 2, processing order in component: 1
+     vessel(_1502),vesselType(_1502,fishing).
+
+cachingOrder2(_1502, trawlingMovement(_1502)=false) :- % level in dependency graph: 2, processing order in component: 2
+     vessel(_1502),vesselType(_1502,fishing).
+
+cachingOrder2(_2246, stopped(_2246)=nearPorts) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2246),portStatus(nearPorts).
+
+cachingOrder2(_2224, stopped(_2224)=farFromPorts) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2224),portStatus(farFromPorts).
+
+cachingOrder2(_2202, lowSpeed(_2202)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2202).
+
+cachingOrder2(_2180, changingSpeed(_2180)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2180).
+
+cachingOrder2(_2158, movingSpeed(_2158)=below) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2158),movingStatus(below).
+
+cachingOrder2(_2136, movingSpeed(_2136)=normal) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2136),movingStatus(normal).
+
+cachingOrder2(_2114, movingSpeed(_2114)=above) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2114),movingStatus(above).
+
+cachingOrder2(_2092, tuggingSpeed(_2092)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2092).
+
+cachingOrder2(_2070, trawlSpeed(_2070)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2070),vesselType(_2070,fishing).
+
+cachingOrder2(_2048, sarSpeed(_2048)=true) :- % level in dependency graph: 3, processing order in component: 1
+     vessel(_2048),vesselType(_2048,sar).
+
+cachingOrder2(_3228, sarMovement(_3228)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3228),vesselType(_3228,sar).
+
+cachingOrder2(_3228, sarMovement(_3228)=false) :- % level in dependency graph: 4, processing order in component: 2
+     vessel(_3228),vesselType(_3228,sar).
+
+cachingOrder2(_3206, underWay(_3206)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3206).
+
+cachingOrder2(_3184, anchoredOrMoored(_3184)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3184).
+
+cachingOrder2(_3160, tugging(_3160,_3162)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3160,_3162).
+
+cachingOrder2(_3136, rendezVous(_3136,_3138)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3136,_3138).
+
+cachingOrder2(_3114, trawling(_3114)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vessel(_3114).
+
+cachingOrder2(_3090, pilotOps(_3090,_3092)=true) :- % level in dependency graph: 4, processing order in component: 1
+     vpair(_3090,_3092).
+
+cachingOrder2(_3996, drifting(_3996)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_3996).
+
+cachingOrder2(_3974, inSAR(_3974)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_3974).
+
+cachingOrder2(_3952, loitering(_3952)=true) :- % level in dependency graph: 5, processing order in component: 1
+     vessel(_3952).
+
+collectGrounds([entersArea(_676,_690), gap_start(_676), stop_start(_676), slow_motion_start(_676), change_in_speed_start(_676), velocity(_676,_690,_692,_694), change_in_heading(_676), leavesArea(_676,_690), gap_end(_676), stop_end(_676), slow_motion_end(_676), change_in_speed_end(_676), coord(_676,_690,_692)],vessel(_676)).
+
+collectGrounds([proximity(_664,_666)=true],vpair(_664,_666)).
+
+dgrounded(withinArea(_1752,_1754)=true, vessel(_1752)).
+dgrounded(gap(_1710)=nearPorts, vessel(_1710)).
+dgrounded(gap(_1668)=farFromPorts, vessel(_1668)).
+dgrounded(stopped(_1626)=nearPorts, vessel(_1626)).
+dgrounded(stopped(_1584)=farFromPorts, vessel(_1584)).
+dgrounded(lowSpeed(_1552)=true, vessel(_1552)).
+dgrounded(changingSpeed(_1520)=true, vessel(_1520)).
+dgrounded(highSpeedNearCoast(_1488)=true, vessel(_1488)).
+dgrounded(movingSpeed(_1446)=below, vessel(_1446)).
+dgrounded(movingSpeed(_1404)=normal, vessel(_1404)).
+dgrounded(movingSpeed(_1362)=above, vessel(_1362)).
+dgrounded(drifting(_1330)=true, vessel(_1330)).
+dgrounded(tuggingSpeed(_1298)=true, vessel(_1298)).
+dgrounded(trawlSpeed(_1254)=true, vessel(_1254)).
+dgrounded(trawlingMovement(_1210)=true, vessel(_1210)).
+dgrounded(sarSpeed(_1166)=true, vessel(_1166)).
+dgrounded(sarMovement(_1122)=true, vessel(_1122)).
+dgrounded(trawlingMovement(_1078)=false, vessel(_1078)).
+dgrounded(sarMovement(_1034)=false, vessel(_1034)).
+dgrounded(underWay(_1002)=true, vessel(_1002)).
+dgrounded(anchoredOrMoored(_970)=true, vessel(_970)).
+dgrounded(tugging(_934,_936)=true, vpair(_934,_936)).
+dgrounded(rendezVous(_898,_900)=true, vpair(_898,_900)).
+dgrounded(trawling(_866)=true, vessel(_866)).
+dgrounded(inSAR(_834)=true, vessel(_834)).
+dgrounded(loitering(_802)=true, vessel(_802)).
+dgrounded(pilotOps(_766,_768)=true, vpair(_766,_768)).

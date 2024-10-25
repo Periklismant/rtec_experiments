@@ -165,7 +165,7 @@ storeStartingPoints(_, _, []) :- !.
 storeStartingPoints(Index, F=V, SPoints) :-
 	fi(F=V, _, _),
 	retract(startingPoints(Index, F=V, _)), !,
-	assertz(startingPoints(Index, F=V, SPoints)).
+        assertz(startingPoints(Index, F=V, SPoints)).
 storeStartingPoints(Index, F=V, SPoints) :-
 	fi(F=V, _, _), !,
 	assertz(startingPoints(Index, F=V, SPoints)).
