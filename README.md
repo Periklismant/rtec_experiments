@@ -1,10 +1,28 @@
-# Purpose
+# Reproducing our Experiments
 
 This repository contains scripts for reproducing the experiments presented in the paper "Reasoning over Events with Delayed Effects", which is currently under review.
 
-# Docker Installation
+We provide the code for reproducing our experiments in the form of a Docker image.
 
-# Organisation
+First, clone this repository and move to its root directory:
+
+	git clone https://github.com/Periklismant/rtec_experiments
+	cd rtec_experiments
+
+The easiest way to reproduce our experiments is through a Docker image. Install Docker by following the instruction on the [official website](https://docs.docker.com/engine/install/), and then follow these steps:
+
+	sudo docker build -t experiments . # Build a Docker image named experiments based on Dockerfile.
+	sudo docker run -it experiments # Run the Docker image in iteractive mode.
+	./run_all_experiments.sh # Execute the script the runs all experiments.
+
+In order to run a specific set of experiments of the paper, you may run the corresponding execution script as follows:
+	
+	cd scripts
+	ls # See the available scripts.
+	./run_script_of_your_choice.sh
+
+
+## Organisation
 
 - /systems: Source code and/or executables for the systems used in the experimental comparison.
 - /datasets: The datasets used in the experiments. Note that some of the datasets are *not* packed with the repository, due to their size. For these datasets, we provide external download links (see, e.g., datasets/maritime/brest/download_dataset.log). The maritime dataset including vessels sailing in all European seas is not publicly available.
