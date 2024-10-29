@@ -1,6 +1,10 @@
-# Reproducing our Experiments
+# Supplementary Material
 
-This repository contains scripts for reproducing the experiments presented in the paper "Reasoning over Events with Delayed Effects", which is currently under review.
+This repository contains a technical appendix and the scripts for reproducing the experiments presented in the paper "Reasoning over Events with Delayed Effects", which is currently under review.
+
+The technical appendix of the paper can be found in: [technical_appendix.pdf](technical_appendix.pdf).
+
+## Reproducing our Experiments
 
 We provide the code for reproducing our experiments in the form of a Docker image.
 
