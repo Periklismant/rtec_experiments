@@ -8,10 +8,7 @@ systems/sCASP/logs/*.txt
 systems/rtec/examples/*/results/*.txt
 systems/rtecnaive/examples/*/results/*.txt
 systems/rtecnofi/examples/*/results/*.txt
-datasets/netbillnop/*.csv
-datasets/netbillp/*.csv
 datasets/netbill/*.csv
-datasets/voting/*.csv
 systems/rtec/examples/maritime/dataset/csv/*.csv
 systems/rtec/examples/maritime_fi_only/dataset/csv/*.csv
 systems/rtec/examples/maritime_no_fi/dataset/csv/*.csv
