@@ -7,17 +7,15 @@ wget -O ../datasets/maritime/brest_dataset.zip "https://owncloud.skel.iit.demokr
 unzip -o ../datasets/maritime/brest_dataset.zip -d ../datasets/maritime/
 rm ../datasets/maritime/brest_dataset.zip
 
-#WindowSizes=(7200 14400 28800 57600)
-WindowSizes=(115200)
-#step=7200
-step=115200
-end_time=1447106400
+WindowSizes=(7200 14400 28800 57600)
+step=7200
+
 cd ../systems/rtec/execution\ scripts
 
 echo "%%% Executing RTEC on the maritime domain with future initiations (see Figure 6 (middle) of the paper).%%%"
 for window_size in ${WindowSizes[@]}; do
     echo -e "\tWindow size: ${window_size}"
-    ./run_rtec.sh --app=maritime_fi_only --window-size=${window_size} --step=${step} --end-time=${end_time} > ../../../logs/rtec/maritime_fi_only_win${window_size}.txt
+    ./run_rtec.sh --app=maritime_fi_only --window-size=${window_size} --step=${step} > ../../../logs/rtec/maritime_fi_only_win${window_size}.txt
     awk 'NR==3{print "\tAverage reasoning time: " $6} NR==4{print "\tStandard deviation: " $6}' ../examples/maritime_fi_only/results/log-swi-${window_size}-${step}-csv-file-log.txt
 done
 cd ../../../scripts

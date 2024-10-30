@@ -6,12 +6,9 @@ wget -O ../datasets/maritime/imis_dataset.zip "https://owncloud.skel.iit.demokri
 unzip -o ../datasets/maritime/imis_dataset.zip -d ../datasets/maritime/
 rm ../datasets/maritime/imis_dataset.zip
 
-#WindowSizes=(7200 14400 28800 57600)
-#WindowSizes=(115200)
-WindowSizes=(57600)
-#step=7200
-#step=115200
-step=57600
+WindowSizes=(7200 14400 28800 57600)
+step=7200
+
 cd ../systems/rtec/execution\ scripts
 
 echo "%%% Executing RTEC on the maritime dataset of all European seas (see Figure 6 (right) of the paper).%%%"
